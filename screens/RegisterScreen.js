@@ -8,10 +8,11 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  Modal,
 } from "react-native";
 
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { login } from "../reducers/users";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -25,6 +26,7 @@ export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
 
   const Register = () => {
     fetch("http://172.20.10.4:3000/users/signup", {
@@ -54,6 +56,7 @@ export default function RegisterScreen({ navigation }) {
         }
       });
   };
+ 
 
   return (
     <SafeAreaView style={styles.container}>
@@ -95,8 +98,11 @@ export default function RegisterScreen({ navigation }) {
             onChangeText={(value) => setPassword(value)}
             value={password}
           />
-          <TouchableOpacity onPress={() => Register()}>
-            <Text style={styles.registerBtn}>Register</Text>
+          <TouchableOpacity
+            style={styles.registerBtn}
+            onPress={() => Register()}
+          >
+            <Text style={styles.textBtn}>S'inscrire</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -118,7 +124,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     fontSize: 20,
   },
+  textBtn: {
+    fontSize: 35,
+    color: "white",
+    textAlign: "center",
+  },
   registerBtn: {
-    fontSize: 20,
+    backgroundColor: "#A7333F",
+    margin: "20",
+    borderRadius: 50,
+    padding: 10,
   },
 });

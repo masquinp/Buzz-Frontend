@@ -4,6 +4,10 @@ import {
   View,
   TouchableOpacity,
   SafeAreaView,
+  Modal,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform
 } from "react-native";
 
 import MapView, { Marker } from "react-native-maps";
@@ -16,6 +20,10 @@ import { faUser, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 export default function MapScreen({ navigation }) {
   const [location, setLocation] = useState(null); // useState obligé pour récupérer la position
+  const [modalVisible, setModalVisible] = useState(false);
+  const [departure, setDeparture] = useState("");
+  const [arrival, setArrival] = useState("");
+  // const [date, setDate] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -37,15 +45,57 @@ export default function MapScreen({ navigation }) {
     return <View style={{ flex: 1 }}></View>;
   }
 
+  const addRide = () => {
+    setModalVisible(true);
+  };
+
+  const handleClose = () => {
+    setModalVisible(false);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
+        <KeyboardAvoidingView
+                style={styles.container}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+              >
+      <Modal visible={modalVisible} animationType="fade" transparent>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View>
+            <TextInput
+              placeholder="Departure"
+              onChangeText={(value) => setDeparture(value)}
+              value={departure}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="Arrival"
+              onChangeText={(value) => setArrival(value)}
+              value={arrival}
+              style={styles.input}
+            />
+            </View>
+            <TouchableOpacity onPress={() => addRide()} style={styles.button} activeOpacity={0.8}>
+              <Text style={styles.textButton}>Ajoutez</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleClose()}
+              style={styles.button}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.textButton}>Fermez</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <FontAwesomeIcon icon={faArrowLeft} size={24} color="#000" />
       </TouchableOpacity>
       <View style={styles.header}>
-        <Text style={styles.message}>Where are you going ?</Text>
+        <Text style={styles.message}>Où allez-vous?</Text>
         <TouchableOpacity>
-          <FontAwesomeIcon icon={faUser} size={28} color="#A7333F" />
+          <FontAwesomeIcon icon={faUser} size={40} color="#A7333F" />
         </TouchableOpacity>
       </View>
       <MapView
@@ -66,10 +116,11 @@ export default function MapScreen({ navigation }) {
         />
       </MapView>
       <View>
-        <TouchableOpacity>
-          <Text style={styles.rideBtn}> Find a ride </Text>
+        <TouchableOpacity style={styles.rideBtn} onPress={() => addRide()}>
+          <Text style={styles.textBtn}> Trouvez un trajet </Text>
         </TouchableOpacity>
       </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -81,15 +132,64 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    backgroundColor: "#ab9090",
+    borderRadius: 20,
+    padding: 30,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  input: {
+    width: 150,
+    borderBottomColor: "#A7333F",
+    borderBottomWidth: 1,
+    fontSize: 16,
+    color: 'black'
+  },
+  button: {
+    width: 150,
+    alignItems: "center",
+    marginTop: 20,
+    paddingTop: 8,
+    backgroundColor: "#A7333F",
+    borderRadius: 10,
+  },
+  textButton: {
+    color: "#ffffff",
+    height: 24,
+    fontWeight: "600",
+    fontSize: 15,
+  },
 
   message: {
-    fontSize: 15,
+    fontSize: 25,
+    marginLeft: '100'
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
   rideBtn: {
-    fontSize: 30,
+    backgroundColor: "#A7333F",
+    margin: "20",
+    borderRadius: 5,
+    padding: 8,
+  },
+  textBtn: {
+    fontSize: 35,
+    color: "white",
+    textAlign: "center",
   },
 });

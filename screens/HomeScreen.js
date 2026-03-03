@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   SafeAreaView,
+  Image,
 } from "react-native";
 import { useDispatch } from "react-redux";
 
@@ -14,22 +15,34 @@ export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate("Ride")}>
-        <FontAwesomeIcon icon={faArrowLeft} size={24} color="#000" />
-      </TouchableOpacity>
-       <TouchableOpacity onPress={() => navigation.navigate("Review")}>
-        <FontAwesomeIcon icon={faArrowLeft} size={24} color="#000" />
-      </TouchableOpacity>
+      <View style={styles.temporary}>
+        <TouchableOpacity onPress={() => navigation.navigate("Ride")}>
+          <FontAwesomeIcon icon={faArrowLeft} size={24} color="#000" />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Review")}>
+          <FontAwesomeIcon icon={faArrowLeft} size={24} color="#000" />
+        </TouchableOpacity>
+      </View>
+      <Image
+        style={styles.image}
+        source={require("../assets/image2.png")}
+      ></Image>
       <View>
         <Text style={styles.title}>BUZZ</Text>
         <Text style={styles.message}>Welcome to our app !</Text>
       </View>
-      <View >
-        <TouchableOpacity onPress={() => navigation.navigate("Connection")}>
-          <Text style={styles.connectionBtn}> Connection </Text>
+      <View style={styles.btnContainer}>
+        <TouchableOpacity
+          style={styles.connectionBtn}
+          onPress={() => navigation.navigate("Connection")}
+        >
+          <Text style={styles.textBtn}> Connection </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-          <Text style={styles.inscriptionBtn}> Inscription </Text>
+        <TouchableOpacity
+          style={styles.inscriptionBtn}
+          onPress={() => navigation.navigate("Register")}
+        >
+          <Text style={styles.textBtn}> Inscription </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -45,16 +58,34 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 60,
+    fontWeight: "bold",
   },
   message: {
     fontSize: 30,
   },
-  connectionBtn: {
-    fontSize: 25,
+  textBtn: {
+    fontSize: 35,
+    color: "white",
+    textAlign: "center",
   },
-  inscriptionBtn: {
-    fontSize: 25,
-  }
-  
+  connectionBtn: {
+    backgroundColor: "#A7333F",
+    margin: "20",
+    borderRadius: 50,
+    padding: 10,
+  },
 
+  inscriptionBtn: {
+    backgroundColor: "#A7333F",
+    borderRadius: 50,
+    padding: 10,
+  },
+
+  image: {
+    width: 400,
+    height: 300,
+  },
+  temporary: {
+    flexDirection: "row",
+  },
 });
