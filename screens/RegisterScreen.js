@@ -8,15 +8,14 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  Modal,
+  Image,
 } from "react-native";
 
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/users";
 
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import Arrow from "../components/Arrow";
 
 export default function RegisterScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -26,7 +25,6 @@ export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
 
   const Register = () => {
     fetch("http://172.20.10.4:3000/users/signup", {
@@ -56,17 +54,18 @@ export default function RegisterScreen({ navigation }) {
         }
       });
   };
- 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <FontAwesomeIcon icon={faArrowLeft} size={24} color="#000" />
-        </TouchableOpacity>
+        <Arrow />
+        <Image
+          style={styles.logo}
+          source={require("../assets/logo7.png")}
+        ></Image>
         <View>
           <TextInput
             placeholder="Firstname"
@@ -117,6 +116,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  safeArea: {
+    flex: 1,
+  },
   input: {
     width: 250,
     marginTop: 25,
@@ -134,5 +136,12 @@ const styles = StyleSheet.create({
     margin: "20",
     borderRadius: 50,
     padding: 10,
+    marginTop: 100
+  },
+  logo: {
+    width: 180,
+    height: 120,
+    resizeMode: "contain",
+    alignSelf: 'center'
   },
 });

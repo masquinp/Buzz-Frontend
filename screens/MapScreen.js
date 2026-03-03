@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUser, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import Arrow from "../components/Arrow";
 
 export default function MapScreen({ navigation }) {
   const [location, setLocation] = useState(null); // useState obligé pour récupérer la position
@@ -89,9 +90,7 @@ export default function MapScreen({ navigation }) {
           </View>
         </View>
       </Modal>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <FontAwesomeIcon icon={faArrowLeft} size={24} color="#000" />
-      </TouchableOpacity>
+      <Arrow/>
       <View style={styles.header}>
         <Text style={styles.message}>Où allez-vous?</Text>
         <TouchableOpacity>
@@ -139,7 +138,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalView: {
-    backgroundColor: "#c1a4a4",
+    backgroundColor: "#c2a7a7",
     borderRadius: 20,
     padding: 30,
     alignItems: "center",
@@ -153,11 +152,12 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   input: {
-    width: 150,
+    width: 180,
     borderBottomColor: "#A7333F",
     borderBottomWidth: 1,
-    fontSize: 16,
-    color: 'black'
+    fontSize: 20,
+    color: 'white',
+    marginBottom: 20,
   },
   button: {
     width: 150,
@@ -181,6 +181,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginTop: 40,
   },
   rideBtn: {
     backgroundColor: "#A7333F",
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   textBtn: {
-    fontSize: 35,
+    fontSize: 30,
     color: "white",
     textAlign: "center",
   },

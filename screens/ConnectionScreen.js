@@ -13,9 +13,7 @@ import {
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/users";
-
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import Arrow from "../components/Arrow";
 
 export default function ConnectionScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -48,20 +46,13 @@ export default function ConnectionScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         {/* goBack = pratique de React Navigation qui fonctionne comme un bouton précedent*/}
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <FontAwesomeIcon
-            style={styles.arrow}
-            icon={faArrowLeft}
-            size={24}
-            color="#000"
-          />
-        </TouchableOpacity>
+        <Arrow />
         <Image
           style={styles.logo}
           source={require("../assets/logo7.png")}
@@ -93,14 +84,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fdf6f0",
     alignItems: "center",
-    justifyContent: "center",
+  },
+  safeArea: {
+    flex: 1,
   },
   input: {
-    width: "100%",
+    width: "80%",
     marginTop: 15,
+    marginBottom: 30,
     borderColor: "#A7333F",
     borderBottomWidth: 1,
-    fontSize: 30,
+    fontSize: 25,
+    marginLeft: 35
   },
 
   textBtn: {
@@ -110,14 +105,20 @@ const styles = StyleSheet.create({
   },
   connectionBtn: {
     backgroundColor: "#A7333F",
-    margin: "20",
     borderRadius: 50,
     padding: 10,
+    marginTop: 30,
   },
   logo: {
-    width: 350,
-    height: 350,
+    width: 300,
+    height: 300,
     resizeMode: "contain",
+    alignSelf: "center",
+    marginBottom: -20,
   },
-  arrow: {},
+
+  inputContainer: {
+    width: "100%",
+    marginBottom: 30,
+  },
 });
