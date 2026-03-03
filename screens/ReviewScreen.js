@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, Image } from "react-native";
+import review from "../components/review"
 
 export default function ReviewScreen() {
 
@@ -11,3 +12,21 @@ export default function ReviewScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  evaluation: {
+    flex: 1,
+  },
+  note: {
+    flex: 1,
+  },
+  listeBox: {
+    flex: 1,
+  }
+});

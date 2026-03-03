@@ -3,10 +3,6 @@ import { StyleSheet, Text, View, Image } from "react-native";
 
 export default function ReviewScreen(props) {
 
-  const [note, setNote] = useState(0);
-  const [message, setMessage] = useState('');
-  const [reviews, setReviews] = useState([]);
-
   const reviewBox = () => (
     <View style={styles.boxCard}>
       <Image 

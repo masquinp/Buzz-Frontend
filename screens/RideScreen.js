@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, Image } from "react-native";
+import ride from "../components/ride"
 
 export default function ReviewScreen() {
 
@@ -8,4 +9,19 @@ export default function ReviewScreen() {
       <View style={styles.listeBox}> Box </View>
     </View>
   );
-} aa
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  evaluation: {
+    flex: 1,
+  },
+  listeBox: {
+    flex: 1,
+  },
+});
