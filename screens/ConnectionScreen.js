@@ -5,7 +5,9 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
-  Image
+  Image,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 
 import { useState } from "react";
@@ -36,36 +38,52 @@ export default function ConnectionScreen({ navigation }) {
           dispatch(login({ email, token: data.token }));
           setEmail("");
           setPassword("");
+          // Navigation vers l'écran suivant après succès
+          navigation.navigate("Map");
+        } else {
+          // alerte ici pour prévenir l'utilisateur
+          alert("Email ou mot de passe incorrect");
         }
       });
-    // Navigation vers l'écran suivant après succès
-    navigation.navigate("Map");
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* goBack = pratique de React Navigation qui fonctionne comme un bouton précedent*/}
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <FontAwesomeIcon icon={faArrowLeft} size={24} color="#000" />
-      </TouchableOpacity>
-    <Image style={styles.logo} source={require('../assets/logo1.png')}></Image>
-      <View>
-        <TextInput
-          placeholder="Email"
-          style={styles.input}
-          onChangeText={(value) => setEmail(value)}
-          value={email}
-        />
-        <TextInput
-          placeholder="Password"
-          style={styles.input}
-          onChangeText={(value) => setPassword(value)}
-          value={password}
-        />
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        {/* goBack = pratique de React Navigation qui fonctionne comme un bouton précedent*/}
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <FontAwesomeIcon
+            style={styles.arrow}
+            icon={faArrowLeft}
+            size={24}
+            color="#000"
+          />
+        </TouchableOpacity>
+        <Image
+          style={styles.logo}
+          source={require("../assets/logo7.png")}
+        ></Image>
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Email"
+            style={styles.input}
+            onChangeText={(value) => setEmail(value)}
+            value={email}
+          />
+          <TextInput
+            placeholder="Password"
+            style={styles.input}
+            onChangeText={(value) => setPassword(value)}
+            value={password}
+          />
+        </View>
         <TouchableOpacity style={styles.connectionBtn} onPress={() => signIn()}>
           <Text style={styles.textBtn}>Connection</Text>
         </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -73,18 +91,19 @@ export default function ConnectionScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#fdf6f0",
     alignItems: "center",
     justifyContent: "center",
   },
   input: {
     width: "100%",
-    marginTop: 25,
+    marginTop: 15,
     borderColor: "#A7333F",
     borderBottomWidth: 1,
     fontSize: 30,
   },
-    textBtn: {
+
+  textBtn: {
     fontSize: 35,
     color: "white",
     textAlign: "center",
@@ -96,8 +115,9 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   logo: {
-    width: 250,
-    height: 300,
-    resizeMode: "contain"
-  }
+    width: 350,
+    height: 350,
+    resizeMode: "contain",
+  },
+  arrow: {},
 });

@@ -128,6 +128,7 @@ export default function MapScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fdf6f0'
   },
   map: {
     flex: 1,
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalView: {
-    backgroundColor: "#ab9090",
+    backgroundColor: "#c1a4a4",
     borderRadius: 20,
     padding: 30,
     alignItems: "center",

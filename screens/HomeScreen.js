@@ -23,17 +23,17 @@ export default function HomeScreen({ navigation }) {
           <FontAwesomeIcon icon={faArrowLeft} size={24} color="#000" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-          <Text  style={styles.p}>P</Text>
-          </TouchableOpacity> 
+          <Text style={styles.p}>P</Text>
+        </TouchableOpacity>
       </View>
       <Image
         style={styles.image}
-        source={require("../assets/image2.png")}
+        source={require("../assets/image4.png")}
       ></Image>
-      <View>
+      {/* <View>
         <Text style={styles.title}>BUZZ</Text>
         <Text style={styles.message}>Welcome to our app !</Text>
-      </View>
+      </View> */}
       <View style={styles.btnContainer}>
         <TouchableOpacity
           style={styles.connectionBtn}
@@ -55,7 +55,7 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#fdf6f0",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -86,12 +86,12 @@ const styles = StyleSheet.create({
 
   image: {
     width: 400,
-    height: 300,
+    height: 550,
   },
   temporary: {
     flexDirection: "row",
   },
   p: {
-    fontSize: 30
-  }
+    fontSize: 30,
+  },
 });
