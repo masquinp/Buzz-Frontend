@@ -1,14 +1,18 @@
 import { StyleSheet, Text, View, Image } from "react-native";
-import review from "../components/review"
+import review from "../components/review";
 
 export default function ReviewScreen() {
-
-
   return (
     <View style={styles.container}>
-      <View style={styles.evaluation}> Mes évaluations </View>
-      <View style={styles.note}> Note </View>
-      <View style={styles.listeBox}> Box </View>
+      <View style={styles.evaluation}>
+        <Text> Mes évaluations </Text>
+      </View>
+      <View style={styles.note}>
+        <Text> Note </Text>
+      </View>
+      <View style={styles.listeBox}>
+        <Text> Box</Text>
+      </View>
     </View>
   );
 }
@@ -28,5 +32,5 @@ const styles = StyleSheet.create({
   },
   listeBox: {
     flex: 1,
-  }
+  },
 });

@@ -1,12 +1,15 @@
 import { StyleSheet, Text, View, Image } from "react-native";
-import ride from "../components/ride"
+import ride from "../components/ride";
 
 export default function ReviewScreen() {
-
   return (
     <View style={styles.container}>
-      <View style={styles.evaluation}> Trajets Disponible </View>
-      <View style={styles.listeBox}> Box </View>
+      <View style={styles.evaluation}>
+        <Text> Trajets Disponible</Text>
+      </View>
+      <View style={styles.listeBox}>
+        <Text> Box </Text>
+      </View>
     </View>
   );
 }
