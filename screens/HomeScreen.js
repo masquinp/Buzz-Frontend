@@ -7,10 +7,19 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
   return (
     <SafeAreaView style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.navigate("Ride")}>
+        <FontAwesomeIcon icon={faArrowLeft} size={24} color="#000" />
+      </TouchableOpacity>
+       <TouchableOpacity onPress={() => navigation.navigate("Review")}>
+        <FontAwesomeIcon icon={faArrowLeft} size={24} color="#000" />
+      </TouchableOpacity>
       <View>
         <Text style={styles.title}>BUZZ</Text>
         <Text style={styles.message}>Welcome to our app !</Text>

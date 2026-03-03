@@ -9,6 +9,8 @@ import HomeScreen from "./screens/HomeScreen";
 import ConnectionScreen from "./screens/ConnectionScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import MapScreen from "./screens/MapScreen";
+import RideScreen from "./screens/RideScreen";
+import ReviewScreen from "./screens/ReviewScreen";
 
 import user from './reducers/users';
 
@@ -56,9 +58,12 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={HomeScreen} />
+        
         <Stack.Screen name="Connection" component={ConnectionScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Map" component={MapScreen} />
+        <Stack.Screen name="Ride" component={RideScreen} />
+        <Stack.Screen name="Review" component={ReviewScreen} />
         { /* <Stack.Screen name="TabNavigator" component={TabNavigator} /> */ }
       </Stack.Navigator>
     </NavigationContainer>

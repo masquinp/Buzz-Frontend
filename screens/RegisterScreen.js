@@ -6,32 +6,36 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { login } from "../reducers/users";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 export default function RegisterScreen({ navigation }) {
+  const dispatch = useDispatch();
+
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const SignUpRegister = () => {
-    fetch("http://localhost:3000/users/signup", {
+  const Register = () => {
+    fetch("http://172.20.10.4:3000/users/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        firstname: firstname,
-        lastname: lastname,
-        username: username,
-        email: email,
-        password: password,
+        firstname,
+        lastname,
+        username,
+        email,
+        password,
       }),
     })
       .then((response) => response.json())
@@ -43,57 +47,58 @@ export default function RegisterScreen({ navigation }) {
               token: data.token,
             }),
           );
-          setFirstname("");
-          setLastname("");
-          setUsername("");
-          setEmail("");
-          setPassword("");
-         
+          // Navigation vers l'écran suivant après succès
+          navigation.navigate("Map");
+        } else {
+          alert(data.error);
         }
       });
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <FontAwesomeIcon icon={faArrowLeft} size={24} color="#000" />
-      </TouchableOpacity>
-      <View>
-        <TextInput
-          placeholder="Firsname"
-          style={styles.input}
-          onChangeText={(value) => setFirstname(value)}
-          value={firstname}
-        />
-        <TextInput
-          placeholder="Lastname"
-          style={styles.input}
-          onChangeText={(value) => setLastname(value)}
-          value={lastname}
-        />
-        <TextInput
-          placeholder="Username"
-          style={styles.input}
-          onChangeText={(value) => setUsername(value)}
-          value={username}
-        />
-        <TextInput
-          placeholder="Email"
-          style={styles.input}
-          onChangeText={(value) => setEmail(value)}
-          value={email}
-        />
-        <TextInput
-          placeholder="Password"
-          style={styles.input}
-          onChangeText={(value) => setPassword(value)}
-          value={password}
-        />
-        <TouchableOpacity onPress={() => navigation.navigate("Map")}>
-          <Text style={styles.registerBtn}>Register</Text>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <FontAwesomeIcon icon={faArrowLeft} size={24} color="#000" />
         </TouchableOpacity>
-      </View>
+        <View>
+          <TextInput
+            placeholder="Firstname"
+            style={styles.input}
+            onChangeText={(value) => setFirstname(value)}
+            value={firstname}
+          />
+          <TextInput
+            placeholder="Lastname"
+            style={styles.input}
+            onChangeText={(value) => setLastname(value)}
+            value={lastname}
+          />
+          <TextInput
+            placeholder="Username"
+            style={styles.input}
+            onChangeText={(value) => setUsername(value)}
+            value={username}
+          />
+          <TextInput
+            placeholder="Email"
+            style={styles.input}
+            onChangeText={(value) => setEmail(value)}
+            value={email}
+          />
+          <TextInput
+            placeholder="Password"
+            style={styles.input}
+            onChangeText={(value) => setPassword(value)}
+            value={password}
+          />
+          <TouchableOpacity onPress={() => Register()}>
+            <Text style={styles.registerBtn}>Register</Text>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
