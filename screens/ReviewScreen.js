@@ -1,18 +1,39 @@
-import { StyleSheet, Text, View, Image } from "react-native";
-import review from "../components/review";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
+import Review from "../components/review";
 
 export default function ReviewScreen() {
   return (
     <View style={styles.container}>
-      <View style={styles.evaluation}>
-        <Text> Mes évaluations </Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>Mes évaluations</Text>
       </View>
-      <View style={styles.note}>
-        <Text> Note </Text>
+      <View style={styles.globalNote}>
+        <Text style={styles.noteNumber}>4.5</Text>
+        <Text style={styles.noteText}>Note moyenne</Text>
       </View>
-      <View style={styles.listeBox}>
-        <Text> Box</Text>
-      </View>
+      <ScrollView style={styles.listeBox}>
+        <Review 
+          photo=""
+          name="Elsa"
+          note={4}
+          date="02/03/26"
+          text="Tres Bien."
+        />
+        <Review 
+          photo=""
+          name="Margaux"
+          note={4.5}
+          date="02/03/26"
+          text="Super expérience."
+        />
+        <Review 
+          photo=""
+          name="Pierre"
+          note={5}
+          date="01/03/26"
+          text="Conduite parfaite."
+        />
+      </ScrollView>
     </View>
   );
 }
@@ -20,17 +41,33 @@ export default function ReviewScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f4f6f8",
+    paddingTop: 60,
+  },
+  header: {
+    paddingHorizontal: 20,
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: "bold",
+    color: "#222",
+    textAlign: "center"
+  },
+  globalNote: {
     alignItems: "center",
-    justifyContent: "center",
+    marginBottom: 25,
   },
-  evaluation: {
-    flex: 1,
+  noteNumber: {
+    fontSize: 40,
+    fontWeight: "bold",
+    color: "#FFC107",
   },
-  note: {
-    flex: 1,
+  noteText: {
+    fontSize: 14,
+    color: "#777",
   },
   listeBox: {
-    flex: 1,
+    paddingHorizontal: 15,
   },
 });

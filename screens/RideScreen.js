@@ -1,15 +1,38 @@
-import { StyleSheet, Text, View, Image } from "react-native";
-import ride from "../components/ride";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
+import Ride from "../components/ride";
 
-export default function ReviewScreen() {
+export default function RideScreen() {
   return (
     <View style={styles.container}>
-      <View style={styles.evaluation}>
-        <Text> Trajets Disponible</Text>
+      <View style={styles.header}>
+        <Text style={styles.trajetText}>Trajets disponibles</Text>
       </View>
-      <View style={styles.listeBox}>
-        <Text> Box </Text>
-      </View>
+      <ScrollView style={styles.listeBox}>
+        <Ride
+          photo=""
+          name="Margaux"
+          car="BMW Série 3"
+          note={4.5}
+          date="06/03/26"
+          price="19$"
+        />
+        <Ride
+          photo=""
+          name="Elsa"
+          car="Audi A4"
+          note={5}
+          date="07/03/26"
+          price="25$"
+        />
+        <Ride
+          photo=""
+          name="Pierre"
+          car="Volkswagen"
+          note={4}
+          date="08/03/26"
+          price="22$"
+        />
+      </ScrollView>
     </View>
   );
 }
@@ -17,14 +40,20 @@ export default function ReviewScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#f4f6f8",
+    paddingTop: 60,
   },
-  evaluation: {
-    flex: 1,
+  header: {
+    paddingHorizontal: 20,
+    marginBottom: 20,
+  },
+  trajetText: {
+    fontSize: 26,
+    fontWeight: "bold",
+    color: "#222",
+    textAlign: "center"
   },
   listeBox: {
-    flex: 1,
+    paddingHorizontal: 15,
   },
 });
