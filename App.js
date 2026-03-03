@@ -11,6 +11,7 @@ import RegisterScreen from "./screens/RegisterScreen";
 import MapScreen from "./screens/MapScreen";
 import RideScreen from "./screens/RideScreen";
 import ReviewScreen from "./screens/ReviewScreen";
+import ProfileScreen from "./screens/ProfileScreen";
 
 import user from './reducers/users';
 
@@ -64,6 +65,7 @@ export default function App() {
         <Stack.Screen name="Map" component={MapScreen} />
         <Stack.Screen name="Ride" component={RideScreen} />
         <Stack.Screen name="Review" component={ReviewScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
         { /* <Stack.Screen name="TabNavigator" component={TabNavigator} /> */ }
       </Stack.Navigator>
     </NavigationContainer>

@@ -22,6 +22,9 @@ export default function HomeScreen({ navigation }) {
         <TouchableOpacity onPress={() => navigation.navigate("Review")}>
           <FontAwesomeIcon icon={faArrowLeft} size={24} color="#000" />
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+          <Text  style={styles.p}>P</Text>
+          </TouchableOpacity> 
       </View>
       <Image
         style={styles.image}
@@ -88,4 +91,7 @@ const styles = StyleSheet.create({
   temporary: {
     flexDirection: "row",
   },
+  p: {
+    fontSize: 30
+  }
 });
