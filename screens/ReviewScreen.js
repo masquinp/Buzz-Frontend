@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View, ScrollView, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Review from "../components/review";
 import Arrow from "../components/Arrow";
 
 export default function ReviewScreen() {
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <Arrow />
           <Text style={styles.title}>Mes évaluations</Text>
@@ -37,7 +37,6 @@ export default function ReviewScreen() {
             text="Conduite parfaite."
           />
         </ScrollView>
-      </View>
     </SafeAreaView>
   );
 }

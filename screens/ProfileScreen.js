@@ -4,16 +4,15 @@ import {
   View,
   Image,
   TouchableOpacity,
-  SafeAreaView,
 } from "react-native";
 import Arrow from "../components/Arrow";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Profile(props) {
   const handleSubmit = () => {};
 
   return (
-    <SafeAreaView>
-      <View style={styles.boxContainer}>
+    <SafeAreaView style={styles.boxContainer}>
         <View style={styles.firstBox}>
           <Arrow />
           <Text style={styles.compteText}>Mon Compte</Text>
@@ -63,7 +62,6 @@ export default function Profile(props) {
               <Text style={styles.textButton}>Paiement</Text>
             </TouchableOpacity>
           </View>
-        </View>
       </View>
     </SafeAreaView>
   );

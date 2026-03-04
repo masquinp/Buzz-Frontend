@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import { CameraView, Camera } from "expo-camera";
-import { StyleSheet, View, TouchableOpacity, SafeAreaView } from "react-native";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useIsFocused } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { addPhoto } from "../reducers/users";
 import Arrow from "../components/Arrow";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SnapScreen() {
   const [hasPermission, setHasPermission] = useState(false);
@@ -23,7 +24,7 @@ export default function SnapScreen() {
   }, []);
 
   if (!hasPermission || !isFocused) {
-    return <View />;
+    return <View style={{ flex: 1 }} />;
   }
 
   const toggleCameraFacing = () => {
@@ -48,27 +49,27 @@ export default function SnapScreen() {
   };
 
   return (
-    <SafeAreaView>
-      <View style={{ flex: 1 }}>
-        <CameraView
-          style={{ flex: 1 }}
-          ref={cameraRef}
-          facing={facing}
-          flash={flash}
-        />
-        <Arrow />
-        <TouchableOpacity onPress={takePicture}>
-          <FontAwesome name="circle-thin" size={80} color="white" />
-        </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
+      <CameraView
+        style={styles.camera}
+        ref={cameraRef}
+        facing={facing}
+        flash={flash}
+      />
 
-        <TouchableOpacity onPress={toggleFlash}>
-          <FontAwesome name="flash" size={30} color="white" />
-        </TouchableOpacity>
+      <Arrow color="#fff" top={70}/>
 
-        <TouchableOpacity onPress={toggleCameraFacing}>
-          <FontAwesome name="rotate-right" size={30} color="white" />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
+        <FontAwesome name="circle-thin" size={90} color="white" />
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.flashButton} onPress={toggleFlash}>
+        <FontAwesome name="flash" size={30} color="white" />
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.rotateButton} onPress={toggleCameraFacing}>
+        <FontAwesome name="rotate-right" size={30} color="white" />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -76,5 +77,24 @@ export default function SnapScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "black",
+  },
+  camera: {
+    flex: 1,
+  },
+  captureButton: {
+    position: "absolute",
+    bottom: 40,
+    alignSelf: "center",
+  },
+  flashButton: {
+    position: "absolute",
+    top: 70,
+    right: 20,
+  },
+  rotateButton: {
+    position: "absolute",
+    bottom: 50,
+    right: 30,
   },
 });

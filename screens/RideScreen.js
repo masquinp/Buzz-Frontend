@@ -4,15 +4,14 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
 } from "react-native";
 import Ride from "../components/ride";
 import Arrow from "../components/Arrow";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function RideScreen() {
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <Arrow />
           <Text style={styles.trajetText}>Trajets disponibles</Text>
@@ -43,7 +42,6 @@ export default function RideScreen() {
             price="22$"
           />
         </ScrollView>
-      </View>
     </SafeAreaView>
   );
 }

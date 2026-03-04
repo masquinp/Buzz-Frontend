@@ -16,20 +16,20 @@ import TestScreen from "./screens/TestScreen";
 import ChatScreen from "./screens/ChatScreen";
 import CameraScreen from "./screens/CameraScreen";
 
-import user from './reducers/users';
+import user from "./reducers/users";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
   reducer: { user },
 });
 
 const Stack = createNativeStackNavigator();
- const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
-
-  const TabNavigator = () => {
+const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -42,7 +42,7 @@ const Stack = createNativeStackNavigator();
             iconName = "house";
           } else if (route.name === "Chat") {
             iconName = "message";
-          } 
+          }
 
           return <FontAwesome name={iconName} size={size} color={color} />;
         },
@@ -54,31 +54,29 @@ const Stack = createNativeStackNavigator();
       <Tab.Screen name="Map" component={MapScreen} />
       <Tab.Screen name="Test" component={TestScreen} />
       <Tab.Screen name="Chat" component={ChatScreen} />
-
     </Tab.Navigator>
   );
 };
 
-
 export default function App() {
   return (
     <Provider store={store}>
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Connection" component={ConnectionScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Connection" component={ConnectionScreen} />
+            <Stack.Screen name="Register" component={RegisterScreen} />
 
-        <Stack.Screen name="TabNavigator" component={TabNavigator} /> 
-       { /* <Stack.Screen name="Map" component={MapScreen} /> */}
-        <Stack.Screen name="Ride" component={RideScreen} />
-        <Stack.Screen name="Review" component={ReviewScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="Camera" component={CameraScreen} />
-       
-        
-      </Stack.Navigator>
-    </NavigationContainer>
+            <Stack.Screen name="TabNavigator" component={TabNavigator} />
+            {/* <Stack.Screen name="Map" component={MapScreen} /> */}
+            <Stack.Screen name="Ride" component={RideScreen} />
+            <Stack.Screen name="Review" component={ReviewScreen} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="Camera" component={CameraScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaProvider>
     </Provider>
   );
 }
