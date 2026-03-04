@@ -4,7 +4,8 @@ import { StyleSheet, View, TouchableOpacity, SafeAreaView } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useIsFocused } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
-import { addPhoto } from "../reducers/user";
+import { addPhoto } from "../reducers/users";
+import Arrow from "../components/Arrow";
 
 export default function SnapScreen() {
   const [hasPermission, setHasPermission] = useState(false);
