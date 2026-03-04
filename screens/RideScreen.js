@@ -14,7 +14,7 @@ export default function RideScreen() {
     <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <Arrow />
-          <Text style={styles.trajetText}>Trajets disponibles</Text>
+          <Text style={styles.trajetText}>Historique des Trajets</Text>
         </View>
         <ScrollView style={styles.listeBox}>
           <Ride

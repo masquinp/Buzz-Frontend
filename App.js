@@ -19,6 +19,7 @@ import DriverScreen from "./screens/DriverScreen";
 
 import user from "./reducers/users";
 import rides from './reducers/rides';
+import profile from './reducers/profile';
 
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -26,7 +27,7 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user, rides },
+  reducer: { user, rides, profile },
 });
 
 const Stack = createNativeStackNavigator();
