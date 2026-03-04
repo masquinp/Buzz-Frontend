@@ -7,7 +7,7 @@ import {
   Modal,
   TextInput,
   KeyboardAvoidingView,
-  Platform
+  Platform,
 } from "react-native";
 
 import MapView, { Marker } from "react-native-maps";
@@ -16,7 +16,7 @@ import * as Location from "expo-location";
 import { useEffect, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faUser, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Arrow from "../components/Arrow";
 
 export default function MapScreen({ navigation }) {
@@ -56,69 +56,75 @@ export default function MapScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-        <KeyboardAvoidingView
-                style={styles.container}
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-              >
-      <Modal visible={modalVisible} animationType="fade" transparent>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View>
-            <TextInput
-              placeholder="Departure"
-              onChangeText={(value) => setDeparture(value)}
-              value={departure}
-              style={styles.input}
-            />
-            <TextInput
-              placeholder="Arrival"
-              onChangeText={(value) => setArrival(value)}
-              value={arrival}
-              style={styles.input}
-            />
-            </View>
-            <TouchableOpacity onPress={() => addRide()} style={styles.button} activeOpacity={0.8}>
-              <Text style={styles.textButton}>Ajoutez</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleClose()}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.textButton}>Fermez</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-      <Arrow/>
-      <View style={styles.header}>
-        <Text style={styles.message}>Où allez-vous?</Text>
-        <TouchableOpacity>
-          <FontAwesomeIcon icon={faUser} size={40} color="#A7333F" />
-        </TouchableOpacity>
-      </View>
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: location.latitude,
-          longitude: location.longitude,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
-        }}
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <Marker
-          testID="marker"
-          style={styles.marker}
-          title="My location"
-          pinColor="#A7333F"
-          coordinate={location}
-        />
-      </MapView>
-      <View>
-        <TouchableOpacity style={styles.rideBtn} onPress={() => addRide()}>
-          <Text style={styles.textBtn}> Trouvez un trajet </Text>
-        </TouchableOpacity>
-      </View>
+        <Modal visible={modalVisible} animationType="fade" transparent>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View>
+                <TextInput
+                  placeholder="Departure"
+                  onChangeText={(value) => setDeparture(value)}
+                  value={departure}
+                  style={styles.input}
+                />
+                <TextInput
+                  placeholder="Arrival"
+                  onChangeText={(value) => setArrival(value)}
+                  value={arrival}
+                  style={styles.input}
+                />
+              </View>
+              <TouchableOpacity
+                onPress={() => addRide()}
+                style={styles.button}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.textButton}>Ajoutez</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleClose()}
+                style={styles.button}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.textButton}>Fermez</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+        <Arrow />
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.rideBtn} onPress={() => addRide()}>
+            <Text style={styles.message}>Où allez-vous?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <FontAwesomeIcon icon={faUser} size={40} color="#A7333F" />
+          </TouchableOpacity>
+        </View>
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: location.latitude,
+            longitude: location.longitude,
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
+          }}
+        >
+          <Marker
+            testID="marker"
+            style={styles.marker}
+            title="My location"
+            pinColor="#A7333F"
+            coordinate={location}
+          />
+        </MapView>
+        <View>
+          <TouchableOpacity style={styles.textBtn}>
+            <Text style={styles.driverBtn}> Conducteur ? Cliquez-ici </Text>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -127,7 +133,7 @@ export default function MapScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fdf6f0'
+    backgroundColor: "#fdf6f0",
   },
   map: {
     flex: 1,
@@ -156,7 +162,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#A7333F",
     borderBottomWidth: 1,
     fontSize: 20,
-    color: 'white',
+    color: "white",
     marginBottom: 20,
   },
   button: {
@@ -173,25 +179,31 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 15,
   },
-
-  message: {
-    fontSize: 25,
-    marginLeft: '100'
-  },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 40,
   },
-  rideBtn: {
+  driverBtn: {
     backgroundColor: "#A7333F",
     margin: "20",
     borderRadius: 5,
     padding: 8,
-  },
-  textBtn: {
-    fontSize: 30,
+    fontSize: 20,
     color: "white",
     textAlign: "center",
+  },
+  rideBtn: {
+    backgroundColor: '#c2a7a7',
+    borderRadius: 25,
+    justifyContent: 'center',
+    marginLeft: 60,
+    alignItems: 'center'
+  },
+   message: {
+    fontSize: 25,
+    marginLeft: "100",
+    color: '#67262d',
+    alignItems: 'center'
   },
 });

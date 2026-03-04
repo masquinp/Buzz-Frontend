@@ -6,13 +6,11 @@ import {
   SafeAreaView,
   Image,
 } from "react-native";
-import { useDispatch } from "react-redux";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 export default function HomeScreen({ navigation }) {
-  const dispatch = useDispatch();
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.temporary}>
