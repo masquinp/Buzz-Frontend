@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   trajetText: {
     fontSize: 26,
     fontWeight: "bold",
-    color: "#222",
+    color: "#A7333F",
     textAlign: "center",
   },
   listeBox: {

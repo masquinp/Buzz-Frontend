@@ -1,100 +1,81 @@
+import React from "react";
 import {
   StyleSheet,
   Text,
   View,
   Image,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
-import Arrow from "../components/Arrow";
-import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function Profile(props) {
-  const handleSubmit = () => {};
-
+export default function Profile({ navigation, ...props }) {
   return (
-    <SafeAreaView style={styles.boxContainer}>
-        <View style={styles.firstBox}>
-          <Arrow />
-          <Text style={styles.compteText}>Mon Compte</Text>
-          <Image source={{ uri: props.photo }} style={styles.photo} />
-          <Text style={styles.nameText}>{props.name}</Text>
-          <View style={styles.secondBox}>
-            <TouchableOpacity
-              onPress={() => handleSubmit()}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.textButton}>Mes informations</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleSubmit()}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.textButton}>Mes évaluation</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleSubmit()}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.textButton}>Mes préférence</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleSubmit()}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.textButton}>Sécurité</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleSubmit()}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.textButton}>Trajets</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleSubmit()}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.textButton}>Paiement</Text>
-            </TouchableOpacity>
-          </View>
+    <ScrollView style={styles.container}>
+      <View style={styles.profileBox}>
+        <Text style={styles.title}>Mon Compte</Text>
+        <Image source={{ uri: props.photo }} style={styles.photo} />
+        <Text style={styles.nameText}>
+          {props.prenom} {props.nom}
+        </Text>
       </View>
-    </SafeAreaView>
+
+      <View style={styles.infoCard}>
+        <Text style={styles.title}>Mes informations</Text>
+        <View style={styles.info}>
+          <Text style={styles.value}>Nom : {props.nom}</Text>
+          <Text style={styles.value}>Prénom : {props.prenom}</Text>
+          <Text style={styles.value}>Email : {props.email}</Text>
+          <Text style={styles.value}>Nom d'utilisateur : {props.username}</Text>
+          <Text style={styles.value}>Mot de passe : {props.password}</Text>
+        </View>
+      </View>
+
+      <View style={styles.menuBox}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("Review")}
+        >
+          <Text style={styles.textButton}>Mes évaluations</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("Ride")}
+        >
+          <Text style={styles.textButton}>Trajets</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.textButton}>Paiement</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  boxContainer: {
+  container: {
     flex: 1,
     backgroundColor: "#f4f6f8",
-    paddingTop: 70,
+    paddingTop: 60,
   },
 
-  firstBox: {
+  profileBox: {
     alignItems: "center",
     marginBottom: 30,
   },
 
-  secondBox: {
-    width: "100%",
-    paddingHorizontal: 20,
-    marginTop: 20,
-  },
-
-  compteText: {
+  title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 15,
+    color:"#A7333F"
   },
 
   photo: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 110,
+    height: 110,
+    borderRadius: 55,
     marginBottom: 15,
     backgroundColor: "#000",
   },
@@ -103,6 +84,33 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     color: "#222",
+  },
+
+  infoCard: {
+    backgroundColor: "#fff",
+    marginHorizontal: 20,
+    padding: 20,
+    borderRadius: 15,
+    marginBottom: 25,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+
+  info: {
+    flexDirection: "column",
+  },
+
+  value: {
+    color: "#222",
+    marginBottom: 10,
+    fontSize: 16,
+  },
+
+  menuBox: {
+    paddingHorizontal: 20,
   },
 
   button: {
@@ -119,7 +127,7 @@ const styles = StyleSheet.create({
 
   textButton: {
     fontSize: 16,
-    color: "#333",
+    color: "#A7333F",
     fontWeight: "500",
   },
 });

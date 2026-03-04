@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    color: "#222",
+    color: "#A7333F",
     textAlign: "center",
   },
   globalNote: {
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   noteText: {
     fontSize: 14,
-    color: "#777",
+    color: "#A7333F",
   },
   listeBox: {
     paddingHorizontal: 15,

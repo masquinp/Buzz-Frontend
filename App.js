@@ -14,7 +14,7 @@ import ReviewScreen from "./screens/ReviewScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import TestScreen from "./screens/TestScreen";
 import ChatScreen from "./screens/ChatScreen";
-import CameraScreen from "./screens/CameraScreen";
+
 
 import user from "./reducers/users";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -73,7 +73,6 @@ export default function App() {
             <Stack.Screen name="Ride" component={RideScreen} />
             <Stack.Screen name="Review" component={ReviewScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
-            <Stack.Screen name="Camera" component={CameraScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
