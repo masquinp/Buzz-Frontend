@@ -24,9 +24,6 @@ export default function HomeScreen({ navigation }) {
         <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
           <Text style={styles.p}>P</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Camera")}>
-          <Text style={styles.p}>Cam</Text>
-        </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Test")}>
           <Text style={styles.p}>Test</Text>
         </TouchableOpacity>
