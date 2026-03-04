@@ -19,21 +19,18 @@ export default function ReviewScreen() {
             photo=""
             name="Elsa"
             note={4}
-            date="02/03/26"
             text="Tres Bien."
           />
           <Review
             photo=""
             name="Margaux"
             note={4.5}
-            date="02/03/26"
             text="Super expérience."
           />
           <Review
             photo=""
             name="Pierre"
             note={5}
-            date="01/03/26"
             text="Conduite parfaite."
           />
         </ScrollView>

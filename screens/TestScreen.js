@@ -10,7 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Arrow from "../components/Arrow";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { faCircleUser, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -24,6 +24,7 @@ export default function TestScreen({ navigation }) {
   const allRides = useSelector((state) => state.rides.value);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedRide, setSelectedRide] = useState(null);
 
   useEffect(() => {
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/rides`)
@@ -36,7 +37,9 @@ export default function TestScreen({ navigation }) {
       .catch((err) => console.log("Erreur :", err));
   }, []);
 
-  const showModal = () => {
+  // ride = info du trajet
+  const showModal = (ride) => {
+    setSelectedRide(ride);
     setModalVisible(true);
   };
 
@@ -47,7 +50,7 @@ export default function TestScreen({ navigation }) {
   const rides = allRides.map((data, i) => {
     return (
       <View key={i} style={styles.card}>
-        <TouchableOpacity onPress={() => showModal()}>
+        <TouchableOpacity onPress={() => showModal(data)}>
           <View style={styles.boxCard}>
             <View style={styles.infoUser}>
               <FontAwesomeIcon icon={faCircleUser} size={50} color="#000" />
@@ -71,12 +74,40 @@ export default function TestScreen({ navigation }) {
         <Modal visible={modalVisible} animationType="fade" transparent>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
+              {selectedRide && (
+                <>
+                  <View style={styles.modalContainer}>
+                    <FontAwesomeIcon
+                      icon={faCircleUser}
+                      size={85}
+                      color="#000"
+                    />
+                    <Text style={styles.modalUsername}>
+                      {selectedRide.user?.username}
+                    </Text>
+                    <Text style={styles.modalDestination}>
+                      {selectedRide.departure} ➔ {selectedRide.arrival}
+                    </Text>
+
+                    <Text style={styles.modalDate}>
+                      Date : {selectedRide.date}
+                    </Text>
+                    <Text style={styles.modalPrice}>
+                      Prix : {selectedRide.price}€
+                    </Text>
+                    <Text style={styles.other}>Autres passagers : </Text>
+                  </View>
+                </>
+              )}
+              <TouchableOpacity style={styles.button}>
+                <Text>Validez le trajet</Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => closeModal()}
                 style={styles.button}
                 activeOpacity={0.8}
               >
-                <Text style={styles.textButton}>Fermez</Text>
+                <FontAwesomeIcon icon={faXmark} size={20} color="black" />
               </TouchableOpacity>
             </View>
           </View>
@@ -111,7 +142,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 25,
     fontWeight: "bold",
-    color: '#A7333F'
+    color: "#A7333F",
   },
   infoUser: {
     flexDirection: "row",
@@ -149,6 +180,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    width: "85%",
+    height: "70%",
   },
   button: {
     width: 150,
@@ -163,5 +196,24 @@ const styles = StyleSheet.create({
     height: 24,
     fontWeight: "600",
     fontSize: 15,
+  },
+  modalDestination: {
+    fontSize: 25,
+  },
+  modalContainer: {
+    alignItems: "center",
+  },
+  modalUsername: {
+    fontSize: 35,
+    fontWeight: "bold",
+  },
+  modalDate: {
+    fontSize: 25,
+  },
+  modalPrice: {
+    fontSize: 25,
+  },
+  other: {
+    fontSize: 25,
   },
 });

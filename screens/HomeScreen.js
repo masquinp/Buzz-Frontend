@@ -8,22 +8,11 @@ import {
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.temporary}>
-        <TouchableOpacity onPress={() => navigation.navigate("Ride")}>
-          <FontAwesomeIcon icon={faArrowLeft} size={24} color="#000" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Review")}>
-          <FontAwesomeIcon icon={faArrowLeft} size={24} color="#000" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-          <Text style={styles.p}>P</Text>
-        </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Test")}>
           <Text style={styles.p}>Test</Text>
         </TouchableOpacity>

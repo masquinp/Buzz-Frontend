@@ -16,8 +16,14 @@ export const userSlice = createSlice({
       state.value.token = null;
       state.value.email = null;
     },
+    addPhoto: (state, action) => {
+      state.value.photos.push(action.payload);
+    },
+    removePhoto: (state, action) => {
+      state.value.photos = state.value.photos.filter((photo) => photo !== action.payload);
+    },
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout, addPhoto, removePhoto } = userSlice.actions;
 export default userSlice.reducer;

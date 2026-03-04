@@ -64,6 +64,7 @@ export default function MapScreen({ navigation }) {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <View>
+                <Text style={styles.itinéraire}>Votre intinéraire</Text>
                 <TextInput
                   placeholder="Departure"
                   onChangeText={(value) => setDeparture(value)}
@@ -121,7 +122,10 @@ export default function MapScreen({ navigation }) {
           />
         </MapView>
         <View>
-          <TouchableOpacity style={styles.textBtn}>
+          <TouchableOpacity
+            style={styles.textBtn}
+            onPress={() => navigation.navigate("Driver")}
+          >
             <Text style={styles.driverBtn}> Conducteur ? Cliquez-ici </Text>
           </TouchableOpacity>
         </View>
@@ -194,16 +198,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   rideBtn: {
-    backgroundColor: '#c2a7a7',
+    backgroundColor: "#c2a7a7",
     borderRadius: 25,
-    justifyContent: 'center',
+    justifyContent: "center",
     marginLeft: 60,
-    alignItems: 'center'
+    alignItems: "center",
   },
-   message: {
+  message: {
     fontSize: 25,
     marginLeft: "100",
-    color: '#67262d',
-    alignItems: 'center'
+    color: "#67262d",
+    alignItems: "center",
   },
 });
