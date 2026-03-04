@@ -9,10 +9,18 @@ import {
 } from "react-native";
 import Arrow from "../components/Arrow";
 
-import { useSelector } from "react-redux";  
+import { useSelector, useDispatch } from "react-redux";  
+import { logout } from "../reducers/users";
 
 export default function Profile({ navigation }) {
+   const dispatch = useDispatch();
   const profile = useSelector((state) => state.profile.value);
+  
+
+  const handleLogout = () => {
+    dispatch(logout());
+    // navigation.navigate("Home");
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -53,6 +61,9 @@ export default function Profile({ navigation }) {
 
         <TouchableOpacity style={styles.button}>
           <Text style={styles.textButton}>Paiement</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleLogout()}>
+          <Text>Se deconnecter</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

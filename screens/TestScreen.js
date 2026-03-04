@@ -36,43 +36,6 @@ export default function TestScreen({ navigation }) {
       .catch((err) => console.log("Erreur :", err));
   }, []);
 
-  /*const [departure, setDeparture] = useState("");
-  const [arrival, setArrival] = useState("");
-  const [date, setDate] = useState("");
-  const [price, setPrice] = useState("");
-  const [placeAvailable, setPlaceAvailable] = useState("");
-  const [placesLeft, setPlacesLeft] = useState("");
-  const [totalCost, setTotalCost] = useState("");
-  
-
-
-     const newRide = () => {
-    fetch(`${EXPO_PUBLIC_API_URL}/rides/add`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        departure,
-        arrival,
-        date,
-        price,
-        placeAvailable,
-        placesTotal,
-         user,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          dispatch(addRide(data.ride));
-          // Navigation vers l'écran suivant après succès
-          // navigation.navigate("TabNavigator", { screen: "Map" });
-        } else {
-          alert(data.error);
-        }
-      });
-  };
-  */
-
   const showModal = () => {
     setModalVisible(true);
   };
