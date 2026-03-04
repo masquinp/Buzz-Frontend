@@ -6,6 +6,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { addPhoto } from "../reducers/users";
 import Arrow from "../components/Arrow";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SnapScreen() {
   const [hasPermission, setHasPermission] = useState(false);
@@ -23,13 +24,13 @@ export default function SnapScreen() {
   }, []);
 
   if (!hasPermission || !isFocused) {
-    return <View />;
+    return <View style={{ flex: 1 }} />;
   }
 
   const toggleCameraFacing = () => {
     setFacing((current) => (current === "back" ? "front" : "back"));
   };
-  
+
   const toggleFlash = () => {
     setFlash((current) => (current === "off" ? "on" : "off"));
   };
@@ -48,31 +49,52 @@ export default function SnapScreen() {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView style={styles.container}>
       <CameraView
-        style={{ flex: 1 }}
+        style={styles.camera}
         ref={cameraRef}
         facing={facing}
         flash={flash}
       />
-      <Arrow />
-      <TouchableOpacity onPress={takePicture}>
-        <FontAwesome name="circle-thin" size={80} color="white" />
+
+      <Arrow color="#fff" top={70}/>
+
+      <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
+        <FontAwesome name="circle-thin" size={90} color="white" />
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={toggleFlash}>
+      <TouchableOpacity style={styles.flashButton} onPress={toggleFlash}>
         <FontAwesome name="flash" size={30} color="white" />
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={toggleCameraFacing}>
+      <TouchableOpacity style={styles.rotateButton} onPress={toggleCameraFacing}>
         <FontAwesome name="rotate-right" size={30} color="white" />
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "black",
+  },
+  camera: {
+    flex: 1,
+  },
+  captureButton: {
+    position: "absolute",
+    bottom: 40,
+    alignSelf: "center",
+  },
+  flashButton: {
+    position: "absolute",
+    top: 70,
+    right: 20,
+  },
+  rotateButton: {
+    position: "absolute",
+    bottom: 50,
+    right: 30,
   },
 });

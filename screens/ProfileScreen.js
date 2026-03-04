@@ -1,62 +1,69 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import Arrow from "../components/Arrow";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Profile(props) {
   const handleSubmit = () => {};
 
   return (
-    <View style={styles.boxContainer}>
-      <View style={styles.firstBox}>
-        <Arrow />
-        <Text style={styles.compteText}>Mon Compte</Text>
-        <Image source={{ uri: props.photo }} style={styles.photo} />
-        <Text style={styles.nameText}>{props.name}</Text>
-        <View style={styles.secondBox}>
-          <TouchableOpacity
-            onPress={() => handleSubmit()}
-            style={styles.button}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.textButton}>Mes informations</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleSubmit()}
-            style={styles.button}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.textButton}>Mes évaluation</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleSubmit()}
-            style={styles.button}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.textButton}>Mes préférence</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleSubmit()}
-            style={styles.button}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.textButton}>Sécurité</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleSubmit()}
-            style={styles.button}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.textButton}>Trajets</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleSubmit()}
-            style={styles.button}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.textButton}>Paiement</Text>
-          </TouchableOpacity>
-        </View>
+    <SafeAreaView style={styles.boxContainer}>
+        <View style={styles.firstBox}>
+          <Arrow />
+          <Text style={styles.compteText}>Mon Compte</Text>
+          <Image source={{ uri: props.photo }} style={styles.photo} />
+          <Text style={styles.nameText}>{props.name}</Text>
+          <View style={styles.secondBox}>
+            <TouchableOpacity
+              onPress={() => handleSubmit()}
+              style={styles.button}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.textButton}>Mes informations</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleSubmit()}
+              style={styles.button}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.textButton}>Mes évaluation</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleSubmit()}
+              style={styles.button}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.textButton}>Mes préférence</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleSubmit()}
+              style={styles.button}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.textButton}>Sécurité</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleSubmit()}
+              style={styles.button}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.textButton}>Trajets</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleSubmit()}
+              style={styles.button}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.textButton}>Paiement</Text>
+            </TouchableOpacity>
+          </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

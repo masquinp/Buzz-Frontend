@@ -4,11 +4,11 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
-export default function Arrow() {
+export default function Arrow({color= '#000', top= 20}) {
   const navigation = useNavigation();
   return (
-    <TouchableOpacity style={styles.arrow} onPress={() => navigation.goBack()}>
-      <FontAwesomeIcon icon={faArrowLeft} size={24} color="#000" />
+    <TouchableOpacity style={[styles.arrow, {top: top}]} onPress={() => navigation.goBack()}>
+      <FontAwesomeIcon icon={faArrowLeft} size={24} color = {color} />
     </TouchableOpacity>
   );
 }
@@ -16,7 +16,6 @@ export default function Arrow() {
 const styles = StyleSheet.create({
   arrow: {
     position: "absolute",
-    top: 20,
     left: 20,
     zIndex: 10,
   },
