@@ -41,12 +41,12 @@ const Stack = createNativeStackNavigator();
           } else if (route.name === "Test") {
             iconName = "house";
           } else if (route.name === "Chat") {
-            iconName = "message";
+            iconName = "comments";
           } 
 
           return <FontAwesome name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "#ec6e5b",
+        tabBarActiveTintColor: "#A7333F",
         tabBarInactiveTintColor: "#335561",
         headerShown: false,
       })}

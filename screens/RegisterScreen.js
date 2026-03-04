@@ -4,12 +4,13 @@ import {
   Text,
   View,
   TouchableOpacity,
-  SafeAreaView,
   TextInput,
   KeyboardAvoidingView,
   Platform,
   Image,
 } from "react-native";
+
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -17,8 +18,11 @@ import { login } from "../reducers/users";
 
 import Arrow from "../components/Arrow";
 
+const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
+
 export default function RegisterScreen({ navigation }) {
   const dispatch = useDispatch();
+
 
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -27,7 +31,7 @@ export default function RegisterScreen({ navigation }) {
   const [password, setPassword] = useState("");
 
   const Register = () => {
-    fetch("http://172.20.10.4:3000/users/signup", {
+    fetch(`${EXPO_PUBLIC_API_URL}/users/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -48,7 +52,7 @@ export default function RegisterScreen({ navigation }) {
             }),
           );
           // Navigation vers l'écran suivant après succès
-          navigation.navigate("Map");
+          navigation.navigate("TabNavigator", { screen: "Map" });
         } else {
           alert(data.error);
         }

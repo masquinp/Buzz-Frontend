@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity, } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Arrow from "../components/Arrow";
 
 export default function TestScreen({ navigation }) {

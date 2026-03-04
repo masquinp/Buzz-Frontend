@@ -3,9 +3,10 @@ import {
   Text,
   View,
   TouchableOpacity,
-  SafeAreaView,
   Image,
 } from "react-native";
+
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
@@ -22,9 +23,6 @@ export default function HomeScreen({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
           <Text style={styles.p}>P</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Test")}>
-          <Text style={styles.p}>Test</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Camera")}>
           <Text style={styles.p}>Cam</Text>
