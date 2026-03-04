@@ -1,10 +1,12 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from "react-native";
 import Ride from "../components/ride";
+import Arrow from "../components/Arrow";
 
 export default function RideScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <Arrow />
         <Text style={styles.trajetText}>Trajets disponibles</Text>
       </View>
       <ScrollView style={styles.listeBox}>

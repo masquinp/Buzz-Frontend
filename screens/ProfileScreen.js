@@ -1,13 +1,16 @@
-import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import Arrow from "../components/Arrow";
 
-export default function Profile() {
+export default function Profile(props) {
+  const handleSubmit = () => {};
+
   return (
     <View style={styles.boxContainer}>
-      <View styles={styles.firstBox}>
-        <Text style={styles.carText}>Mon Compte</Text>
+      <View style={styles.firstBox}>
+        <Arrow />
+        <Text style={styles.compteText}>Mon Compte</Text>
         <Image source={{ uri: props.photo }} style={styles.photo} />
         <Text style={styles.nameText}>{props.name}</Text>
-
         <View style={styles.secondBox}>
           <TouchableOpacity
             onPress={() => handleSubmit()}
@@ -58,15 +61,27 @@ export default function Profile() {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  boxContainer: {
     flex: 1,
     backgroundColor: "#f4f6f8",
     paddingTop: 70,
   },
 
-  profileBox: {
+  firstBox: {
     alignItems: "center",
     marginBottom: 30,
+  },
+
+  secondBox: {
+    width: "100%",
+    paddingHorizontal: 20,
+    marginTop: 20,
+  },
+
+  compteText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 15,
   },
 
   photo: {
@@ -74,16 +89,13 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     marginBottom: 15,
+    backgroundColor: "#000",
   },
 
   nameText: {
     fontSize: 22,
     fontWeight: "bold",
     color: "#222",
-  },
-
-  menuBox: {
-    paddingHorizontal: 20,
   },
 
   button: {
@@ -104,4 +116,3 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 });
-
