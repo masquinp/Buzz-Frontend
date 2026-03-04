@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { CameraView, Camera } from "expo-camera";
-import { StyleSheet, View, TouchableOpacity } from "react-native";
+import { StyleSheet, View, TouchableOpacity, SafeAreaView } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useIsFocused } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
@@ -28,7 +28,7 @@ export default function SnapScreen() {
   const toggleCameraFacing = () => {
     setFacing((current) => (current === "back" ? "front" : "back"));
   };
-  
+
   const toggleFlash = () => {
     setFlash((current) => (current === "off" ? "on" : "off"));
   };
@@ -47,26 +47,28 @@ export default function SnapScreen() {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <CameraView
-        style={{ flex: 1 }}
-        ref={cameraRef}
-        facing={facing}
-        flash={flash}
-      />
-      <Arrow />
-      <TouchableOpacity onPress={takePicture}>
-        <FontAwesome name="circle-thin" size={80} color="white" />
-      </TouchableOpacity>
+    <SafeAreaView>
+      <View style={{ flex: 1 }}>
+        <CameraView
+          style={{ flex: 1 }}
+          ref={cameraRef}
+          facing={facing}
+          flash={flash}
+        />
+        <Arrow />
+        <TouchableOpacity onPress={takePicture}>
+          <FontAwesome name="circle-thin" size={80} color="white" />
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={toggleFlash}>
-        <FontAwesome name="flash" size={30} color="white" />
-      </TouchableOpacity>
+        <TouchableOpacity onPress={toggleFlash}>
+          <FontAwesome name="flash" size={30} color="white" />
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={toggleCameraFacing}>
-        <FontAwesome name="rotate-right" size={30} color="white" />
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity onPress={toggleCameraFacing}>
+          <FontAwesome name="rotate-right" size={30} color="white" />
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
