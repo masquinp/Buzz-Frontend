@@ -15,14 +15,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/users";
-
+import { profileUser } from "../reducers/profileSlice";
 import Arrow from "../components/Arrow";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export default function RegisterScreen({ navigation }) {
   const dispatch = useDispatch();
-
 
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -51,6 +50,17 @@ export default function RegisterScreen({ navigation }) {
               token: data.token,
             }),
           );
+
+          dispatch(
+            profileUser({
+              firstname,
+              lastname,
+              email,
+              username,
+              password,
+            })
+          );
+
           // Navigation vers l'écran suivant après succès
           navigation.navigate("TabNavigator", { screen: "Map" });
         } else {

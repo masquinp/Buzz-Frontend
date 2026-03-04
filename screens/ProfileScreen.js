@@ -7,26 +7,30 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import Arrow from "../components/Arrow";
 
-export default function Profile({ navigation, ...props }) {
+export default function Profile({ navigation }) {
+  const profile = useSelector((state) => state.profile.value);
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.profileBox}>
+        <Arrow />
         <Text style={styles.title}>Mon Compte</Text>
-        <Image source={{ uri: props.photo }} style={styles.photo} />
+        <Image source={{ uri: profile.photo }} style={styles.photo} />
         <Text style={styles.nameText}>
-          {props.prenom} {props.nom}
+          {profile.prenom} {profile.nom}
         </Text>
       </View>
 
       <View style={styles.infoCard}>
         <Text style={styles.title}>Mes informations</Text>
         <View style={styles.info}>
-          <Text style={styles.value}>Nom : {props.nom}</Text>
-          <Text style={styles.value}>Prénom : {props.prenom}</Text>
-          <Text style={styles.value}>Email : {props.email}</Text>
-          <Text style={styles.value}>Nom d'utilisateur : {props.username}</Text>
-          <Text style={styles.value}>Mot de passe : {props.password}</Text>
+          <Text style={styles.value}>Nom : {profile.nom}</Text>
+          <Text style={styles.value}>Prénom : {profile.prenom}</Text>
+          <Text style={styles.value}>Email : {profile.email}</Text>
+          <Text style={styles.value}>Nom d'utilisateur : {profile.username}</Text>
+          <Text style={styles.value}>Mot de passe : {profile.password}</Text>
         </View>
       </View>
 
