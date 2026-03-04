@@ -14,8 +14,11 @@ import ReviewScreen from "./screens/ReviewScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import TestScreen from "./screens/TestScreen";
 import ChatScreen from "./screens/ChatScreen";
+<<<<<<< HEAD
 import CameraScreen from "./screens/CameraScreen";
 import DriverScreen from "./screens/DriverScreen";
+=======
+>>>>>>> 7221b399bbe5baa9f98b75d0a363dc22466e88f9
 
 
 import user from "./reducers/users";
@@ -74,9 +77,12 @@ export default function App() {
             <Stack.Screen name="Ride" component={RideScreen} />
             <Stack.Screen name="Review" component={ReviewScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
+<<<<<<< HEAD
             <Stack.Screen name="Camera" component={CameraScreen} />
             <Stack.Screen name="Test" component={TestScreen} />
             <Stack.Screen name="Driver" component={DriverScreen} />
+=======
+>>>>>>> 7221b399bbe5baa9f98b75d0a363dc22466e88f9
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
