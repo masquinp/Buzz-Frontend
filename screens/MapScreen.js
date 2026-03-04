@@ -99,7 +99,7 @@ export default function MapScreen({ navigation }) {
           <TouchableOpacity style={styles.rideBtn} onPress={() => addRide()}>
             <Text style={styles.message}>Où allez-vous?</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
             <FontAwesomeIcon icon={faUser} size={40} color="#A7333F" />
           </TouchableOpacity>
         </View>

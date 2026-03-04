@@ -3,8 +3,8 @@ import { StyleSheet, Text, View } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import HomeScreen from "./screens/HomeScreen";
 import ConnectionScreen from "./screens/ConnectionScreen";
 import RegisterScreen from "./screens/RegisterScreen";
@@ -12,6 +12,9 @@ import MapScreen from "./screens/MapScreen";
 import RideScreen from "./screens/RideScreen";
 import ReviewScreen from "./screens/ReviewScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import TestScreen from "./screens/TestScreen";
+import ChatScreen from "./screens/ChatScreen";
+import CameraScreen from "./screens/CameraScreen";
 
 import user from './reducers/users';
 
@@ -23,21 +26,23 @@ const store = configureStore({
 });
 
 const Stack = createNativeStackNavigator();
-// const Tab = createBottomTabNavigator();
+ const Tab = createBottomTabNavigator();
 
 
- /* const TabNavigator = () => {
+  const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           let iconName = "";
 
-          if (route.name === "Home") {
+          if (route.name === "Map") {
+            iconName = "map";
+          } else if (route.name === "Test") {
             iconName = "house";
           } else if (route.name === "Chat") {
             iconName = "message";
-          }
+          } 
 
           return <FontAwesome name={iconName} size={size} color={color} />;
         },
@@ -46,12 +51,14 @@ const Stack = createNativeStackNavigator();
         headerShown: false,
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Message" component={MessageScreen} />
+      <Tab.Screen name="Map" component={MapScreen} />
+      <Tab.Screen name="Test" component={TestScreen} />
+      <Tab.Screen name="Chat" component={ChatScreen} />
+
     </Tab.Navigator>
   );
 };
-*/
+
 
 export default function App() {
   return (
@@ -61,11 +68,15 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Connection" component={ConnectionScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
-        <Stack.Screen name="Map" component={MapScreen} />
+
+        <Stack.Screen name="TabNavigator" component={TabNavigator} /> 
+       { /* <Stack.Screen name="Map" component={MapScreen} /> */}
         <Stack.Screen name="Ride" component={RideScreen} />
         <Stack.Screen name="Review" component={ReviewScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
-        { /* <Stack.Screen name="TabNavigator" component={TabNavigator} /> */ }
+        <Stack.Screen name="Camera" component={CameraScreen} />
+       
+        
       </Stack.Navigator>
     </NavigationContainer>
     </Provider>
