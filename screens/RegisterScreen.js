@@ -15,7 +15,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/users";
-import { profileUser } from "../reducers/profileSlice";
+
+import { profileUser } from "../reducers/profile"
 import Arrow from "../components/Arrow";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;

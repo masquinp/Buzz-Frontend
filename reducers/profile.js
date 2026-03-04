@@ -10,7 +10,7 @@ const initialState = {
     },
 };
 
-export const reviewSlice = createSlice ({
+export const profileSlice = createSlice ({
     name: "profile",
     initialState,
     reducers: {

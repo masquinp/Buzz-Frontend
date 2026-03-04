@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import Arrow from "../components/Arrow";
 
+import { useSelector } from "react-redux";  
+
 export default function Profile({ navigation }) {
   const profile = useSelector((state) => state.profile.value);
 
