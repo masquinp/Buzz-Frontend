@@ -15,15 +15,19 @@ import ProfileScreen from "./screens/ProfileScreen";
 import TestScreen from "./screens/TestScreen";
 import ChatScreen from "./screens/ChatScreen";
 import CameraScreen from "./screens/CameraScreen";
+import DriverScreen from "./screens/DriverScreen";
+
 
 import user from "./reducers/users";
+import rides from './reducers/rides';
+
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user },
+  reducer: { user, rides },
 });
 
 const Stack = createNativeStackNavigator();
@@ -38,8 +42,6 @@ const TabNavigator = () => {
 
           if (route.name === "Map") {
             iconName = "map";
-          } else if (route.name === "Test") {
-            iconName = "house";
           } else if (route.name === "Chat") {
             iconName = "comments";
           } 
@@ -52,7 +54,6 @@ const TabNavigator = () => {
       })}
     >
       <Tab.Screen name="Map" component={MapScreen} />
-      <Tab.Screen name="Test" component={TestScreen} />
       <Tab.Screen name="Chat" component={ChatScreen} />
     </Tab.Navigator>
   );
@@ -74,6 +75,8 @@ export default function App() {
             <Stack.Screen name="Review" component={ReviewScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="Camera" component={CameraScreen} />
+            <Stack.Screen name="Test" component={TestScreen} />
+            <Stack.Screen name="Driver" component={DriverScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
