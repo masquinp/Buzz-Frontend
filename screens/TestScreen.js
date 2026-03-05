@@ -10,11 +10,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Arrow from "../components/Arrow";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { faCircleUser, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { loadRides } from "../reducers/rides";
+import { addBooking } from "../reducers/bookings";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -24,6 +25,9 @@ export default function TestScreen({ navigation }) {
   const allRides = useSelector((state) => state.rides.value);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedRide, setSelectedRide] = useState(null);
+  const [seatsBooked, setSeatsBooked] = useState(1);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/rides`)
@@ -36,44 +40,9 @@ export default function TestScreen({ navigation }) {
       .catch((err) => console.log("Erreur :", err));
   }, []);
 
-  /*const [departure, setDeparture] = useState("");
-  const [arrival, setArrival] = useState("");
-  const [date, setDate] = useState("");
-  const [price, setPrice] = useState("");
-  const [placeAvailable, setPlaceAvailable] = useState("");
-  const [placesLeft, setPlacesLeft] = useState("");
-  const [totalCost, setTotalCost] = useState("");
-  
-
-
-     const newRide = () => {
-    fetch(`${EXPO_PUBLIC_API_URL}/rides/add`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        departure,
-        arrival,
-        date,
-        price,
-        placeAvailable,
-        placesTotal,
-         user,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          dispatch(addRide(data.ride));
-          // Navigation vers l'écran suivant après succès
-          // navigation.navigate("TabNavigator", { screen: "Map" });
-        } else {
-          alert(data.error);
-        }
-      });
-  };
-  */
-
-  const showModal = () => {
+  // ride = info du trajet
+  const showModal = (ride) => {
+    setSelectedRide(ride);
     setModalVisible(true);
   };
 
@@ -84,7 +53,7 @@ export default function TestScreen({ navigation }) {
   const rides = allRides.map((data, i) => {
     return (
       <View key={i} style={styles.card}>
-        <TouchableOpacity onPress={() => showModal()}>
+        <TouchableOpacity onPress={() => showModal(data)}>
           <View style={styles.boxCard}>
             <View style={styles.infoUser}>
               <FontAwesomeIcon icon={faCircleUser} size={50} color="#000" />
@@ -102,18 +71,73 @@ export default function TestScreen({ navigation }) {
     );
   });
 
+
+  const newBooking = () => {
+    if (!selectedRide) return; // Sécurité
+      fetch(`${EXPO_PUBLIC_API_URL}/bookings/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: user.token,
+          seatsBooked : seatsBooked,
+          ride: selectedRide._id,
+          message: message,
+          
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.result) {
+            dispatch(addBooking(data.booking));
+            // Navigation vers l'écran suivant après succès
+            // onPress={() => navigation.navigate("Bookings")}
+            alert("Réservation réussie !");
+          } else {
+            alert(data.error);
+          }
+        });
+    };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollView}>
         <Modal visible={modalVisible} animationType="fade" transparent>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
+              {selectedRide && (
+                <>
+                  <View style={styles.modalContainer}>
+                    <FontAwesomeIcon
+                      icon={faCircleUser}
+                      size={85}
+                      color="#000"
+                    />
+                    <Text style={styles.modalUsername}>
+                      {selectedRide.user?.username}
+                    </Text>
+                    <Text style={styles.modalDestination}>
+                      {selectedRide.departure} ➔ {selectedRide.arrival}
+                    </Text>
+
+                    <Text style={styles.modalDate}>
+                      Date : {selectedRide.date}
+                    </Text>
+                    <Text style={styles.modalPrice}>
+                      Prix : {selectedRide.price}€
+                    </Text>
+                    <Text style={styles.other}>Autres passagers : </Text>
+                  </View>
+                </>
+              )}
+              <TouchableOpacity style={styles.button} onPress={() => newBooking()}>
+                <Text>Validez le trajet</Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => closeModal()}
                 style={styles.button}
                 activeOpacity={0.8}
               >
-                <Text style={styles.textButton}>Fermez</Text>
+                <FontAwesomeIcon icon={faXmark} size={20} color="black" />
               </TouchableOpacity>
             </View>
           </View>
@@ -148,7 +172,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 25,
     fontWeight: "bold",
-    color: '#A7333F'
+    color: "#A7333F",
   },
   infoUser: {
     flexDirection: "row",
@@ -186,6 +210,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    width: "85%",
+    height: "70%",
   },
   button: {
     width: 150,
@@ -200,5 +226,24 @@ const styles = StyleSheet.create({
     height: 24,
     fontWeight: "600",
     fontSize: 15,
+  },
+  modalDestination: {
+    fontSize: 25,
+  },
+  modalContainer: {
+    alignItems: "center",
+  },
+  modalUsername: {
+    fontSize: 35,
+    fontWeight: "bold",
+  },
+  modalDate: {
+    fontSize: 25,
+  },
+  modalPrice: {
+    fontSize: 25,
+  },
+  other: {
+    fontSize: 25,
   },
 });

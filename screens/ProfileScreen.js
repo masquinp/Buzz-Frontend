@@ -9,10 +9,18 @@ import {
 } from "react-native";
 import Arrow from "../components/Arrow";
 
-import { useSelector } from "react-redux";  
+import { useSelector, useDispatch } from "react-redux";  
+import { logout } from "../reducers/users";
 
 export default function Profile({ navigation }) {
+   const dispatch = useDispatch();
   const profile = useSelector((state) => state.profile.value);
+  const user = useSelector((state) => state.user.value);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    // navigation.navigate("Home);
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -28,8 +36,8 @@ export default function Profile({ navigation }) {
       <View style={styles.infoCard}>
         <Text style={styles.title}>Mes informations</Text>
         <View style={styles.info}>
-          <Text style={styles.value}>Nom : {profile.lastname}</Text>
-          <Text style={styles.value}>Prénom : {profile.firstname}</Text>
+          <Text style={styles.value}>Nom : {profile.nom}</Text>
+          <Text style={styles.value}>Prénom : {profile.prenom}</Text>
           <Text style={styles.value}>Email : {profile.email}</Text>
           <Text style={styles.value}>Nom d'utilisateur : {profile.username}</Text>
           <Text style={styles.value}>Mot de passe : {profile.password}</Text>
@@ -53,6 +61,9 @@ export default function Profile({ navigation }) {
 
         <TouchableOpacity style={styles.button}>
           <Text style={styles.textButton}>Paiement</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleLogout()}>
+          <Text>Se deconnecter</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
