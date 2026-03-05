@@ -14,12 +14,15 @@ import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Arrow from "../components/Arrow";
 
 export default function MapScreen({ navigation }) {
+  const user = useSelector((state) => state.user.value);
+
   const [location, setLocation] = useState(null); // useState obligé pour récupérer la position
   const [modalVisible, setModalVisible] = useState(false);
   const [departure, setDeparture] = useState("");
@@ -97,12 +100,18 @@ export default function MapScreen({ navigation }) {
         </Modal>
         <Arrow />
         <View style={styles.header}>
+        <Text style={styles.welcome}>Bonjour {user.email}</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+            <FontAwesomeIcon icon={faUser} size={40} color="#A7333F" />
+          </TouchableOpacity>
+
+        </View>
+        <View>
+          
           <TouchableOpacity style={styles.rideBtn} onPress={() => addRide()}>
             <Text style={styles.message}>Où allez-vous?</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-            <FontAwesomeIcon icon={faUser} size={40} color="#A7333F" />
-          </TouchableOpacity>
+          
         </View>
         <MapView
           style={styles.map}
@@ -207,13 +216,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#c2a7a7",
     borderRadius: 25,
     justifyContent: "center",
-    marginLeft: 60,
+    
     alignItems: "center",
+   
   },
   message: {
     fontSize: 25,
-    marginLeft: "100",
     color: "#67262d",
     alignItems: "center",
+    
   },
+  welcome: {
+    textAlign: 'center',
+    fontSize: 22,
+    fontWeight: 'bold'
+  }
 });
