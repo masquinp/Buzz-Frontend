@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  value: { token: null, email: null },
+  value: { token: null, email: null, photos: [] },
 };
 
 export const userSlice = createSlice({
@@ -20,7 +20,7 @@ export const userSlice = createSlice({
       state.value.photos.push(action.payload);
     },
     removePhoto: (state, action) => {
-      state.value.photos = state.value.photos.filter((photo) => photo !== action.payload);
+      state.value.photos = state.value.photos.filter((photos) => photos !== action.payload);
     },
   },
 });
