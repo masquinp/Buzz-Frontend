@@ -1,19 +1,25 @@
+import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import HomeScreen from "./screens/HomeScreen";
+
 import ConnectionScreen from "./screens/ConnectionScreen";
 import RegisterScreen from "./screens/RegisterScreen";
+
+import HomeScreen from "./screens/HomeScreen";
+
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+
+import ProfileScreen from "./screens/ProfileScreen";
+import ChatScreen from "./screens/ChatScreen";
+
 import MapScreen from "./screens/MapScreen";
 import RideScreen from "./screens/RideScreen";
 import ReviewScreen from "./screens/ReviewScreen";
-import ProfileScreen from "./screens/ProfileScreen";
 import TestScreen from "./screens/TestScreen";
-import ChatScreen from "./screens/ChatScreen";
 import DriverScreen from "./screens/DriverScreen";
 import BookingsScreen from "./screens/BookingsScreen";
 import AddRideScreen from "./screens/AddRideScreen";
