@@ -14,7 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function RideScreen() {
   const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
   const [bookings, setBookings] = useState([]);
-  const user = useSelector((state) => state.users.value);
+  const user = useSelector((state) => state.user.value);
 
   useEffect(() => {
     fetch(`${EXPO_PUBLIC_API_URL}/bookings/${user.token}`)

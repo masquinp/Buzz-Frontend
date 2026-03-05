@@ -40,7 +40,6 @@ export default function Profile({ navigation }) {
           <Text style={styles.value}>Prénom : {profile.firstname}</Text>
           <Text style={styles.value}>Email : {profile.email}</Text>
           <Text style={styles.value}>Nom d'utilisateur : {profile.username}</Text>
-          <Text style={styles.value}>Mot de passe : {profile.password}</Text>
         </View>
       </View>
 
