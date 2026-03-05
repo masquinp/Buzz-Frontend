@@ -20,6 +20,9 @@ import { profileUser } from "../reducers/profile";
 import Arrow from "../components/Arrow";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
+// Grabbed from emailregex.com
+const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 
 export default function RegisterScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -29,8 +32,15 @@ export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState(false);
 
   const Register = () => {
+    if (!EMAIL_REGEX.test(email)) {
+      setEmailError(true);
+      return;
+    }
+    setEmailError(false);
+
     fetch(`${EXPO_PUBLIC_API_URL}/users/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -103,10 +113,16 @@ export default function RegisterScreen({ navigation }) {
           />
           <TextInput
             placeholder="Email"
-            style={styles.input}
+            autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
+            keyboardType="email-address" // https://reactnative.dev/docs/textinput#keyboardtype
+            textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
+            autoComplete="email" // https://reactnative.dev/docs/textinput#autocomplete-android
             onChangeText={(value) => setEmail(value)}
             value={email}
+            style={styles.input}
           />
+
+          {emailError && <Text style={styles.error}>Invalid email address</Text>}
           <TextInput
             placeholder="Password"
             style={styles.input}

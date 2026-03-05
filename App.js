@@ -19,7 +19,7 @@ import ChatScreen from "./screens/ChatScreen";
 import MapScreen from "./screens/MapScreen";
 import RideScreen from "./screens/RideScreen";
 import ReviewScreen from "./screens/ReviewScreen";
-import TestScreen from "./screens/TestScreen";
+import AllRidesScreen from "./screens/AllRidesScreen";
 import DriverScreen from "./screens/DriverScreen";
 import BookingsScreen from "./screens/BookingsScreen";
 import AddRideScreen from "./screens/AddRideScreen";
@@ -82,7 +82,7 @@ export default function App() {
             <Stack.Screen name="Ride" component={RideScreen} />
             <Stack.Screen name="Review" component={ReviewScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
-            <Stack.Screen name="Test" component={TestScreen} />
+            <Stack.Screen name="AllRides" component={AllRidesScreen} />
             <Stack.Screen name="Driver" component={DriverScreen} />
             <Stack.Screen name="Bookings" component={BookingsScreen} />
             <Stack.Screen name="AddRide" component={AddRideScreen} />

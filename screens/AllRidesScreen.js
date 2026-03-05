@@ -19,7 +19,7 @@ import { addBooking } from "../reducers/bookings";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
-export default function TestScreen({ navigation }) {
+export default function AllRidesScreen({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
   const allRides = useSelector((state) => state.rides.value);

@@ -130,7 +130,7 @@ export default function MapScreen({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.textBtn}
-            onPress={() => navigation.navigate("Test")}
+            onPress={() => navigation.navigate("AllRides")}
           >
             <Text style={styles.driverBtn}> Voir les trajets </Text>
           </TouchableOpacity>

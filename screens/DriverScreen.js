@@ -159,10 +159,10 @@ export default function TestScreen({ navigation }) {
        method: "POST",
        headers: { "Content-Type": "application/json" },
        body: JSON.stringify({
-         user: user._id,
+         token: user.token,
          brand,
          model,
-         color: 
+         color,
          nbSeats,
          licencePlate,
        }),
@@ -277,7 +277,7 @@ export default function TestScreen({ navigation }) {
               <TouchableOpacity
                 style={styles.registerBtn}
                 onPress={() => {
-                  /* Ta fonction pour sauver la voiture */
+                  newCar(),
                   closeModal();
                 }}
               >
@@ -287,6 +287,7 @@ export default function TestScreen({ navigation }) {
           </View>
         </Modal>
         <Arrow />
+        <Text>Bonjour ! {user?.email}</Text>
         <View styles={styles.addDoc}>
           <Text>Ajouter vos documents : </Text>
           <TouchableOpacity onPress={() => openModal('camera')}>
@@ -303,7 +304,7 @@ export default function TestScreen({ navigation }) {
         ) : (
           <Text>Aucune photo téléchargée</Text>
         )}
-        <Text>Voiture enregistrée : {user.car}</Text>
+        <Text>Voiture enregistrée : {user.car ? `${user.car.brand} ${user.car.model}` : "Aucune"}</Text>
         <TouchableOpacity onPress={() => openModal('car')}>
           <Text style={styles.title}>Ajoutez votre voiture</Text>
         </TouchableOpacity>
