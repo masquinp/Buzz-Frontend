@@ -25,8 +25,7 @@ import {
 
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState, useRef } from "react";
-import { addRide, deleteRide } from "../reducers/rides";
-import { addPhoto } from "../reducers/users";
+import { addPhoto, removePhoto } from "../reducers/users";
 import { useIsFocused } from "@react-navigation/native";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
@@ -46,11 +45,6 @@ export default function TestScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [activeModal, setActiveModal] = useState(null); // null = aucune modal ouverte
 
-  const [departure, setDeparture] = useState("");
-  const [arrival, setArrival] = useState("");
-  const [date, setDate] = useState("");
-  const [price, setPrice] = useState("");
-  const [placeAvailable, setPlaceAvailable] = useState("");
   const [brand, setBrand] = useState("");
   const [color, setColor] = useState("");
   const [model, setModel] = useState("");
@@ -138,31 +132,22 @@ export default function TestScreen({ navigation }) {
     }
   };
 
-  const newRide = () => {
-    fetch(`${EXPO_PUBLIC_API_URL}/rides/add`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        token: user.token,
-        departure,
-        arrival,
-        date,
-        price,
-        placeAvailable,
-        placesTotal,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          dispatch(addRide(data.ride));
-          // Navigation vers l'écran suivant après succès
-          // navigation.navigate("TabNavigator", { screen: "Map" });
-        } else {
-          alert(data.error);
-        }
-      });
-  };
+  const photos = user.photos?.map((data, i) => {
+    return (
+      <View key={i} style={styles.photoContainer}>
+        <TouchableOpacity onPress={() => dispatch(removePhoto(data))}>
+          <FontAwesome
+            name="times"
+            size={20}
+            color="#000000"
+            style={styles.deleteIcon}
+          />
+        </TouchableOpacity>
+
+        <Image source={{ uri: data }} style={styles.photo} />
+      </View>
+    );
+  });
 
   const showModal = (ride) => {
     setModalVisible(true);
@@ -179,20 +164,20 @@ export default function TestScreen({ navigation }) {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <Modal visible={modalVisible} animationType="fade">
-          <CameraView
-            style={styles.camera}
-            ref={cameraRef}
-            facing={facing}
-            flash={flash}
-          >
-            
+          <View style={{ flex: 1 }}>
+            <CameraView
+              style={styles.camera}
+              ref={cameraRef}
+              facing={facing}
+              flash={flash}
+            />
+
             <TouchableOpacity
               onPress={() => closeModal()}
-              style={styles.closeButton}
+              style={styles.closeModal}
             >
-              <FontAwesomeIcon style={styles.closeModal} icon={faXmark} size={50} color="white" />
+              <FontAwesomeIcon icon={faXmark} size={50} color="white" />
             </TouchableOpacity>
-
             <View style={styles.cameraButtons}>
               <TouchableOpacity
                 style={styles.flashButton}
@@ -215,7 +200,7 @@ export default function TestScreen({ navigation }) {
                 <FontAwesome name="rotate-right" size={30} color="white" />
               </TouchableOpacity>
             </View>
-          </CameraView>
+          </View>
         </Modal>
         <Arrow />
         <View styles={styles.addDoc}>
@@ -224,46 +209,19 @@ export default function TestScreen({ navigation }) {
             <FontAwesomeIcon icon={faCamera} size={50} color="#000" />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity>
-        <Text style={styles.title}>Ajoutez un trajet</Text>
+        <Text>Vos photos</Text>
+        <ScrollView contentContainerStyle={styles.galleryContainer}>
+          {photos}
+        </ScrollView>
+        {/* si l'utilisateur n'a mis aucune photo, on renvoie ce text :*/}
+        {user.photos && user.photos.length > 0 ? (
+          photos
+        ) : (
+          <Text>Aucune photo téléchargée</Text>
+        )}
+        <TouchableOpacity onPress={() => navigation.navigate("AddRide")}>
+          <Text style={styles.title}>Ajoutez un trajet</Text>
         </TouchableOpacity>
-{ /* 
-        <View>
-          <TextInput
-            placeholder="Departure"
-            style={styles.input}
-            onChangeText={(value) => setDeparture(value)}
-            value={departure}
-          />
-          <TextInput
-            placeholder="Arrival"
-            style={styles.input}
-            onChangeText={(value) => setArrival(value)}
-            value={arrival}
-          />
-          <TextInput
-            placeholder="Date"
-            style={styles.input}
-            onChangeText={(value) => setDate(value)}
-            value={date}
-          />
-          <TextInput
-            placeholder="Price"
-            style={styles.input}
-            onChangeText={(value) => setPrice(value)}
-            value={price}
-          />
-          <TextInput
-            placeholder="Place available"
-            style={styles.input}
-            onChangeText={(value) => setPlaceAvailable(value)}
-            value={placeAvailable}
-          />
-          <TouchableOpacity style={styles.registerBtn} onPress={() => newRide}>
-            <Text style={styles.textBtn}>Valider</Text>
-          </TouchableOpacity>
-        </View>
-        */}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -291,19 +249,7 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
   },
-  registerBtn: {
-    backgroundColor: "#A7333F",
-    margin: "20",
-    borderRadius: 50,
-    padding: 10,
-    marginTop: 100,
-  },
-  logo: {
-    width: 180,
-    height: 120,
-    resizeMode: "contain",
-    alignSelf: "center",
-  },
+
   title: {
     fontSize: 25,
   },
@@ -335,18 +281,24 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   captureButton: {
-  alignItems: "center",
-},
-cameraButtons: {
-  position: "absolute",
-  bottom: 40,
-  width: "100%",
-  flexDirection: "row",
-  justifyContent: "space-around",
-  alignItems: "center",
-},
-closeModal: {
+    alignItems: "center",
+  },
+  cameraButtons: {
+    position: "absolute",
+    bottom: 40,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+  closeModal: {
     top: 80,
     left: 30,
-}
+    position: "absolute",
+  },
+  galleryContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 10,
+  },
 });

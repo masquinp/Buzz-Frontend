@@ -1,39 +1,49 @@
 import { StyleSheet, Text, View, ScrollView } from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { reviewUser } from "../reducers/review";
 import Review from "../components/review";
 import Arrow from "../components/Arrow";
 
 export default function ReviewScreen() {
+  const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
+  const dispatch = useDispatch();
+  const reviews = useSelector((state) => state.review.reviews);
+
+  const moyenne =
+    reviews.reduce((sum, review) => sum + Number(review.note), 0) /
+      reviews.length || 0;
+
+  useEffect(() => {
+    fetch(`${EXPO_PUBLIC_API_URL}/reviews`)
+      .then((response) => response.json())
+      .then((data) => {
+        dispatch(reviewUser(data.reviews));
+      }); 
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <Arrow />
-          <Text style={styles.title}>Mes évaluations</Text>
-        </View>
-        <View style={styles.globalNote}>
-          <Text style={styles.noteNumber}>4.5</Text>
-          <Text style={styles.noteText}>Note moyenne</Text>
-        </View>
-        <ScrollView style={styles.listeBox}>
+      <View style={styles.header}>
+        <Arrow />
+        <Text style={styles.title}>Mes évaluations</Text>
+      </View>
+      <View style={styles.globalNote}>
+        <Text style={styles.noteNumber}>{moyenne}</Text>
+        <Text style={styles.noteText}>Note moyenne</Text>
+      </View>
+      <ScrollView style={styles.listeBox}>
+        {reviews.map((data, i) => (
           <Review
-            photo=""
-            name="Elsa"
-            note={4}
-            text="Tres Bien."
+            key={i}
+            photo={data.user?.photo}
+            name={data.user?.name}
+            note={data.note}
+            text={data.message}
           />
-          <Review
-            photo=""
-            name="Margaux"
-            note={4.5}
-            text="Super expérience."
-          />
-          <Review
-            photo=""
-            name="Pierre"
-            note={5}
-            text="Conduite parfaite."
-          />
-        </ScrollView>
+        ))} 
+      </ScrollView>
     </SafeAreaView>
   );
 }

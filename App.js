@@ -22,11 +22,12 @@ import ReviewScreen from "./screens/ReviewScreen";
 import TestScreen from "./screens/TestScreen";
 import DriverScreen from "./screens/DriverScreen";
 import BookingsScreen from "./screens/BookingsScreen";
-
+import AddRideScreen from "./screens/AddRideScreen";
 
 import user from "./reducers/users";
 import rides from './reducers/rides';
 import profile from './reducers/profile';
+import review from './reducers/review';
 
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -34,7 +35,7 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user, rides, profile },
+  reducer: { user, rides, profile, review },
 });
 
 const Stack = createNativeStackNavigator();
@@ -84,6 +85,7 @@ export default function App() {
             <Stack.Screen name="Test" component={TestScreen} />
             <Stack.Screen name="Driver" component={DriverScreen} />
             <Stack.Screen name="Bookings" component={BookingsScreen} />
+            <Stack.Screen name="AddRide" component={AddRideScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
