@@ -15,6 +15,7 @@ import ProfileScreen from "./screens/ProfileScreen";
 import TestScreen from "./screens/TestScreen";
 import ChatScreen from "./screens/ChatScreen";
 import DriverScreen from "./screens/DriverScreen";
+import BookingsScreen from "./screens/BookingsScreen";
 
 
 import user from "./reducers/users";
@@ -76,6 +77,7 @@ export default function App() {
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="Test" component={TestScreen} />
             <Stack.Screen name="Driver" component={DriverScreen} />
+            <Stack.Screen name="Bookings" component={BookingsScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

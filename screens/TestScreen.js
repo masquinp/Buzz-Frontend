@@ -15,6 +15,7 @@ import { faCircleUser, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { loadRides } from "../reducers/rides";
+import { addBooking } from "../reducers/bookings";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -25,6 +26,8 @@ export default function TestScreen({ navigation }) {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedRide, setSelectedRide] = useState(null);
+  const [seatsBooked, setSeatsBooked] = useState(1);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/rides`)
@@ -68,6 +71,33 @@ export default function TestScreen({ navigation }) {
     );
   });
 
+
+  const newBooking = () => {
+    if (!selectedRide) return; // Sécurité
+      fetch(`${EXPO_PUBLIC_API_URL}/bookings/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: user.token,
+          seatsBooked : seatsBooked,
+          ride: selectedRide._id,
+          message: message,
+          
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.result) {
+            dispatch(addBooking(data.booking));
+            // Navigation vers l'écran suivant après succès
+            // onPress={() => navigation.navigate("Bookings")}
+            alert("Réservation réussie !");
+          } else {
+            alert(data.error);
+          }
+        });
+    };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollView}>
@@ -99,7 +129,7 @@ export default function TestScreen({ navigation }) {
                   </View>
                 </>
               )}
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity style={styles.button} onPress={() => newBooking()}>
                 <Text>Validez le trajet</Text>
               </TouchableOpacity>
               <TouchableOpacity

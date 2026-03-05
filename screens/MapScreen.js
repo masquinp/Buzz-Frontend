@@ -128,6 +128,12 @@ export default function MapScreen({ navigation }) {
           >
             <Text style={styles.driverBtn}> Conducteur ? Cliquez-ici </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.textBtn}
+            onPress={() => navigation.navigate("Test")}
+          >
+            <Text style={styles.driverBtn}> Voir les trajets </Text>
+          </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
