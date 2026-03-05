@@ -10,16 +10,19 @@ import {
   Image,
 } from "react-native";
 
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/users";
 
-import { profileUser } from "../reducers/profile"
+import { profileUser } from "../reducers/profile";
 import Arrow from "../components/Arrow";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
+// Grabbed from emailregex.com
+const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 
 export default function RegisterScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -29,8 +32,15 @@ export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState(false);
 
   const Register = () => {
+    if (!EMAIL_REGEX.test(email)) {
+      setEmailError(true);
+      return;
+    }
+    setEmailError(false);
+
     fetch(`${EXPO_PUBLIC_API_URL}/users/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -49,6 +59,7 @@ export default function RegisterScreen({ navigation }) {
             login({
               username: username,
               token: data.token,
+              _id: data.user._id,
             }),
           );
 
@@ -59,7 +70,7 @@ export default function RegisterScreen({ navigation }) {
               email,
               username,
               password,
-            })
+            }),
           );
 
           // Navigation vers l'écran suivant après succès
@@ -102,10 +113,16 @@ export default function RegisterScreen({ navigation }) {
           />
           <TextInput
             placeholder="Email"
-            style={styles.input}
+            autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
+            keyboardType="email-address" // https://reactnative.dev/docs/textinput#keyboardtype
+            textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
+            autoComplete="email" // https://reactnative.dev/docs/textinput#autocomplete-android
             onChangeText={(value) => setEmail(value)}
             value={email}
+            style={styles.input}
           />
+
+          {emailError && <Text style={styles.error}>Invalid email address</Text>}
           <TextInput
             placeholder="Password"
             style={styles.input}
@@ -151,12 +168,12 @@ const styles = StyleSheet.create({
     margin: "20",
     borderRadius: 50,
     padding: 10,
-    marginTop: 100
+    marginTop: 100,
   },
   logo: {
     width: 180,
     height: 120,
     resizeMode: "contain",
-    alignSelf: 'center'
+    alignSelf: "center",
   },
 });

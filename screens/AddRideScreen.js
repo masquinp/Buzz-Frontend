@@ -32,27 +32,34 @@ export default function TestScreen({ navigation }) {
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
   const [date, setDate] = useState("");
-  const [price, setPrice] = useState("");
-  const [placeAvailable, setPlaceAvailable] = useState("");
+  const [price, setPrice] = useState(0);
+ // const [placeAvailable, setPlaceAvailable] = useState("");
+  const [placesTotal, setPlacesTotal] = useState(0);
 
   const newRide = () => {
+    console.log("Envoi du ride pour l'user ID:", user._id);
+    
     fetch(`${EXPO_PUBLIC_API_URL}/rides/add`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        token: user.token,
+        user: user._id,
         departure,
         arrival,
         date,
-        price,
-        placeAvailable,
-        placesTotal,
+        
+        price: Number(price),
+        placesTotal: Number(placesTotal),
+       // placeAvailable,
+        // placesTotal,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
+            console.log(data);
           dispatch(addRide(data.ride));
+          alert("Trajet ajouté !");
           // Navigation vers l'écran suivant après succès
           // navigation.navigate("TabNavigator", { screen: "Map" });
         } else {
@@ -94,13 +101,23 @@ export default function TestScreen({ navigation }) {
             onChangeText={(value) => setPrice(value)}
             value={price}
           />
-          <TextInput
+          { /*<TextInput
             placeholder="Place available"
             style={styles.input}
             onChangeText={(value) => setPlaceAvailable(value)}
             value={placeAvailable}
           />
-          <TouchableOpacity style={styles.registerBtn} onPress={() => newRide}>
+          */ }
+          <TextInput
+            placeholder="Nombre de places disponibles"
+            style={styles.input}
+            onChangeText={(value) => setPlacesTotal(value)}
+            value={placesTotal}
+          />
+          <TouchableOpacity
+            style={styles.registerBtn}
+            onPress={() => newRide()}
+          >
             <Text style={styles.textBtn}>Valider</Text>
           </TouchableOpacity>
         </View>
@@ -128,7 +145,7 @@ const styles = StyleSheet.create({
   },
   textBtn: {
     fontSize: 35,
-    color: "white",
+    color: "black",
     textAlign: "center",
   },
 });

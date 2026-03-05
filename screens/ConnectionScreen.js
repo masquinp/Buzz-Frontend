@@ -9,12 +9,13 @@ import {
   Platform,
 } from "react-native";
 
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { login } from "../reducers/users";
+import { login, addCar } from "../reducers/users";
 import Arrow from "../components/Arrow";
+import { profileUser } from "../reducers/profile";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -23,7 +24,6 @@ export default function ConnectionScreen({ navigation }) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
 
   const signIn = () => {
     fetch(`${EXPO_PUBLIC_API_URL}/users/signin`, {
@@ -36,10 +36,24 @@ export default function ConnectionScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log("Données reçues du backend :", data);
         if (data.result) {
-          dispatch(login({ email, token: data.token }));
+          const userId = data.user ? data.user._id : data._id;
+          dispatch(login({ email, token: data.token, _id: data.user._id }));
+          dispatch(
+            profileUser({
+              firstname: data.user.firstname,
+              lastname: data.user.lastname,
+              email: data.user.email,
+              username: data.user.username,
+            }),
+          );
           setEmail("");
           setPassword("");
+          // si l'utilisateur a enregistré une voiture, on l'affiche avec ça :
+          if (data.user.car) {
+            dispatch(addCar(data.user.car));
+          }
           // Navigation vers l'écran suivant après succès
           navigation.navigate("TabNavigator", { screen: "Map" });
         } else {
@@ -99,7 +113,7 @@ const styles = StyleSheet.create({
     borderColor: "#A7333F",
     borderBottomWidth: 1,
     fontSize: 25,
-    marginLeft: 35
+    marginLeft: 35,
   },
 
   textBtn: {

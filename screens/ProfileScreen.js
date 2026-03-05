@@ -25,22 +25,21 @@ export default function Profile({ navigation }) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.profileBox}>
-        <Arrow />
+      <Arrow />
         <Text style={styles.title}>Mon Compte</Text>
         <Image source={{ uri: profile.photo }} style={styles.photo} />
         <Text style={styles.nameText}>
-          {profile.prenom} {profile.nom}
+          {profile.firstname} {profile.lastname}
         </Text>
       </View>
 
       <View style={styles.infoCard}>
         <Text style={styles.title}>Mes informations</Text>
         <View style={styles.info}>
-          <Text style={styles.value}>Nom : {profile.nom}</Text>
-          <Text style={styles.value}>Prénom : {profile.prenom}</Text>
+          <Text style={styles.value}>Nom : {profile.lastname}</Text>
+          <Text style={styles.value}>Prénom : {profile.firstname}</Text>
           <Text style={styles.value}>Email : {profile.email}</Text>
           <Text style={styles.value}>Nom d'utilisateur : {profile.username}</Text>
-          <Text style={styles.value}>Mot de passe : {profile.password}</Text>
         </View>
       </View>
 
@@ -54,7 +53,7 @@ export default function Profile({ navigation }) {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("Ride")}
+          onPress={() => navigation.navigate("MyRide")}
         >
           <Text style={styles.textButton}>Trajets</Text>
         </TouchableOpacity>

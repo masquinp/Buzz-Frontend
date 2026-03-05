@@ -20,12 +20,11 @@ import {
   faCircleUser,
   faXmark,
   faCamera,
-  faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState, useRef } from "react";
-import { addPhoto, removePhoto } from "../reducers/users";
+import { addPhoto, removePhoto, addCar } from "../reducers/users";
 import { useIsFocused } from "@react-navigation/native";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
@@ -35,15 +34,17 @@ export default function TestScreen({ navigation }) {
   const isFocused = useIsFocused();
 
   const user = useSelector((state) => state.user.value);
-  const rides = useSelector((state) => state.rides.value);
+ // const rides = useSelector((state) => state.rides.value);
 
   const formData = new FormData();
 
   // Reference to the camera
   const cameraRef = useRef(null);
 
-  const [modalVisible, setModalVisible] = useState(false);
+  // const [modalVisible, setModalVisible] = useState(false);
   const [activeModal, setActiveModal] = useState(null); // null = aucune modal ouverte
+  const openModal = (type) => setActiveModal(type);
+  const closeModal = () => setActiveModal(null);
 
   const [brand, setBrand] = useState("");
   const [color, setColor] = useState("");
@@ -149,21 +150,44 @@ export default function TestScreen({ navigation }) {
     );
   });
 
-  const showModal = (ride) => {
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
-
+ const newCar = () => {
+     if (!user._id) {
+       alert("Erreur : Utilisateur non identifié. Reconnectez-vous.");
+       return;
+     }
+     fetch(`${EXPO_PUBLIC_API_URL}/users/addCar`, {
+       method: "POST",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify({
+         token: user.token,
+         brand,
+         model,
+         color,
+         nbSeats,
+         licencePlate,
+       }),
+     })
+       .then((response) => response.json())
+       .then((data) => {
+         if (data.result) {
+           console.log(data);
+           dispatch(addCar(data.car));
+           alert("Voiture ajoutée !");
+           // Navigation vers l'écran suivant après succès
+           // navigation.navigate("TabNavigator", { screen: "Map" });
+         } else {
+           alert(data.error);
+         }
+       });
+   };
+ 
   return (
     <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <Modal visible={modalVisible} animationType="fade">
+        <Modal visible={activeModal === "camera"} animationType="slide">
           <View style={{ flex: 1 }}>
             <CameraView
               style={styles.camera}
@@ -202,10 +226,71 @@ export default function TestScreen({ navigation }) {
             </View>
           </View>
         </Modal>
+        {/* MODALE 2 : AJOUT VOITURE */}
+        <Modal
+          visible={activeModal === "car"}
+          animationType="fade"
+          transparent={true}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <TouchableOpacity
+                onPress={closeModal}
+                style={{ alignSelf: "flex-end" }}
+              >
+                <FontAwesomeIcon icon={faXmark} size={30} color="#A7333F" />
+              </TouchableOpacity>
+
+              <Text style={styles.modalTitle}>Ma Voiture</Text>
+
+              <TextInput
+                placeholder="Marque"
+                style={styles.input}
+                onChangeText={setBrand}
+                value={brand}
+              />
+              <TextInput
+                placeholder="Modèle"
+                style={styles.input}
+                onChangeText={setModel}
+                value={model}
+              />
+               <TextInput
+                placeholder="Couleur"
+                style={styles.input}
+                onChangeText={setColor}
+                value={color}
+              />
+               <TextInput
+                placeholder="Nombre de places"
+                style={styles.input}
+                onChangeText={setNbSeats}
+                value={nbSeats}
+              />
+              <TextInput
+                placeholder="Plaque d'immatriculation"
+                style={styles.input}
+                onChangeText={setLicencePlate}
+                value={licencePlate}
+              />
+
+              <TouchableOpacity
+                style={styles.registerBtn}
+                onPress={() => {
+                  newCar(),
+                  closeModal();
+                }}
+              >
+                <Text style={styles.textBtn}>Enregistrer</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
         <Arrow />
+        <Text>Bonjour ! {user?.email}</Text>
         <View styles={styles.addDoc}>
           <Text>Ajouter vos documents : </Text>
-          <TouchableOpacity onPress={() => showModal()}>
+          <TouchableOpacity onPress={() => openModal('camera')}>
             <FontAwesomeIcon icon={faCamera} size={50} color="#000" />
           </TouchableOpacity>
         </View>
@@ -219,6 +304,10 @@ export default function TestScreen({ navigation }) {
         ) : (
           <Text>Aucune photo téléchargée</Text>
         )}
+        <Text>Voiture enregistrée : {user.car ? `${user.car.brand} ${user.car.model}` : "Aucune"}</Text>
+        <TouchableOpacity onPress={() => openModal('car')}>
+          <Text style={styles.title}>Ajoutez votre voiture</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("AddRide")}>
           <Text style={styles.title}>Ajoutez un trajet</Text>
         </TouchableOpacity>
@@ -271,8 +360,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    width: "100%",
-    height: "100%",
+    width: "85%",
+    height: "85%",
+
   },
   addDoc: {
     flexDirection: "row",
