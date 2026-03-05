@@ -36,8 +36,11 @@ export default function ConnectionScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log("Données reçues du backend :", data);
         if (data.result) {
-          dispatch(login({ email, token: data.token }));
+          
+          const userId = data.user ? data.user._id : data._id;
+          dispatch(login({ email, token: data.token, _id: data.user._id }));
           setEmail("");
           setPassword("");
           // Navigation vers l'écran suivant après succès

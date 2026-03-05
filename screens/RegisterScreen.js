@@ -10,13 +10,13 @@ import {
   Image,
 } from "react-native";
 
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/users";
 
-import { profileUser } from "../reducers/profile"
+import { profileUser } from "../reducers/profile";
 import Arrow from "../components/Arrow";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
@@ -49,6 +49,7 @@ export default function RegisterScreen({ navigation }) {
             login({
               username: username,
               token: data.token,
+              _id: data.user._id,
             }),
           );
 
@@ -59,7 +60,7 @@ export default function RegisterScreen({ navigation }) {
               email,
               username,
               password,
-            })
+            }),
           );
 
           // Navigation vers l'écran suivant après succès
@@ -151,12 +152,12 @@ const styles = StyleSheet.create({
     margin: "20",
     borderRadius: 50,
     padding: 10,
-    marginTop: 100
+    marginTop: 100,
   },
   logo: {
     width: 180,
     height: 120,
     resizeMode: "contain",
-    alignSelf: 'center'
+    alignSelf: "center",
   },
 });
