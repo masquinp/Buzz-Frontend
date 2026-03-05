@@ -72,7 +72,7 @@ export default function TestScreen({ navigation }) {
   });
 
 
-  const newBooking = () => {
+ /*  const newBooking = () => {
     if (!selectedRide) return; // Sécurité
       fetch(`${EXPO_PUBLIC_API_URL}/bookings/add`, {
         method: "POST",
@@ -90,13 +90,38 @@ export default function TestScreen({ navigation }) {
           if (data.result) {
             dispatch(addBooking(data.booking));
             // Navigation vers l'écran suivant après succès
-            // onPress={() => navigation.navigate("Bookings")}
+            navigation.navigate("Bookings")}
             alert("Réservation réussie !");
           } else {
             alert(data.error);
           }
         });
     };
+*/
+    const newBooking = () => {
+    if (!selectedRide) return; // Sécurité
+
+    fetch(`${EXPO_PUBLIC_API_URL}/bookings/add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token: user.token,
+        seatsBooked: seatsBooked,
+        ride: selectedRide._id,
+        message: message,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          dispatch(addBooking(data.booking));
+          alert("Réservation réussie !");
+          navigation.navigate("Bookings");
+        } else {
+          alert(data.error);
+        }
+      }); 
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>

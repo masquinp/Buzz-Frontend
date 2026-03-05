@@ -19,7 +19,7 @@ export default function Profile({ navigation }) {
 
   const handleLogout = () => {
     dispatch(logout());
-    // navigation.navigate("Home);
+   // navigation.navigate("Home");
   }
 
   return (
