@@ -16,6 +16,8 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import ProfileScreen from "./screens/ProfileScreen";
 import ChatScreen from "./screens/ChatScreen";
 
+import { StripeProvider } from "@stripe/stripe-react-native";
+
 import MapScreen from "./screens/MapScreen";
 import RideScreen from "./screens/RideScreen";
 import ReviewScreen from "./screens/ReviewScreen";
