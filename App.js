@@ -10,9 +10,6 @@ import ConnectionScreen from "./screens/ConnectionScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 
 import HomeScreen from "./screens/HomeScreen";
-import SearchRideScreen from "../screens/Ride/SearchRideScreen";
-import SearchResultsScreen from "../screens/Ride/SearchResultsScreen";
-import RideDetailsScreen from "../screens/Ride/RideDetailsScreen";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
