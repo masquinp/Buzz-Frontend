@@ -99,19 +99,16 @@ export default function MapScreen({ navigation }) {
           </View>
         </Modal>
         <Arrow />
-        <View style={styles.header}>
-        <Text style={styles.welcome}>Bonjour {user.email}</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-            <FontAwesomeIcon icon={faUser} size={40} color="#A7333F" />
-          </TouchableOpacity>
-
-        </View>
         <View>
-          
+          <Text style={styles.welcome}>Bonjour {user.username}</Text>
+        </View>
+        <View style={styles.header}>
           <TouchableOpacity style={styles.rideBtn} onPress={() => addRide()}>
             <Text style={styles.message}>Où allez-vous?</Text>
           </TouchableOpacity>
-          
+          <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+            <FontAwesomeIcon icon={faUser} size={40} color="#A7333F" />
+          </TouchableOpacity>
         </View>
         <MapView
           style={styles.map}
@@ -130,19 +127,20 @@ export default function MapScreen({ navigation }) {
             coordinate={location}
           />
         </MapView>
-        <View>
+        <View >
+          <TouchableOpacity
+            style={styles.textBtn}
+            onPress={() => navigation.navigate("AllRides")}
+          >
+            <Text style={styles.getRidesBtn}> Voir les trajets </Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.textBtn}
             onPress={() => navigation.navigate("Driver")}
           >
             <Text style={styles.driverBtn}> Conducteur ? Cliquez-ici </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.textBtn}
-            onPress={() => navigation.navigate("AllRides")}
-          >
-            <Text style={styles.driverBtn}> Voir les trajets </Text>
-          </TouchableOpacity>
+          
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -198,6 +196,16 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 15,
   },
+  getRidesBtn: {
+    backgroundColor: "#A7333F",
+    margin: "20",
+    borderRadius: 5,
+    padding: 8,
+    fontSize: 20,
+    color: "white",
+    textAlign: "center",
+    marginBottom: 0,
+  },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -208,27 +216,35 @@ const styles = StyleSheet.create({
     margin: "20",
     borderRadius: 5,
     padding: 8,
-    fontSize: 20,
+    fontSize: 17,
     color: "white",
     textAlign: "center",
+    
   },
   rideBtn: {
     backgroundColor: "#c2a7a7",
     borderRadius: 25,
     justifyContent: "center",
-    
+    marginLeft: 75,
     alignItems: "center",
-   
+    flex: 1,
+    marginRight: 30,
   },
   message: {
-    fontSize: 25,
+    fontSize: 22,
     color: "#67262d",
     alignItems: "center",
-    
   },
   welcome: {
-    textAlign: 'center',
+    textAlign: "center",
+    top: 25,
     fontSize: 22,
-    fontWeight: 'bold'
+    fontWeight: "bold",
+  },
+  itinéraire: {
+    color: 'white', 
+    alignSelf: 'center',
+    marginBottom: 25,
+    fontSize: 20
   }
 });

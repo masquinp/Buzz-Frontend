@@ -17,6 +17,8 @@ import { useEffect, useState } from "react";
 import { loadRides } from "../reducers/rides";
 import { addBooking } from "../reducers/bookings";
 
+import { formatDate } from "../utils/formatDate";
+
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export default function AllRidesScreen({ navigation }) {
@@ -50,6 +52,9 @@ export default function AllRidesScreen({ navigation }) {
     setModalVisible(false);
   };
 
+    
+
+
   const rides = allRides.map((data, i) => {
     return (
       <View key={i} style={styles.card}>
@@ -57,13 +62,20 @@ export default function AllRidesScreen({ navigation }) {
           <View style={styles.boxCard}>
             <View style={styles.infoUser}>
               <FontAwesomeIcon icon={faCircleUser} size={50} color="#000" />
-              <Text style={styles.username}> {data.user?.username}</Text>
+              <Text style={styles.username}>
+                {data.user?.firstname} {data.user?.lastname}
+              </Text>
             </View>
             <Text style={styles.destination}>
               {data.departure} ➔ {data.arrival}
             </Text>
             <Text style={styles.price}>{data.price}€</Text>
-            <Text style={styles.date}>{data.date}</Text>
+            <Text style={styles.date}>{formatDate(data.date)}</Text>
+            <Text style={styles.car}>
+              {data.user?.car
+                ? `${data.user.car.brand} ${data.user.car.model}`
+                : "Voiture non renseignée"}
+            </Text>
             {/* <Text>Places restantes : {data.placeAvailable}</Text> */}
           </View>
         </TouchableOpacity>
@@ -71,8 +83,16 @@ export default function AllRidesScreen({ navigation }) {
     );
   });
 
+  const displayCar = () => {
+    if (!selectedRide) return "Non renseignée";
+    if (selectedRide.user?.car) {
+      return `${selectedRide.user.car.brand} ${selectedRide.user.car.model} ${selectedRide.user.car.color} ${selectedRide.user.car.licencePlate}`;
+    }
+    return "Non renseignée";
+  };
 
- /*  const newBooking = () => {
+
+  /*  const newBooking = () => {
     if (!selectedRide) return; // Sécurité
       fetch(`${EXPO_PUBLIC_API_URL}/bookings/add`, {
         method: "POST",
@@ -98,7 +118,7 @@ export default function AllRidesScreen({ navigation }) {
         });
     };
 */
-    const newBooking = () => {
+  const newBooking = () => {
     if (!selectedRide) return; // Sécurité
 
     fetch(`${EXPO_PUBLIC_API_URL}/bookings/add`, {
@@ -120,7 +140,7 @@ export default function AllRidesScreen({ navigation }) {
         } else {
           alert(data.error);
         }
-      }); 
+      });
   };
 
   return (
@@ -145,16 +165,22 @@ export default function AllRidesScreen({ navigation }) {
                     </Text>
 
                     <Text style={styles.modalDate}>
-                      Date : {selectedRide.date}
+                      {formatDate(selectedRide.date)}
                     </Text>
                     <Text style={styles.modalPrice}>
-                      Prix : {selectedRide.price}€
+                      {selectedRide.price}€
+                    </Text>
+                    <Text style={styles.modalCar}>
+                       {displayCar()}
                     </Text>
                     <Text style={styles.other}>Autres passagers : </Text>
                   </View>
                 </>
               )}
-              <TouchableOpacity style={styles.button} onPress={() => newBooking()}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => newBooking()}
+              >
                 <Text>Validez le trajet</Text>
               </TouchableOpacity>
               <TouchableOpacity

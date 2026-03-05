@@ -9,23 +9,23 @@ import {
 } from "react-native";
 import Arrow from "../components/Arrow";
 
-import { useSelector, useDispatch } from "react-redux";  
+import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../reducers/users";
 
 export default function Profile({ navigation }) {
-   const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const profile = useSelector((state) => state.profile.value);
   const user = useSelector((state) => state.user.value);
 
   const handleLogout = () => {
     dispatch(logout());
-   // navigation.navigate("Home");
-  }
+    navigation.navigate("Home");
+  };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.profileBox}>
-      <Arrow />
+        <Arrow />
         <Text style={styles.title}>Mon Compte</Text>
         <Image source={{ uri: profile.photo }} style={styles.photo} />
         <Text style={styles.nameText}>
@@ -39,7 +39,9 @@ export default function Profile({ navigation }) {
           <Text style={styles.value}>Nom : {profile.lastname}</Text>
           <Text style={styles.value}>Prénom : {profile.firstname}</Text>
           <Text style={styles.value}>Email : {profile.email}</Text>
-          <Text style={styles.value}>Nom d'utilisateur : {profile.username}</Text>
+          <Text style={styles.value}>
+            Nom d'utilisateur : {profile.username}
+          </Text>
         </View>
       </View>
 
@@ -62,7 +64,7 @@ export default function Profile({ navigation }) {
           <Text style={styles.textButton}>Paiement</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleLogout()}>
-          <Text>Se deconnecter</Text>
+          <Text style={styles.logoutBtn}>Se deconnecter</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -85,7 +87,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 15,
-    color:"#A7333F"
+    color: "#A7333F",
   },
 
   photo: {
@@ -145,5 +147,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#A7333F",
     fontWeight: "500",
+  },
+  logoutBtn: {
+    backgroundColor: "#A7333F",
+    borderRadius: 50,
+    padding: 10,
+    marginTop: 30,
+    textAlign: "center",
+    color: "white",
+    fontSize: 15,
+    width: "80%",
+    alignItems: "center",
+    alignSelf: "center",
   },
 });

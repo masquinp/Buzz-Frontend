@@ -1,30 +1,14 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 
-import { SafeAreaView } from 'react-native-safe-area-context';
-
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.temporary}>
-         <TouchableOpacity onPress={() => navigation.navigate("Driver")}>
-          <Text style={styles.p}>Driver</Text>
-        </TouchableOpacity>
-      </View>
       <Image
         style={styles.image}
         source={require("../assets/image4.png")}
       ></Image>
-      {/* <View>
-        <Text style={styles.title}>BUZZ</Text>
-        <Text style={styles.message}>Welcome to our app !</Text>
-      </View> */}
       <View style={styles.btnContainer}>
         <TouchableOpacity
           style={styles.connectionBtn}
@@ -50,13 +34,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  title: {
-    fontSize: 60,
-    fontWeight: "bold",
-  },
-  message: {
-    fontSize: 30,
-  },
   textBtn: {
     fontSize: 35,
     color: "white",
@@ -78,11 +55,5 @@ const styles = StyleSheet.create({
   image: {
     width: 400,
     height: 550,
-  },
-  temporary: {
-    flexDirection: "row",
-  },
-  p: {
-    fontSize: 30,
   },
 });

@@ -38,12 +38,12 @@ export default function TestScreen({ navigation }) {
 
   const newRide = () => {
     console.log("Envoi du ride pour l'user ID:", user._id);
-    
+    console.log("token envoyé :", user.token); //
     fetch(`${EXPO_PUBLIC_API_URL}/rides/add`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        user: user._id,
+        user: user.token,
         departure,
         arrival,
         date,
