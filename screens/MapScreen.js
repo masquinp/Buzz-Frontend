@@ -3,13 +3,13 @@ import {
   Text,
   View,
   TouchableOpacity,
-  SafeAreaView,
   Modal,
   TextInput,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
 
+import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
@@ -27,6 +27,7 @@ export default function MapScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
+
   // const [date, setDate] = useState("");
 
   useEffect(() => {
@@ -69,24 +70,27 @@ export default function MapScreen({ navigation }) {
               <View>
                 <Text style={styles.itinéraire}>Votre intinéraire</Text>
                 <TextInput
-                  placeholder="Departure"
+                  placeholder="Départ"
                   onChangeText={(value) => setDeparture(value)}
                   value={departure}
                   style={styles.input}
                 />
                 <TextInput
-                  placeholder="Arrival"
+                  placeholder="Arrivée"
                   onChangeText={(value) => setArrival(value)}
                   value={arrival}
                   style={styles.input}
                 />
               </View>
               <TouchableOpacity
-                onPress={() => addRide()}
+                onPress={() => {
+                  handleClose();
+                  navigation.navigate("AllRides", { departure, arrival });
+                }}
                 style={styles.button}
                 activeOpacity={0.8}
               >
-                <Text style={styles.textButton}>Ajoutez</Text>
+                <Text style={styles.textButton}>Continuez</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => handleClose()}
@@ -122,17 +126,17 @@ export default function MapScreen({ navigation }) {
           <Marker
             testID="marker"
             style={styles.marker}
-            title="My location"
+            title="Vous êtes ici"
             pinColor="#A7333F"
             coordinate={location}
           />
         </MapView>
-        <View >
+        <View>
           <TouchableOpacity
             style={styles.textBtn}
             onPress={() => navigation.navigate("AllRides")}
           >
-            <Text style={styles.getRidesBtn}> Voir les trajets </Text>
+            <Text style={styles.getRidesBtn}> Voir tous les trajets disponibles </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.textBtn}
@@ -140,7 +144,6 @@ export default function MapScreen({ navigation }) {
           >
             <Text style={styles.driverBtn}> Conducteur ? Cliquez-ici </Text>
           </TouchableOpacity>
-          
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -219,7 +222,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: "white",
     textAlign: "center",
-    
   },
   rideBtn: {
     backgroundColor: "#c2a7a7",
@@ -242,9 +244,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   itinéraire: {
-    color: 'white', 
-    alignSelf: 'center',
+    color: "white",
+    alignSelf: "center",
     marginBottom: 25,
-    fontSize: 20
-  }
+    fontSize: 20,
+  },
 });

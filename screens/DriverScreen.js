@@ -35,7 +35,6 @@ export default function TestScreen({ navigation }) {
   const isFocused = useIsFocused();
 
   const user = useSelector((state) => state.user.value);
-  // const rides = useSelector((state) => state.rides.value);
 
   const formData = new FormData();
 
@@ -58,6 +57,9 @@ export default function TestScreen({ navigation }) {
   const [facing, setFacing] = useState("back");
   const [flash, setFlash] = useState("off");
 
+  const hasPhoto = user.photos && user.photos.length > 0;
+  const hasCar = !!user.car;
+
   // Effect hook to check permission upon each mount
   useEffect(() => {
     (async () => {
@@ -65,12 +67,6 @@ export default function TestScreen({ navigation }) {
       setHasPermission(result && result?.status === "granted");
     })();
   }, []);
-
-  // Conditions to prevent more than 1 camera component to run in the bg
-  /* if (!hasPermission || !isFocused) {
-    return <View />;
-  }
-    */
 
   if (!hasPermission || !isFocused) {
     return (
@@ -81,7 +77,6 @@ export default function TestScreen({ navigation }) {
   }
 
   // Functions to toggle camera facing and flash status
-
   const toggleCameraFacing = () => {
     setFacing((current) => (current === "back" ? "front" : "back"));
   };
@@ -105,7 +100,6 @@ export default function TestScreen({ navigation }) {
 
       // On ajoute un champ "photoFromFront" qui doit correspondre au nom
       // attendu par ton backend (ex: dans ton routeur avec 'formidable' ou 'multer')
-      //@ts-ignore
       formData.append("photoFromFront", {
         uri: photo.uri, // Le chemin local temporaire sur le téléphone
         name: "photo.jpg", // Le nom que le fichier aura sur le serveur
@@ -113,8 +107,7 @@ export default function TestScreen({ navigation }) {
       });
       formData.append("token", user.token);
 
-      // 4. Envoi de la photo vers ton serveur local (Backend)
-      // Remplace bien l'IP par la tienne si elle change (ipconfig / ifconfig)
+      // 4. Envoi de la photo vers le serveur local (Backend)
       fetch(`${EXPO_PUBLIC_API_URL}/users/upload`, {
         method: "POST",
         body: formData, // On passe le FormData ici. Pas besoin de 'headers', fetch le gère seul.
@@ -183,17 +176,16 @@ export default function TestScreen({ navigation }) {
       });
   };
 
-
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView
-        style={styles.container}
+        style={{ flex: 1, backgroundColor: "#cbdee1" }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <Modal visible={activeModal === "camera"} animationType="slide">
           <View style={{ flex: 1 }}>
             <CameraView
-              style={styles.camera}
+              style={{ flex: 1 }}
               ref={cameraRef}
               facing={facing}
               flash={flash}
@@ -201,7 +193,11 @@ export default function TestScreen({ navigation }) {
 
             <TouchableOpacity
               onPress={() => closeModal()}
-              style={styles.closeModal}
+              style={{
+                top: 80,
+                left: 30,
+                position: "absolute",
+              }}
             >
               <FontAwesomeIcon icon={faXmark} size={50} color="white" />
             </TouchableOpacity>
@@ -214,8 +210,11 @@ export default function TestScreen({ navigation }) {
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={styles.captureButton}
-                onPress={takePicture}
+                style={{ alignItems: "center" }}
+                onPress={async () => {
+                  await takePicture(); // on attend que la photo soit prise
+                  closeModal();
+                }}
               >
                 <FontAwesome name="circle-thin" size={90} color="white" />
               </TouchableOpacity>
@@ -290,45 +289,71 @@ export default function TestScreen({ navigation }) {
         </Modal>
         <Arrow />
 
-        <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-          <View style={styles.addDoc}>
-            <Text style={styles.text}>Vous souhaitez ajouter un trajet ?</Text>
-            <Text style={styles.text}>
-              Enregistrer d'abord votre permis de conduire en cliquant sur la
-              caméra.
+        <ScrollView contentContainerStyle={{ top: 60,  }}>
+          <View style={styles.header}>
+            <Text
+              style={{
+                fontSize: 28,
+                fontWeight: "bold",
+                color: "#A7333F",
+                textAlign: "center",
+              }}
+            >
+              Espace Conducteur
             </Text>
-            <Text style={styles.text}>Ajouter vos documents : </Text>
-            <TouchableOpacity onPress={() => openModal("camera")}>
-              <FontAwesomeIcon icon={faCamera} size={50} color="#000" />
+            <Text style={{ fontSize: 14, color: "#888", margin: 15 }}>
+              Complétez votre profil pour proposer des trajets
+            </Text>
+          </View>
+          <View style={styles.bloc}>
+            <Text style={styles.blocTitle}>📄 Mon permis de conduire</Text>
+            <Text style={styles.blocDesc}>
+              Prenez une photo de votre permis
+            </Text>
+            <TouchableOpacity
+              style={[styles.btn, hasPhoto && styles.btnDone]}
+              onPress={() => openModal("camera")}
+            >
+              <Text style={styles.btnText}>
+                {hasPhoto ? "✓ Document ajouté" : "📷 Prendre une photo"}
+              </Text>
+            </TouchableOpacity>
+
+            {hasPhoto && <View style={styles.photoContainer}>{photos}</View>}
+          </View>
+
+          <View style={styles.bloc}>
+            <Text style={styles.blocTitle}>🚗 Ma voiture</Text>
+            <Text style={styles.blocDesc}>
+              Ajoutez les infos de votre véhicule
+            </Text>
+            <TouchableOpacity
+              style={[styles.btn, hasCar && styles.btnDone]}
+              onPress={() => openModal("car")}
+            >
+              <Text style={styles.btnText}>
+                {hasCar
+                  ? `✓ ${user.car.brand} ${user.car.model}`
+                  : "Ajouter ma voiture"}
+              </Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.text}>Vos photos</Text>
 
-          {/* si l'utilisateur n'a mis aucune photo, on renvoie ce text :*/}
-          {user.photos && user.photos.length > 0 ? (
-            photos
-          ) : (
-            <Text>Aucune photo téléchargée</Text>
-          )}
-
-          <Text>
-            Voiture enregistrée :{" "}
-            {user.car ? `${user.car.brand} ${user.car.model}` : "Aucune"}
-          </Text>
-          <TouchableOpacity onPress={() => openModal("car")}>
-            <Text style={styles.title}>Ajoutez votre voiture</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              if (!user.photos || user.photos.length === 0) {
-                alert("Veuillez d'abord ajouter votre permis de conduire.");
-                return;
-              }
-              navigation.navigate("AddRide");
-            }}
-          >
-            <Text style={styles.title}>Ajoutez un trajet</Text>
-          </TouchableOpacity>
+          <View style={styles.bloc}>
+            <Text style={styles.blocTitle}>🗺️ Proposer un trajet</Text>
+            <Text style={styles.blocDesc}>
+              {hasPhoto && hasCar
+                ? "Vous êtes prêt à proposer un trajet !"
+                : "Complétez les étapes ci-dessus d'abord"}
+            </Text>
+            <TouchableOpacity
+              style={[styles.btn, !(hasPhoto && hasCar) && styles.btnDisabled]}
+              disabled={!(hasPhoto && hasCar)}
+              onPress={() => navigation.navigate("AddRide")}
+            >
+              <Text style={styles.btnText}>Créer un trajet</Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -336,12 +361,60 @@ export default function TestScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fdf6f0",
+  scroll: {
+    padding: 20,
+    paddingTop: 80,
+    gap: 15,
   },
-  safeArea: {
-    flex: 1,
+  pageTitle: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#A7333F",
+    marginBottom: 5,
+  },
+  pageSubtitle: {
+    fontSize: 14,
+    color: "#888",
+    marginBottom: 10,
+  },
+  bloc: {
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    elevation: 3,
+    gap: 8,
+    margin: 5
+  },
+  blocTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  blocDesc: {
+    fontSize: 13,
+    color: "#888",
+  },
+  btn: {
+    backgroundColor: "#A7333F",
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    alignSelf: "flex-start",
+    marginTop: 5,
+  },
+  btnDone: {
+    backgroundColor: "#274928",
+  },
+  btnDisabled: {
+    backgroundColor: "#ccc",
+  },
+  btnText: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: 14,
   },
   input: {
     width: 250,
@@ -351,13 +424,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   textBtn: {
-    fontSize: 35,
+    fontSize: 25,
     color: "white",
     textAlign: "center",
   },
-
-  title: {
-    fontSize: 25,
+  registerBtn: {
+    backgroundColor: "#A7333F",
+    borderRadius: 10,
+    padding: 10,
+    marginTop: 20,
+    width: "100%",
   },
   centeredView: {
     flex: 1,
@@ -370,10 +446,6 @@ const styles = StyleSheet.create({
     padding: 30,
     alignItems: "center",
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
@@ -381,17 +453,10 @@ const styles = StyleSheet.create({
     height: "65%",
     justifyContent: "space-between",
   },
-  addDoc: {
-    marginTop: 80,
-  },
-  text: {
-    fontSize: 15,
-  },
-  camera: {
-    flex: 1,
-  },
-  captureButton: {
-    alignItems: "center",
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "white",
   },
   cameraButtons: {
     position: "absolute",
@@ -401,18 +466,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
   },
-  closeModal: {
-    top: 80,
-    left: 30,
-    position: "absolute",
-  },
-
   photo: {
-    margin: 10,
-    width: 100,
-    height: 100,
+    margin: 5,
+    width: 80,
+    height: 80,
+    borderRadius: 8,
   },
   photoContainer: {
     flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 10,
   },
 });

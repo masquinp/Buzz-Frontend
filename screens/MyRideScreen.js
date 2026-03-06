@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { formatDate } from "../utils/formatDate";
+
 export default function RideScreen() {
   const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
   const [bookings, setBookings] = useState([]);
@@ -40,7 +42,7 @@ export default function RideScreen() {
             name={data.ride?.user?.name}
             car={data.ride?.car}
             note={data.ride?.note}
-            date={data.ride?.date}
+            date={formatDate(data.ride?.date)}
             price={data.ride?.price}
           />
         ))}

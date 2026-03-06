@@ -33,7 +33,7 @@ export default function TestScreen({ navigation }) {
   const [arrival, setArrival] = useState("");
   const [date, setDate] = useState("");
   const [price, setPrice] = useState(0);
- // const [placeAvailable, setPlaceAvailable] = useState("");
+  // const [placeAvailable, setPlaceAvailable] = useState("");
   const [placesTotal, setPlacesTotal] = useState(0);
 
   const newRide = () => {
@@ -47,17 +47,17 @@ export default function TestScreen({ navigation }) {
         departure,
         arrival,
         date,
-        
+
         price: Number(price),
         placesTotal: Number(placesTotal),
-       // placeAvailable,
+        // placeAvailable,
         // placesTotal,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-            console.log(data);
+          console.log(data);
           dispatch(addRide(data.ride));
           alert("Trajet ajouté !");
           // Navigation vers l'écran suivant après succès
@@ -76,15 +76,16 @@ export default function TestScreen({ navigation }) {
       >
         <Arrow />
 
-        <View>
+        <View style={styles.card}>
+          <Text style={styles.title}> Nouveau trajet</Text>
           <TextInput
-            placeholder="Departure"
+            placeholder="Départ"
             style={styles.input}
             onChangeText={(value) => setDeparture(value)}
             value={departure}
           />
           <TextInput
-            placeholder="Arrival"
+            placeholder="Arrivée"
             style={styles.input}
             onChangeText={(value) => setArrival(value)}
             value={arrival}
@@ -96,29 +97,26 @@ export default function TestScreen({ navigation }) {
             value={date}
           />
           <TextInput
-            placeholder="Price"
+            placeholder="Prix"
             style={styles.input}
             onChangeText={(value) => setPrice(value)}
             value={price}
           />
-          { /*<TextInput
+          {/*<TextInput
             placeholder="Place available"
             style={styles.input}
             onChangeText={(value) => setPlaceAvailable(value)}
             value={placeAvailable}
           />
-          */ }
+          */}
           <TextInput
             placeholder="Nombre de places disponibles"
             style={styles.input}
             onChangeText={(value) => setPlacesTotal(value)}
             value={placesTotal}
           />
-          <TouchableOpacity
-            style={styles.registerBtn}
-            onPress={() => newRide()}
-          >
-            <Text style={styles.textBtn}>Valider</Text>
+          <TouchableOpacity style={styles.addBtn} onPress={() => newRide()}>
+            <Text style={styles.textBtn}>Enregistrez</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -129,7 +127,7 @@ export default function TestScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fdf6f0",
+    backgroundColor: "#cbdee1",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -137,15 +135,41 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   input: {
-    width: 250,
-    marginTop: 25,
-    borderColor: "#A7333F",
+    width: "100%",
+    marginTop: 15,
+    borderBottomColor: "#A7333F",
     borderBottomWidth: 1,
-    fontSize: 20,
+    fontSize: 18,
+    paddingBottom: 8,
   },
   textBtn: {
-    fontSize: 35,
-    color: "black",
+    fontSize: 18,
+    color: "white",
+    fontWeight: "bold",
+  },
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 30,
+    width: "90%",
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+    gap: 5,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#A7333F",
+    marginBottom: 20,
     textAlign: "center",
+  },
+  addBtn: {
+    backgroundColor: "#A7333F",
+    borderRadius: 25,
+    paddingVertical: 14,
+    marginTop: 30,
+    alignItems: "center",
   },
 });

@@ -3,18 +3,16 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 
 import { StripeProvider } from "@stripe/stripe-react-native";
-import AddPaymentMethodScreen from "./screens/AddPaymentMethodScreen";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import ConnectionScreen from "./screens/ConnectionScreen";
-import RegisterScreen from "./screens/RegisterScreen";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import HomeScreen from "./screens/HomeScreen";
-
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import ConnectionScreen from "./screens/ConnectionScreen";
+import RegisterScreen from "./screens/RegisterScreen";
 
 import ProfileScreen from "./screens/ProfileScreen";
 import ChatScreen from "./screens/ChatScreen";
@@ -26,11 +24,12 @@ import AllRidesScreen from "./screens/AllRidesScreen";
 import DriverScreen from "./screens/DriverScreen";
 import BookingsScreen from "./screens/BookingsScreen";
 import AddRideScreen from "./screens/AddRideScreen";
+import AddPaymentMethodScreen from "./screens/AddPaymentMethodScreen";
 
 import user from "./reducers/users";
-import rides from './reducers/rides';
-import profile from './reducers/profile';
-import review from './reducers/review';
+import rides from "./reducers/rides";
+import profile from "./reducers/profile";
+import review from "./reducers/review";
 
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -55,7 +54,7 @@ const TabNavigator = () => {
             iconName = "map";
           } else if (route.name === "Chat") {
             iconName = "comments";
-          } 
+          }
 
           return <FontAwesome name={iconName} size={size} color={color} />;
         },
@@ -83,7 +82,7 @@ export default function App() {
 
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
             {/* <Stack.Screen name="Map" component={MapScreen} /> */}
-            <Stack.Screen name="AddPaymentMethod" component={AddPaymentMethodScreen} />
+             <Stack.Screen name="AddPaymentMethod" component={AddPaymentMethodScreen} /> 
             <Stack.Screen name="MyRide" component={MyRideScreen} />
             <Stack.Screen name="Review" component={ReviewScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
@@ -95,7 +94,7 @@ export default function App() {
         </NavigationContainer>
       </SafeAreaProvider>
     </Provider>
-    </StripeProvider>
+   </StripeProvider>
   );
 }
 

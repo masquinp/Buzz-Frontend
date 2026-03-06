@@ -38,7 +38,6 @@ export default function ConnectionScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("data complet :", data); 
         if (data.result) {
           const userId = data.user ? data.user._id : data._id;
           dispatch(

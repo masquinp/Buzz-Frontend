@@ -35,7 +35,6 @@ export default function RegisterScreen({ navigation }) {
   const [emailError, setEmailError] = useState(false);
 
   const Register = () => {
-    console.log("email :", email); // 👈
     if (!EMAIL_REGEX.test(email)) {
       setEmailError(true);
       return;
@@ -55,7 +54,6 @@ export default function RegisterScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("data signup :", data);
         if (data.result) {
           dispatch(
             login({

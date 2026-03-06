@@ -21,7 +21,7 @@ import { formatDate } from "../utils/formatDate";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
-export default function AllRidesScreen({ navigation }) {
+export default function AllRidesScreen({ navigation, route }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
   const allRides = useSelector((state) => state.rides.value);
@@ -30,6 +30,11 @@ export default function AllRidesScreen({ navigation }) {
   const [selectedRide, setSelectedRide] = useState(null);
   const [seatsBooked, setSeatsBooked] = useState(1);
   const [message, setMessage] = useState("");
+
+  // On récupère les filtres envoyés depuis MapScreen, ou des strings vides si aucun filtre
+  const filterDeparture = route.params?.departure || "";
+  const filterArrival = route.params?.arrival || "";
+  // const filterDate = route.params?.date || "";
 
   useEffect(() => {
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/rides`)
@@ -52,36 +57,58 @@ export default function AllRidesScreen({ navigation }) {
     setModalVisible(false);
   };
 
-    
+  // on filtre tous les rides pour récupérer ceux qui nous interesse
+  const rides = allRides
+    .filter((data) => {
+      const matchDeparture = data.departure
+        .toLowerCase()
+        .includes(filterDeparture.toLowerCase());
+      const matchArrival = data.arrival
+        .toLowerCase()
+        .includes(filterArrival.toLowerCase());
+      return matchDeparture && matchArrival;
+    })
+    .map((data, i) => {
+      return (
+        <View key={i} style={styles.card}>
+          <TouchableOpacity onPress={() => showModal(data)}>
+            <View style={styles.boxCard}>
+              <View style={styles.row}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <FontAwesomeIcon
+                    icon={faCircleUser}
+                    size={50}
+                    color="#545e63"
+                  />
+                  <Text style={{ fontSize: 22, paddingLeft: 5 }}>
+                    {data.user?.firstname} {data.user?.lastname}
+                  </Text>
+                </View>
+                <View style={styles.carAndStars}>
+                  <Text style={{ paddingTop: 20 }}>
+                    {data.user?.car
+                      ? `${data.user.car.brand} ${data.user.car.model}`
+                      : ""}
+                  </Text>
+                  <Text style={styles.stars}>⭐⭐⭐⭐⭐</Text>
+                </View>
+              </View>
 
-
-  const rides = allRides.map((data, i) => {
-    return (
-      <View key={i} style={styles.card}>
-        <TouchableOpacity onPress={() => showModal(data)}>
-          <View style={styles.boxCard}>
-            <View style={styles.infoUser}>
-              <FontAwesomeIcon icon={faCircleUser} size={50} color="#000" />
-              <Text style={styles.username}>
-                {data.user?.firstname} {data.user?.lastname}
+              <Text style={{ fontSize: 16 }}>
+                {data.departure} ➔ {data.arrival}
               </Text>
+
+              <View style={styles.row}>
+                <Text style={styles.date}>{formatDate(data.date)}</Text>
+                <Text style={{ fontSize: 22, paddingRight: 20 }}>
+                  {data.price}€
+                </Text>
+              </View>
             </View>
-            <Text style={styles.destination}>
-              {data.departure} ➔ {data.arrival}
-            </Text>
-            <Text style={styles.price}>{data.price}€</Text>
-            <Text style={styles.date}>{formatDate(data.date)}</Text>
-            <Text style={styles.car}>
-              {data.user?.car
-                ? `${data.user.car.brand} ${data.user.car.model}`
-                : "Voiture non renseignée"}
-            </Text>
-            {/* <Text>Places restantes : {data.placeAvailable}</Text> */}
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  });
+          </TouchableOpacity>
+        </View>
+      );
+    });
 
   const displayCar = () => {
     if (!selectedRide) return "Non renseignée";
@@ -91,33 +118,6 @@ export default function AllRidesScreen({ navigation }) {
     return "Non renseignée";
   };
 
-
-  /*  const newBooking = () => {
-    if (!selectedRide) return; // Sécurité
-      fetch(`${EXPO_PUBLIC_API_URL}/bookings/add`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          token: user.token,
-          seatsBooked : seatsBooked,
-          ride: selectedRide._id,
-          message: message,
-          
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.result) {
-            dispatch(addBooking(data.booking));
-            // Navigation vers l'écran suivant après succès
-            navigation.navigate("Bookings")}
-            alert("Réservation réussie !");
-          } else {
-            alert(data.error);
-          }
-        });
-    };
-*/
   const newBooking = () => {
     if (!selectedRide) return; // Sécurité
 
@@ -144,36 +144,52 @@ export default function AllRidesScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.scrollView}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Modal visible={modalVisible} animationType="fade" transparent>
-          <View style={styles.centeredView}>
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
             <View style={styles.modalView}>
+              <TouchableOpacity
+                onPress={() => closeModal()}
+                style={{ top: 10, left: 10, position: "absolute" }}
+                activeOpacity={0.8}
+              >
+                <FontAwesomeIcon icon={faXmark} size={40} color="black" />
+              </TouchableOpacity>
               {selectedRide && (
                 <>
                   <View style={styles.modalContainer}>
                     <FontAwesomeIcon
                       icon={faCircleUser}
                       size={85}
-                      color="#000"
+                      color="#463838"
                     />
-                    <Text style={styles.modalUsername}>
-                      {selectedRide.user?.username}
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {selectedRide.user?.firstname}{" "}
+                      {selectedRide.user?.lastname}
                     </Text>
-                    <Text style={styles.modalDestination}>
+
+                    <Text style={{ paddingTop: 10 }}>⭐⭐⭐⭐⭐</Text>
+                    <View style={styles.separator} />
+                    <Text style={{ fontSize: 20 }}>
                       {selectedRide.departure} ➔ {selectedRide.arrival}
                     </Text>
 
-                    <Text style={styles.modalDate}>
+                    <Text style={{ fontSize: 20 }}>
                       {formatDate(selectedRide.date)}
                     </Text>
-                    <Text style={styles.modalPrice}>
-                      {selectedRide.price}€
-                    </Text>
-                    <Text style={styles.modalCar}>
-                       {displayCar()}
-                    </Text>
-                    <Text style={styles.other}>Autres passagers : </Text>
+                    <Text style={{ fontSize: 25 }}>{selectedRide.price}€</Text>
+
+                    <Text style={styles.modalCar}>{displayCar()}</Text>
+                    <View style={styles.separator} />
+                    <Text style={{ fontSize: 25 }}>Autres passagers : </Text>
                   </View>
                 </>
               )}
@@ -181,14 +197,14 @@ export default function AllRidesScreen({ navigation }) {
                 style={styles.button}
                 onPress={() => newBooking()}
               >
-                <Text>Validez le trajet</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => closeModal()}
-                style={styles.button}
-                activeOpacity={0.8}
-              >
-                <FontAwesomeIcon icon={faXmark} size={20} color="black" />
+                <Text
+                  style={{
+                    color: "white",
+                    fontSize: 20,
+                  }}
+                >
+                  Validez le trajet
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -204,73 +220,47 @@ export default function AllRidesScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
-  scrollView: {
-    flexGrow: 1,
-  },
   container: {
     flex: 1,
     paddingTop: 50,
     gap: 15,
-  },
-  username: {
-    fontSize: 24,
+    backgroundColor: "#cbdee1",
   },
   title: {
     fontSize: 25,
     textAlign: "center",
-    marginBottom: 25,
+    marginBottom: 12,
     fontWeight: "bold",
     color: "#A7333F",
   },
-  infoUser: {
-    flexDirection: "row",
-  },
+
   boxCard: {
-    flexDirection: "column",
     backgroundColor: "#fff",
     borderRadius: 15,
-    padding: 15,
+    padding: 10,
     shadowOpacity: 0.1,
     shadowRadius: 6,
   },
-  price: {
-    textAlign: "right",
-    fontSize: 25,
-  },
-  destination: {
-    fontSize: 18,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   modalView: {
-    backgroundColor: "#d7bebe",
-    borderRadius: 20,
-    padding: 30,
+    backgroundColor: "#dfc9c9",
+    borderRadius: 25,
+    padding: 25,
     alignItems: "center",
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
     shadowOpacity: 0.25,
-    shadowRadius: 4,
+    shadowRadius: 15,
     elevation: 5,
     width: "85%",
-    height: "70%",
+    height: "65%",
   },
   button: {
-    width: 150,
+    width: "65%",
     alignItems: "center",
-    marginTop: 20,
-    paddingTop: 8,
+    marginTop: 50,
     backgroundColor: "#A7333F",
     borderRadius: 10,
+    height: 50,
+    justifyContent: "center",
   },
   textButton: {
     color: "#ffffff",
@@ -278,23 +268,20 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 15,
   },
-  modalDestination: {
-    fontSize: 25,
-  },
   modalContainer: {
     alignItems: "center",
+    gap: 5,
+    justifyContent: "center",
+    paddingTop: 40,
   },
-  modalUsername: {
-    fontSize: 35,
-    fontWeight: "bold",
+
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 8,
   },
-  modalDate: {
-    fontSize: 25,
-  },
-  modalPrice: {
-    fontSize: 25,
-  },
-  other: {
-    fontSize: 25,
+  separator: {
+    marginVertical: 10,
   },
 });
