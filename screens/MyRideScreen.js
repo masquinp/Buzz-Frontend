@@ -28,8 +28,8 @@ export default function RideScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Arrow top={80} />
       <View style={styles.header}>
-        <Arrow />
         <Text style={styles.trajetText}>Historique des Trajets</Text>
       </View>
       <ScrollView style={styles.listeBox}>

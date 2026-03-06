@@ -20,13 +20,13 @@ export default function ReviewScreen() {
       .then((response) => response.json())
       .then((data) => {
         dispatch(reviewUser(data.reviews));
-      }); 
+      });
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
+      <Arrow top={80}/>
       <View style={styles.header}>
-        <Arrow />
         <Text style={styles.title}>Mes évaluations</Text>
       </View>
       <View style={styles.globalNote}>
@@ -42,7 +42,7 @@ export default function ReviewScreen() {
             note={data.note}
             text={data.message}
           />
-        ))} 
+        ))}
       </ScrollView>
     </SafeAreaView>
   );

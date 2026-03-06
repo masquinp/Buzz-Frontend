@@ -21,8 +21,8 @@ import Arrow from "../components/Arrow";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 // Grabbed from emailregex.com
-const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
+const EMAIL_REGEX =
+  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export default function RegisterScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -35,6 +35,7 @@ export default function RegisterScreen({ navigation }) {
   const [emailError, setEmailError] = useState(false);
 
   const Register = () => {
+    console.log("email :", email); // 👈
     if (!EMAIL_REGEX.test(email)) {
       setEmailError(true);
       return;
@@ -54,6 +55,7 @@ export default function RegisterScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log("data signup :", data);
         if (data.result) {
           dispatch(
             login({
@@ -122,7 +124,9 @@ export default function RegisterScreen({ navigation }) {
             style={styles.input}
           />
 
-          {emailError && <Text style={styles.error}>Invalid email address</Text>}
+          {emailError && (
+            <Text style={styles.error}>Invalid email address</Text>
+          )}
           <TextInput
             placeholder="Password"
             style={styles.input}

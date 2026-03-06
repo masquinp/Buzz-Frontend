@@ -8,6 +8,7 @@ import {
   Platform,
   TextInput,
   Modal,
+  Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CameraView, CameraType, FlashMode, Camera } from "expo-camera";
@@ -34,7 +35,7 @@ export default function TestScreen({ navigation }) {
   const isFocused = useIsFocused();
 
   const user = useSelector((state) => state.user.value);
- // const rides = useSelector((state) => state.rides.value);
+  // const rides = useSelector((state) => state.rides.value);
 
   const formData = new FormData();
 
@@ -110,10 +111,11 @@ export default function TestScreen({ navigation }) {
         name: "photo.jpg", // Le nom que le fichier aura sur le serveur
         type: "image/jpeg", // Le type MIME pour que le serveur sache que c'est une image
       });
+      formData.append("token", user.token);
 
       // 4. Envoi de la photo vers ton serveur local (Backend)
       // Remplace bien l'IP par la tienne si elle change (ipconfig / ifconfig)
-      fetch(`${EXPO_PUBLIC_API_URL}/upload`, {
+      fetch(`${EXPO_PUBLIC_API_URL}/users/upload`, {
         method: "POST",
         body: formData, // On passe le FormData ici. Pas besoin de 'headers', fetch le gère seul.
       })
@@ -150,37 +152,38 @@ export default function TestScreen({ navigation }) {
     );
   });
 
- const newCar = () => {
-     if (!user._id) {
-       alert("Erreur : Utilisateur non identifié. Reconnectez-vous.");
-       return;
-     }
-     fetch(`${EXPO_PUBLIC_API_URL}/users/addCar`, {
-       method: "POST",
-       headers: { "Content-Type": "application/json" },
-       body: JSON.stringify({
-         token: user.token,
-         brand,
-         model,
-         color,
-         nbSeats,
-         licencePlate,
-       }),
-     })
-       .then((response) => response.json())
-       .then((data) => {
-         if (data.result) {
-           console.log(data);
-           dispatch(addCar(data.car));
-           alert("Voiture ajoutée !");
-           // Navigation vers l'écran suivant après succès
-           // navigation.navigate("TabNavigator", { screen: "Map" });
-         } else {
-           alert(data.error);
-         }
-       });
-   };
- 
+  const newCar = () => {
+    if (!user._id) {
+      alert("Erreur : Utilisateur non identifié. Reconnectez-vous.");
+      return;
+    }
+    fetch(`${EXPO_PUBLIC_API_URL}/users/addCar`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token: user.token,
+        brand,
+        model,
+        color,
+        nbSeats,
+        licencePlate,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log(data);
+          dispatch(addCar(data.car));
+          alert("Voiture ajoutée !");
+          // Navigation vers l'écran suivant après succès
+          // navigation.navigate("TabNavigator", { screen: "Map" });
+        } else {
+          alert(data.error);
+        }
+      });
+  };
+
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
@@ -255,13 +258,13 @@ export default function TestScreen({ navigation }) {
                 onChangeText={setModel}
                 value={model}
               />
-               <TextInput
+              <TextInput
                 placeholder="Couleur"
                 style={styles.input}
                 onChangeText={setColor}
                 value={color}
               />
-               <TextInput
+              <TextInput
                 placeholder="Nombre de places"
                 style={styles.input}
                 onChangeText={setNbSeats}
@@ -277,8 +280,7 @@ export default function TestScreen({ navigation }) {
               <TouchableOpacity
                 style={styles.registerBtn}
                 onPress={() => {
-                  newCar(),
-                  closeModal();
+                  (newCar(), closeModal());
                 }}
               >
                 <Text style={styles.textBtn}>Enregistrer</Text>
@@ -287,30 +289,47 @@ export default function TestScreen({ navigation }) {
           </View>
         </Modal>
         <Arrow />
-        <Text>Bonjour ! {user?.email}</Text>
-        <View styles={styles.addDoc}>
-          <Text>Ajouter vos documents : </Text>
-          <TouchableOpacity onPress={() => openModal('camera')}>
-            <FontAwesomeIcon icon={faCamera} size={50} color="#000" />
+
+        <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+          <View style={styles.addDoc}>
+            <Text style={styles.text}>Vous souhaitez ajouter un trajet ?</Text>
+            <Text style={styles.text}>
+              Enregistrer d'abord votre permis de conduire en cliquant sur la
+              caméra.
+            </Text>
+            <Text style={styles.text}>Ajouter vos documents : </Text>
+            <TouchableOpacity onPress={() => openModal("camera")}>
+              <FontAwesomeIcon icon={faCamera} size={50} color="#000" />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.text}>Vos photos</Text>
+
+          {/* si l'utilisateur n'a mis aucune photo, on renvoie ce text :*/}
+          {user.photos && user.photos.length > 0 ? (
+            photos
+          ) : (
+            <Text>Aucune photo téléchargée</Text>
+          )}
+
+          <Text>
+            Voiture enregistrée :{" "}
+            {user.car ? `${user.car.brand} ${user.car.model}` : "Aucune"}
+          </Text>
+          <TouchableOpacity onPress={() => openModal("car")}>
+            <Text style={styles.title}>Ajoutez votre voiture</Text>
           </TouchableOpacity>
-        </View>
-        <Text>Vos photos</Text>
-        <ScrollView contentContainerStyle={styles.galleryContainer}>
-          {photos}
+          <TouchableOpacity
+            onPress={() => {
+              if (!user.photos || user.photos.length === 0) {
+                alert("Veuillez d'abord ajouter votre permis de conduire.");
+                return;
+              }
+              navigation.navigate("AddRide");
+            }}
+          >
+            <Text style={styles.title}>Ajoutez un trajet</Text>
+          </TouchableOpacity>
         </ScrollView>
-        {/* si l'utilisateur n'a mis aucune photo, on renvoie ce text :*/}
-        {user.photos && user.photos.length > 0 ? (
-          photos
-        ) : (
-          <Text>Aucune photo téléchargée</Text>
-        )}
-        <Text>Voiture enregistrée : {user.car ? `${user.car.brand} ${user.car.model}` : "Aucune"}</Text>
-        <TouchableOpacity onPress={() => openModal('car')}>
-          <Text style={styles.title}>Ajoutez votre voiture</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("AddRide")}>
-          <Text style={styles.title}>Ajoutez un trajet</Text>
-        </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -320,8 +339,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fdf6f0",
-    alignItems: "center",
-    justifyContent: "center",
   },
   safeArea: {
     flex: 1,
@@ -361,11 +378,14 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     width: "85%",
-    height: "85%",
-
+    height: "65%",
+    justifyContent: "space-between",
   },
   addDoc: {
-    flexDirection: "row",
+    marginTop: 80,
+  },
+  text: {
+    fontSize: 15,
   },
   camera: {
     flex: 1,
@@ -386,9 +406,13 @@ const styles = StyleSheet.create({
     left: 30,
     position: "absolute",
   },
-  galleryContainer: {
+
+  photo: {
+    margin: 10,
+    width: 100,
+    height: 100,
+  },
+  photoContainer: {
     flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 10,
   },
 });
