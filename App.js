@@ -2,6 +2,9 @@ import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 
+import { StripeProvider } from "@stripe/stripe-react-native";
+import AddPaymentMethodScreen from "./screens/AddPaymentMethodScreen";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -15,8 +18,6 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import ProfileScreen from "./screens/ProfileScreen";
 import ChatScreen from "./screens/ChatScreen";
-
-import { StripeProvider } from "@stripe/stripe-react-native";
 
 import MapScreen from "./screens/MapScreen";
 import MyRideScreen from "./screens/MyRideScreen";
@@ -71,6 +72,7 @@ const TabNavigator = () => {
 
 export default function App() {
   return (
+   <StripeProvider publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY}>
     <Provider store={store}>
       <SafeAreaProvider>
         <NavigationContainer>
@@ -81,6 +83,7 @@ export default function App() {
 
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
             {/* <Stack.Screen name="Map" component={MapScreen} /> */}
+            <Stack.Screen name="AddPaymentMethod" component={AddPaymentMethodScreen} />
             <Stack.Screen name="MyRide" component={MyRideScreen} />
             <Stack.Screen name="Review" component={ReviewScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
@@ -92,6 +95,7 @@ export default function App() {
         </NavigationContainer>
       </SafeAreaProvider>
     </Provider>
+    </StripeProvider>
   );
 }
 

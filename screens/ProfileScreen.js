@@ -58,9 +58,13 @@ export default function Profile({ navigation }) {
           <Text style={styles.textButton}>Trajets</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.textButton}>Paiement</Text>
+       <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("AddPaymentMethod")}
+        >
+        <Text style={styles.textButton}>Paiement</Text>
         </TouchableOpacity>
+
         <TouchableOpacity onPress={() => handleLogout()}>
           <Text>Se deconnecter</Text>
         </TouchableOpacity>
