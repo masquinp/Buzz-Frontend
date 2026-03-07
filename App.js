@@ -72,7 +72,7 @@ const TabNavigator = () => {
 export default function App() {
   return (
     <StripeProvider
-      publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY}
+     publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY}
     >
       <Provider store={store}>
         <SafeAreaProvider>
@@ -98,7 +98,7 @@ export default function App() {
           </NavigationContainer>
         </SafeAreaProvider>
       </Provider>
-    </StripeProvider>
+   </StripeProvider>
   );
 }
 
