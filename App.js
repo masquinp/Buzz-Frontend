@@ -71,29 +71,34 @@ const TabNavigator = () => {
 
 export default function App() {
   return (
-   <StripeProvider publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY}>
-    <Provider store={store}>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Connection" component={ConnectionScreen} />
-            <Stack.Screen name="Register" component={RegisterScreen} />
+    <StripeProvider
+      publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY}
+    >
+      <Provider store={store}>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Home" component={HomeScreen} />
+              <Stack.Screen name="Connection" component={ConnectionScreen} />
+              <Stack.Screen name="Register" component={RegisterScreen} />
 
-            <Stack.Screen name="TabNavigator" component={TabNavigator} />
-             {/* <Stack.Screen name="AddPaymentMethod" component={AddPaymentMethodScreen} />  */}
-            <Stack.Screen name="MyRide" component={MyRideScreen} />
-            <Stack.Screen name="Review" component={ReviewScreen} />
-            <Stack.Screen name="Profile" component={ProfileScreen} />
-            <Stack.Screen name="AllRides" component={AllRidesScreen} />
-            <Stack.Screen name="Driver" component={DriverScreen} />
-            <Stack.Screen name="Bookings" component={BookingsScreen} />
-            <Stack.Screen name="AddRide" component={AddRideScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </Provider>
-   </StripeProvider>
+              <Stack.Screen name="TabNavigator" component={TabNavigator} />
+              <Stack.Screen
+                name="AddPaymentMethod"
+                component={AddPaymentMethodScreen}
+              />
+              <Stack.Screen name="MyRide" component={MyRideScreen} />
+              <Stack.Screen name="Review" component={ReviewScreen} />
+              <Stack.Screen name="Profile" component={ProfileScreen} />
+              <Stack.Screen name="AllRides" component={AllRidesScreen} />
+              <Stack.Screen name="Driver" component={DriverScreen} />
+              <Stack.Screen name="Bookings" component={BookingsScreen} />
+              <Stack.Screen name="AddRide" component={AddRideScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </Provider>
+    </StripeProvider>
   );
 }
 
