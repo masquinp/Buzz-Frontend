@@ -80,21 +80,21 @@ export default function AllRidesScreen({ navigation, route }) {
                     size={50}
                     color="#545e63"
                   />
-                  <Text style={{ fontSize: 22, paddingLeft: 5 }}>
+                  <Text style={{ fontSize: 18, paddingLeft: 10 }}>
                     {data.user?.firstname} {data.user?.lastname}
                   </Text>
                 </View>
                 <View style={styles.carAndStars}>
-                  <Text style={{ paddingTop: 20 }}>
+                  <Text style={{ paddingTop: 15, alignSelf: 'flex-end' }}>
                     {data.user?.car
                       ? `${data.user.car.brand} ${data.user.car.model}`
                       : ""}
                   </Text>
-                  <Text style={styles.stars}>⭐⭐⭐⭐⭐</Text>
+                  <Text style={{ paddingTop: 10 }}>⭐⭐⭐⭐⭐</Text>
                 </View>
               </View>
 
-              <Text style={{ fontSize: 16 }}>
+              <Text style={{ fontSize: 15 }}>
                 {data.departure} ➔ {data.arrival}
               </Text>
 
@@ -144,7 +144,7 @@ export default function AllRidesScreen({ navigation, route }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#d0e2e4" }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Modal visible={modalVisible} animationType="fade" transparent>
           <View
@@ -240,6 +240,7 @@ const styles = StyleSheet.create({
     padding: 10,
     shadowOpacity: 0.1,
     shadowRadius: 6,
+    paddingTop: -10,
   },
   modalView: {
     backgroundColor: "#dfc9c9",

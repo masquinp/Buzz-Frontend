@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   textBtn: {
-    fontSize: 35,
+    fontSize: 32,
     color: "white",
     textAlign: "center",
   },

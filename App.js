@@ -81,8 +81,7 @@ export default function App() {
             <Stack.Screen name="Register" component={RegisterScreen} />
 
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
-            {/* <Stack.Screen name="Map" component={MapScreen} /> */}
-             <Stack.Screen name="AddPaymentMethod" component={AddPaymentMethodScreen} /> 
+             {/* <Stack.Screen name="AddPaymentMethod" component={AddPaymentMethodScreen} />  */}
             <Stack.Screen name="MyRide" component={MyRideScreen} />
             <Stack.Screen name="Review" component={ReviewScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />

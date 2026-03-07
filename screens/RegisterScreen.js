@@ -82,7 +82,7 @@ export default function RegisterScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fdf6f0'}}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -149,9 +149,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fdf6f0",
     alignItems: "center",
     justifyContent: "center",
-  },
-  safeArea: {
-    flex: 1,
   },
   input: {
     width: 250,
