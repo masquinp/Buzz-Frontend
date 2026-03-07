@@ -78,7 +78,7 @@ export default function ConnectionScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fdf6f0'}}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -133,12 +133,12 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     borderColor: "#A7333F",
     borderBottomWidth: 1,
-    fontSize: 25,
+    fontSize: 22,
     marginLeft: 35,
   },
 
   textBtn: {
-    fontSize: 35,
+    fontSize: 32,
     color: "white",
     textAlign: "center",
   },
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   logo: {
-    width: 300,
+    width: 250,
     height: 300,
     resizeMode: "contain",
     alignSelf: "center",

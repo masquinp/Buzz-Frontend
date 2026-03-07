@@ -17,11 +17,7 @@ import Arrow from "../components/Arrow";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faCircleUser,
-  faXmark,
-  faCamera,
-} from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState, useRef } from "react";
@@ -94,6 +90,8 @@ export default function TestScreen({ navigation }) {
 
     // 2. Sécurité : On vérifie que la photo a bien été prise avant de continuer
     if (photo) {
+      // pour afficher la photo directement
+      dispatch(addPhoto(photo.uri));
       // 3. Préparation du "paquet" (FormData) pour l'expédition au backend.
       // Le FormData est nécessaire pour envoyer des fichiers via HTTP.
       const formData = new FormData();
@@ -131,7 +129,7 @@ export default function TestScreen({ navigation }) {
   const photos = user.photos?.map((data, i) => {
     return (
       <View key={i} style={styles.photoContainer}>
-        <TouchableOpacity onPress={() => dispatch(removePhoto(data))}>
+        <TouchableOpacity onPress={() => deletePicture(data)}>
           <FontAwesome
             name="times"
             size={20}
@@ -144,6 +142,30 @@ export default function TestScreen({ navigation }) {
       </View>
     );
   });
+
+  const deletePicture = (photoUrl) => {
+    if (!user.token) {
+      alert("Erreur : Utilisateur non identifié. Reconnectez-vous.");
+      return;
+    }
+    fetch(`${EXPO_PUBLIC_API_URL}/users/deletePicture`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token: user.token,
+        url: photoUrl,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          dispatch(removePhoto(photoUrl));
+          alert("Photo supprimé");
+        } else {
+          alert(data.error);
+        }
+      });
+  };
 
   const newCar = () => {
     if (!user._id) {
@@ -177,7 +199,7 @@ export default function TestScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#d0e2e4" }}>
       <KeyboardAvoidingView
         style={{ flex: 1, backgroundColor: "#cbdee1" }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -279,7 +301,7 @@ export default function TestScreen({ navigation }) {
               <TouchableOpacity
                 style={styles.registerBtn}
                 onPress={() => {
-                  (newCar(), closeModal());
+                  (newCar(), closeModal(), navigation.goBack());
                 }}
               >
                 <Text style={styles.textBtn}>Enregistrer</Text>
@@ -289,7 +311,7 @@ export default function TestScreen({ navigation }) {
         </Modal>
         <Arrow />
 
-        <ScrollView contentContainerStyle={{ top: 60,  }}>
+        <ScrollView contentContainerStyle={{ top: 60 }}>
           <View style={styles.header}>
             <Text
               style={{
@@ -301,7 +323,7 @@ export default function TestScreen({ navigation }) {
             >
               Espace Conducteur
             </Text>
-            <Text style={{ fontSize: 14, color: "#888", margin: 15 }}>
+            <Text style={{ fontSize: 15, color: "#888", margin: 15 }}>
               Complétez votre profil pour proposer des trajets
             </Text>
           </View>
@@ -386,7 +408,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
     gap: 8,
-    margin: 5
+    margin: 7,
   },
   blocTitle: {
     fontSize: 18,

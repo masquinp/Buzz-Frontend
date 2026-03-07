@@ -12,6 +12,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -28,7 +29,12 @@ export default function MapScreen({ navigation }) {
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
 
-  // const [date, setDate] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
+  const onChange = (event, selectedDate) => {
+    if (Platform.OS === "android") setShowPicker(false);
+    if (selectedDate) setDate(selectedDate);
+  };
 
   useEffect(() => {
     (async () => {
@@ -81,11 +87,32 @@ export default function MapScreen({ navigation }) {
                   value={arrival}
                   style={styles.input}
                 />
+
+                <TouchableOpacity
+                  onPress={() => setShowPicker(true)}
+                  style={styles.input}
+                >
+                  <Text style={{ fontSize: 18, color: date ? "#715858" : "#aaa" }}>
+                    {date ? date.toLocaleDateString("fr-FR") : "Date"}
+                  </Text>
+                </TouchableOpacity>
+
+                {showPicker && (
+                  <View style={{ transform: [{ scale: 0.9 }] }}>
+                    <DateTimePicker
+                      value={date}
+                      mode="date"
+                      display={Platform.OS === "ios" ? "spinner" : "calendar"}
+                      onChange={onChange}
+                      minimumDate={new Date()}
+                    />
+                  </View>
+                )}
               </View>
               <TouchableOpacity
                 onPress={() => {
                   handleClose();
-                  navigation.navigate("AllRides", { departure, arrival });
+                  navigation.navigate("AllRides", { departure, arrival, date });
                 }}
                 style={styles.button}
                 activeOpacity={0.8}
@@ -136,7 +163,10 @@ export default function MapScreen({ navigation }) {
             style={styles.textBtn}
             onPress={() => navigation.navigate("AllRides")}
           >
-            <Text style={styles.getRidesBtn}> Voir tous les trajets disponibles </Text>
+            <Text style={styles.getRidesBtn}>
+              {" "}
+              Voir tous les trajets disponibles{" "}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.textBtn}
@@ -246,7 +276,8 @@ const styles = StyleSheet.create({
   itinéraire: {
     color: "white",
     alignSelf: "center",
-    marginBottom: 25,
+    marginBottom: 30,
     fontSize: 20,
+    fontWeight: 500,
   },
 });

@@ -10,13 +10,10 @@ import {
   Modal,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 import Arrow from "../components/Arrow";
 import { addRide, deleteRide } from "../reducers/rides";
-
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faCircleUser, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -31,14 +28,18 @@ export default function TestScreen({ navigation }) {
 
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
-  const [date, setDate] = useState("");
+  // const [date, setDate] = useState("");
   const [price, setPrice] = useState(0);
-  // const [placeAvailable, setPlaceAvailable] = useState("");
   const [placesTotal, setPlacesTotal] = useState(0);
+  const [date, setDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    if (Platform.OS === "android") setShowPicker(false);
+    if (selectedDate) setDate(selectedDate);
+  };
 
   const newRide = () => {
-    console.log("Envoi du ride pour l'user ID:", user._id);
-    console.log("token envoyé :", user.token); //
     fetch(`${EXPO_PUBLIC_API_URL}/rides/add`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -50,8 +51,6 @@ export default function TestScreen({ navigation }) {
 
         price: Number(price),
         placesTotal: Number(placesTotal),
-        // placeAvailable,
-        // placesTotal,
       }),
     })
       .then((response) => response.json())
@@ -69,7 +68,7 @@ export default function TestScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#cbdee1" }}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -90,25 +89,30 @@ export default function TestScreen({ navigation }) {
             onChangeText={(value) => setArrival(value)}
             value={arrival}
           />
-          <TextInput
-            placeholder="Date"
+          <TouchableOpacity
+            onPress={() => setShowPicker(true)}
             style={styles.input}
-            onChangeText={(value) => setDate(value)}
-            value={date}
-          />
+          >
+            <Text style={{ fontSize: 18, color: date ? "#000" : "#aaa" }}>
+              {date ? date.toLocaleDateString("fr-FR") : "Date"}
+            </Text>
+          </TouchableOpacity>
+
+          {showPicker && (
+            <DateTimePicker
+              value={date}
+              mode="date"
+              display={Platform.OS === "ios" ? "spinner" : "calendar"}
+              onChange={onChange}
+              minimumDate={new Date()}
+            />
+          )}
           <TextInput
             placeholder="Prix"
             style={styles.input}
             onChangeText={(value) => setPrice(value)}
             value={price}
           />
-          {/*<TextInput
-            placeholder="Place available"
-            style={styles.input}
-            onChangeText={(value) => setPlaceAvailable(value)}
-            value={placeAvailable}
-          />
-          */}
           <TextInput
             placeholder="Nombre de places disponibles"
             style={styles.input}
