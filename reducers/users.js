@@ -54,15 +54,22 @@ export const userSlice = createSlice({
     },
     removeCar: (state, action) => {
       state.value.car = state.value.car.filter((car) => car !== action.payload);
-);
-  },
-  updateStripePaymentMethod: (state, action) => {
+    },
+    updateStripePaymentMethod: (state, action) => {
       state.value.stripeCustomerId = action.payload.stripeCustomerId;
       state.value.defaultPaymentMethodId =
         action.payload.defaultPaymentMethodId;
+    },
   },
-);
+});
 
-export const { login, logout, addPhoto, removePhoto, addCar, removeCar, updateStripePaymentMethod } =
-  userSlice.actions;
+export const {
+  login,
+  logout,
+  addPhoto,
+  removePhoto,
+  addCar,
+  removeCar,
+  updateStripePaymentMethod,
+} = userSlice.actions;
 export default userSlice.reducer;
