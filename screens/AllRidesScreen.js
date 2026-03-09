@@ -18,6 +18,8 @@ import { loadRides } from "../reducers/rides";
 
 import { formatDate } from "../utils/formatDate";
 
+const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
+
 export default function AllRidesScreen({ navigation, route }) {
   const dispatch = useDispatch();
 
@@ -43,14 +45,6 @@ export default function AllRidesScreen({ navigation, route }) {
   }, []);
 
   // ride = info du trajet
-  const showModal = (ride) => {
-    setSelectedRide(ride);
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
 
   // on filtre tous les rides pour récupérer ceux qui nous interesse
   const rides = allRides
@@ -66,7 +60,12 @@ export default function AllRidesScreen({ navigation, route }) {
     .map((data, i) => {
       return (
         <View key={i} style={styles.card}>
-          <TouchableOpacity onPress={() => navigation.navigate("Booking", {  ride: data })}>
+          <TouchableOpacity
+            onPress={() => {
+              setSelectedRide(data);
+              navigation.navigate("Booking", { ride: data });
+            }}
+          >
             <View style={styles.boxCard}>
               <View style={styles.row}>
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -105,83 +104,9 @@ export default function AllRidesScreen({ navigation, route }) {
       );
     });
 
-  const displayCar = () => {
-    if (!selectedRide) return "Non renseignée";
-    if (selectedRide.user?.car) {
-      return `${selectedRide.user.car.brand} ${selectedRide.user.car.model} ${selectedRide.user.car.color} ${selectedRide.user.car.licencePlate}`;
-    }
-    return "Non renseignée";
-  };
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#d0e2e4" }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <Modal visible={modalVisible} animationType="fade" transparent>
-          <View
-            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-          >
-            <View style={styles.modalView}>
-              <TouchableOpacity
-                onPress={() => closeModal()}
-                style={{ top: 10, left: 10, position: "absolute" }}
-                activeOpacity={0.8}
-              >
-                <FontAwesomeIcon icon={faXmark} size={40} color="black" />
-              </TouchableOpacity>
-              {selectedRide && (
-                <>
-                  <View style={styles.modalContainer}>
-                    <FontAwesomeIcon
-                      icon={faCircleUser}
-                      size={85}
-                      color="#463838"
-                    />
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {selectedRide.user?.firstname}{" "}
-                      {selectedRide.user?.lastname}
-                    </Text>
-
-                    <Text style={{ paddingTop: 10 }}>⭐⭐⭐⭐⭐</Text>
-                    <View style={styles.separator} />
-                    <Text style={{ fontSize: 20 }}>
-                      {selectedRide.departure} ➔ {selectedRide.arrival}
-                    </Text>
-
-                    <Text style={{ fontSize: 20 }}>
-                      {formatDate(selectedRide.date)}
-                    </Text>
-                    <Text style={{ fontSize: 25 }}>{selectedRide.price}€</Text>
-
-                    <Text style={styles.modalCar}>{displayCar()}</Text>
-                    <View style={styles.separator} />
-                    <Text style={{ fontSize: 25 }}>Autres passagers : </Text>
-                  </View>
-                </>
-              )}
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => {
-                  closeModal();
-                  navigation.navigate("Booking");
-                }}
-              >
-                <Text
-                  style={{
-                    color: "white",
-                    fontSize: 20,
-                  }}
-                >
-                  Validez le trajet
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
         <Arrow />
         <View style={styles.container}>
           <Text style={styles.title}>Trajets disponibles</Text>

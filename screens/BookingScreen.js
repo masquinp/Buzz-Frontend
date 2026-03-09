@@ -3,12 +3,49 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import Arrow from "../components/Arrow";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { formatDate } from "../utils/formatDate";
+import { addBooking } from "../reducers/bookings";
+
+import { useEffect, useState } from "react";
+
+const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export default function BookingScreen({ navigation, route }) {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
+  // const booking = useSelector((state) => state.booking.value);
   const { ride } = route.params;
+
+  const [message, setMessage] = useState("");
+  const [seatsBooked, setSeatsBooked] = useState(1);
+
+  const newBooking = () => {
+    if (!ride) return; // Sécurité
+    fetch(`${EXPO_PUBLIC_API_URL}/bookings/add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token: user.token,
+        // status : status,
+        ride: ride._id,
+        message: message,
+        seatsBooked: seatsBooked,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          dispatch(addBooking(data.booking));
+          // Navigation vers l'écran suivant après succès
+          navigation.navigate("Payment", { ride: ride, booking: data.booking });
+          alert("Réservation réussie !");
+        } else {
+          alert(data.error);
+        }
+      });
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#d0e2e4" }}>
       <View style={styles.container}>
@@ -28,11 +65,13 @@ export default function BookingScreen({ navigation, route }) {
         </Text>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate("Booking", { rideId: ride._id })}
+          onPress={() => {
+            newBooking();
+          }}
         >
           <Text>Réservez</Text>
         </TouchableOpacity>
-        <TouchableOpacity >
+        <TouchableOpacity>
           <Text>Annulez</Text>
         </TouchableOpacity>
       </View>
