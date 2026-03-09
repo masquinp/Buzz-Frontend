@@ -5,7 +5,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useIsFocused } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { addPhoto } from "../reducers/users";
-import Arrow from "../components/Arrow";
+import Arrow from "./Arrow";
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SnapScreen() {

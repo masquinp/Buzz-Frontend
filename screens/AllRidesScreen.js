@@ -16,18 +16,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { loadRides } from "../reducers/rides";
 
-
 import { formatDate } from "../utils/formatDate";
-
 
 export default function AllRidesScreen({ navigation, route }) {
   const dispatch = useDispatch();
-  
+
   const allRides = useSelector((state) => state.rides.value);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedRide, setSelectedRide] = useState(null);
-  
 
   // On récupère les filtres envoyés depuis MapScreen, ou des strings vides si aucun filtre
   const filterDeparture = route.params?.departure || "";
@@ -69,7 +66,7 @@ export default function AllRidesScreen({ navigation, route }) {
     .map((data, i) => {
       return (
         <View key={i} style={styles.card}>
-          <TouchableOpacity onPress={() => showModal(data)}>
+          <TouchableOpacity onPress={() => navigation.navigate("Booking", {  ride: data })}>
             <View style={styles.boxCard}>
               <View style={styles.row}>
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -83,7 +80,7 @@ export default function AllRidesScreen({ navigation, route }) {
                   </Text>
                 </View>
                 <View style={styles.carAndStars}>
-                  <Text style={{ paddingTop: 15, alignSelf: 'flex-end' }}>
+                  <Text style={{ paddingTop: 15, alignSelf: "flex-end" }}>
                     {data.user?.car
                       ? `${data.user.car.brand} ${data.user.car.model}`
                       : ""}
@@ -167,15 +164,12 @@ export default function AllRidesScreen({ navigation, route }) {
                 </>
               )}
               <TouchableOpacity
-  style={styles.button}
-  onPress={() => {
-    closeModal();
-    navigation.navigate("BookingConfirm", {
-      rideId: selectedRide._id,
-      ride: selectedRide,
-    });
-  }}
->
+                style={styles.button}
+                onPress={() => {
+                  closeModal();
+                  navigation.navigate("Booking");
+                }}
+              >
                 <Text
                   style={{
                     color: "white",

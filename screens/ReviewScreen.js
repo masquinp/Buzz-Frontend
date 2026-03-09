@@ -3,7 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { reviewUser } from "../reducers/review";
-import Review from "../components/review";
+import Review from "../components/Review";
 import Arrow from "../components/Arrow";
 
 export default function ReviewScreen() {

@@ -22,7 +22,7 @@ const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 export default function ConnectionScreen({ navigation }) {
   const dispatch = useDispatch();
 
-  // const [email, setEmail] = useState("");
+ 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -31,7 +31,6 @@ export default function ConnectionScreen({ navigation }) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        // email,
         username,
         password,
       }),
@@ -78,7 +77,7 @@ export default function ConnectionScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#fdf6f0'}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fdf6f0" }}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -90,13 +89,6 @@ export default function ConnectionScreen({ navigation }) {
           source={require("../assets/logo7.png")}
         ></Image>
         <View style={styles.inputContainer}>
-          {/*<TextInput
-            placeholder="Email"
-            style={styles.input}
-            onChangeText={(value) => setEmail(value)}
-            value={email}
-          />
-          */}
           <TextInput
             placeholder="Username"
             style={styles.input}
@@ -111,7 +103,7 @@ export default function ConnectionScreen({ navigation }) {
           />
         </View>
         <TouchableOpacity style={styles.connectionBtn} onPress={() => signIn()}>
-          <Text style={styles.textBtn}>Connection</Text>
+          <Text style={styles.textBtn}>Connexion</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>

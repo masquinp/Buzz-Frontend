@@ -14,7 +14,7 @@ export default function HomeScreen({ navigation }) {
           style={styles.connectionBtn}
           onPress={() => navigation.navigate("Connection")}
         >
-          <Text style={styles.textBtn}> Connection </Text>
+          <Text style={styles.textBtn}> Connexion </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.inscriptionBtn}
