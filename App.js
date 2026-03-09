@@ -27,6 +27,7 @@ import ReviewScreen from "./screens/ReviewScreen";
 import AllRidesScreen from "./screens/AllRidesScreen";
 import DriverHomeScreen from "./screens/DriverHomeScreen";
 import AddRideScreen from "./screens/AddRideScreen";
+import BookingScreen from "./screens/BookingScreen";
 
 /* OTHER */
 import MyridesScreen from "./screens/MyridesScreen";
@@ -87,6 +88,7 @@ export default function App() {
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="MyRide" component={MyridesScreen} />
             <Stack.Screen name="Messages" component={ChatScreen} />
+            <Stack.Screen name="Booking" component={BookingScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
