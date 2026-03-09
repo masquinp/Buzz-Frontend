@@ -56,10 +56,13 @@ export default function PaymentScreen({ navigation, route }) {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <TouchableOpacity
-                onPress={() => handleClose()}
+                onPress={() => {
+                  handleClose();
+                  navigation.navigate("ConfirmationPayment");
+                }}
                 style={styles.button}
                 activeOpacity={0.8}
-              >
+              > 
                 <Text style={styles.textButton}>Payez</Text>
               </TouchableOpacity>
             </View>

@@ -30,6 +30,7 @@ import AddRideScreen from "./screens/AddRideScreen";
 import BookingScreen from "./screens/BookingScreen";
 import PaymentScreen from "./screens/PaymentScreen";
 import EditProfileScreen from "./screens/EditProfileScreen";
+import ConfirmationPaymentScreen from "./screens/ConfirmationPaymentScreen";
 
 /* OTHER */
 import MyridesScreen from "./screens/MyridesScreen";
@@ -92,6 +93,7 @@ export default function App() {
             <Stack.Screen name="Messages" component={ChatScreen} />
             <Stack.Screen name="Booking" component={BookingScreen} />
             <Stack.Screen name="Payment" component={PaymentScreen} />
+            <Stack.Screen name="ConfirmationPayment" component={ConfirmationPaymentScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
