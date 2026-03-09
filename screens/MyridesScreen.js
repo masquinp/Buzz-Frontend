@@ -5,7 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import Ride from "../components/ride";
+import Ride from "../components/Ride";
 import Arrow from "../components/Arrow";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";

@@ -29,6 +29,7 @@ import DriverHomeScreen from "./screens/DriverHomeScreen";
 import AddRideScreen from "./screens/AddRideScreen";
 import BookingScreen from "./screens/BookingScreen";
 import PaymentScreen from "./screens/PaymentScreen";
+import EditProfileScreen from "./screens/EditProfileScreen";
 
 /* OTHER */
 import MyridesScreen from "./screens/MyridesScreen";
@@ -81,13 +82,13 @@ export default function App() {
             <Stack.Screen name="Register" component={RegisterScreen} />
             {/* TAB NAV */}
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
-
             <Stack.Screen name="AllRides" component={AllRidesScreen} />
             <Stack.Screen name="Review" component={ReviewScreen} />
             <Stack.Screen name="Driver" component={DriverHomeScreen} />
             <Stack.Screen name="AddRide" component={AddRideScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="MyRide" component={MyridesScreen} />
+            <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
             <Stack.Screen name="Messages" component={ChatScreen} />
             <Stack.Screen name="Booking" component={BookingScreen} />
             <Stack.Screen name="Payment" component={PaymentScreen} />

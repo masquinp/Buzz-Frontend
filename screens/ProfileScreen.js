@@ -43,6 +43,12 @@ export default function Profile({ navigation }) {
             Nom d'utilisateur : {profile.username}
           </Text>
         </View>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => navigation.navigate("EditProfileScreen")}
+        >
+          <Text style={styles.editTextButton}>Modifier</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.menuBox}>
@@ -150,7 +156,7 @@ const styles = StyleSheet.create({
   },
   logoutBtn: {
     backgroundColor: "#A7333F",
-    borderRadius: 50,
+    borderRadius: 10,
     padding: 10,
     marginTop: 30,
     textAlign: "center",
@@ -159,5 +165,17 @@ const styles = StyleSheet.create({
     width: "80%",
     alignItems: "center",
     alignSelf: "center",
+  },
+  editButton: {
+    backgroundColor: "#A7333F",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    alignSelf: "flex-end",
+  },
+  editTextButton: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
