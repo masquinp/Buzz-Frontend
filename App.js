@@ -1,7 +1,4 @@
 import React from "react";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-
 import { StripeProvider } from "@stripe/stripe-react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -10,31 +7,43 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-import HomeScreen from "./screens/HomeScreen";
-import ConnectionScreen from "./screens/ConnectionScreen";
-import RegisterScreen from "./screens/RegisterScreen";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
 
-import ProfileScreen from "./screens/ProfileScreen";
-import ChatScreen from "./screens/ChatScreen";
-
-import MapScreen from "./screens/MapScreen";
-import MyRideScreen from "./screens/MyRideScreen";
-import ReviewScreen from "./screens/ReviewScreen";
-import AllRidesScreen from "./screens/AllRidesScreen";
-import DriverScreen from "./screens/DriverScreen";
-import BookingsScreen from "./screens/BookingsScreen";
-import AddRideScreen from "./screens/AddRideScreen";
-import AddPaymentMethodScreen from "./screens/AddPaymentMethodScreen";
-
+/* REDUCERS */
 import user from "./reducers/users";
 import rides from "./reducers/rides";
 import profile from "./reducers/profile";
 import review from "./reducers/review";
 
-import { SafeAreaProvider } from "react-native-safe-area-context";
+/* EXISTING SCREENS */
+import HomeScreen from "./screens/HomeScreen";
+import ConnectionScreen from "./screens/ConnectionScreen";
+import RegisterScreen from "./screens/RegisterScreen";
+import ProfileScreen from "./screens/ProfileScreen";
+import ChatScreen from "./screens/ChatScreen";
+import MapScreen from "./screens/MapScreen";
+import ReviewScreen from "./screens/ReviewScreen";
+import AllRidesScreen from "./screens/AllRidesScreen";
+import DriverHomeScreen from "./screens/DriverHomeScreen";
+import AddRideScreen from "./screens/AddRideScreen";
+import PaymentScreen from "./screens/PaymentScreen";
+import AddPaymentMethodScreen from "./screens/AddPaymentMethodScreen";
 
-import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
+/* NEW PASSENGER FLOW */
+import PassengerHomeScreen from "./screens/PassengerHomeScreen";
+import RideSummaryScreen from "./screens/RideSummaryScreen";
+import BookingConfirmedScreen from "./screens/BookingConfirmedScreen";
+
+/* NEW DRIVER FLOW */
+import DriverTripDetailsScreen from "./screens/DriverTripDetailsScreen";
+import DriverQrScannerScreen from "./screens/DriverQrScannerScreen";
+import DriverTripInProgressScreen from "./screens/DriverTripInProgressScreen";
+import DriverTripCompletedScreen from "./screens/DriverTripCompletedScreen";
+
+/* OTHER */
+import MyridesScreen from "./screens/MyridesScreen";
 
 const store = configureStore({
   reducer: { user, rides, profile, review },
@@ -77,23 +86,63 @@ export default function App() {
       <Provider store={store}>
         <SafeAreaProvider>
           <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Navigator
+              initialRouteName="Home"
+              screenOptions={{ headerShown: false }}
+            >
+              {/* AUTH / HOME */}
               <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="Connection" component={ConnectionScreen} />
               <Stack.Screen name="Register" component={RegisterScreen} />
 
+              {/* TAB NAV */}
               <Stack.Screen name="TabNavigator" component={TabNavigator} />
+
+              {/* EXISTING */}
               <Stack.Screen
                 name="AddPaymentMethod"
                 component={AddPaymentMethodScreen}
               />
-              <Stack.Screen name="MyRide" component={MyRideScreen} />
-              <Stack.Screen name="Review" component={ReviewScreen} />
-              <Stack.Screen name="Profile" component={ProfileScreen} />
               <Stack.Screen name="AllRides" component={AllRidesScreen} />
-              <Stack.Screen name="Driver" component={DriverScreen} />
-              <Stack.Screen name="Bookings" component={BookingsScreen} />
+              <Stack.Screen name="Review" component={ReviewScreen} />
+              <Stack.Screen name="DriverHome" component={DriverHomeScreen} />
               <Stack.Screen name="AddRide" component={AddRideScreen} />
+              <Stack.Screen name="Payment" component={PaymentScreen} />
+              <Stack.Screen name="Profile" component={ProfileScreen} />
+              <Stack.Screen name="MyRides" component={MyridesScreen} />
+              <Stack.Screen name="Messages" component={ChatScreen} />
+
+              {/* PASSENGER FLOW */}
+              <Stack.Screen
+                name="PassengerHome"
+                component={PassengerHomeScreen}
+              />
+              <Stack.Screen name="RideSummary" component={RideSummaryScreen} />
+              <Stack.Screen
+                name="BookingConfirmed"
+                component={BookingConfirmedScreen}
+              />
+
+              {/* DRIVER FLOW */}
+              <Stack.Screen
+                name="DriverTripDetails"
+                component={DriverTripDetailsScreen}
+              />
+              <Stack.Screen
+                name="DriverQrScanner"
+                component={DriverQrScannerScreen}
+              />
+              <Stack.Screen
+                name="DriverTripInProgress"
+                component={DriverTripInProgressScreen}
+              />
+              <Stack.Screen
+                name="DriverTripCompleted"
+                component={DriverTripCompletedScreen}
+              />
+
+              {/* SETTINGS TEMPORAIRE */}
+              <Stack.Screen name="Settings" component={ProfileScreen} />
             </Stack.Navigator>
           </NavigationContainer>
         </SafeAreaProvider>
@@ -101,12 +150,3 @@ export default function App() {
     </StripeProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

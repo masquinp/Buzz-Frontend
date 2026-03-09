@@ -15,21 +15,19 @@ import { faCircleUser, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { loadRides } from "../reducers/rides";
-import { addBooking } from "../reducers/bookings";
+
 
 import { formatDate } from "../utils/formatDate";
 
-const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export default function AllRidesScreen({ navigation, route }) {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.value);
+  
   const allRides = useSelector((state) => state.rides.value);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedRide, setSelectedRide] = useState(null);
-  const [seatsBooked, setSeatsBooked] = useState(1);
-  const [message, setMessage] = useState("");
+  
 
   // On récupère les filtres envoyés depuis MapScreen, ou des strings vides si aucun filtre
   const filterDeparture = route.params?.departure || "";
@@ -118,31 +116,6 @@ export default function AllRidesScreen({ navigation, route }) {
     return "Non renseignée";
   };
 
-  const newBooking = () => {
-    if (!selectedRide) return; // Sécurité
-
-    fetch(`${EXPO_PUBLIC_API_URL}/bookings/add`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        token: user.token,
-        seatsBooked: seatsBooked,
-        ride: selectedRide._id,
-        message: message,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          dispatch(addBooking(data.booking));
-          alert("Réservation réussie !");
-          navigation.navigate("Bookings");
-        } else {
-          alert(data.error);
-        }
-      });
-  };
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#d0e2e4" }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -194,9 +167,15 @@ export default function AllRidesScreen({ navigation, route }) {
                 </>
               )}
               <TouchableOpacity
-                style={styles.button}
-                onPress={() => newBooking()}
-              >
+  style={styles.button}
+  onPress={() => {
+    closeModal();
+    navigation.navigate("BookingConfirm", {
+      rideId: selectedRide._id,
+      ride: selectedRide,
+    });
+  }}
+>
                 <Text
                   style={{
                     color: "white",
