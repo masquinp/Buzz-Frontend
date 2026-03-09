@@ -11,6 +11,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { profileUser } from "../reducers/profile";
 import Arrow from "../components/Arrow";
+const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export default function EditProfile({ navigation }) {
   const dispatch = useDispatch();
@@ -22,21 +23,36 @@ export default function EditProfile({ navigation }) {
   const [username, setUsername] = useState(profile.username || "");
   const [password, setPassword] = useState(profile.password || "");
 
+  //post user/update  https://nodemailer.com/
   const handleSave = () => {
-    dispatch(
-      profileUser({
+    fetch(`${EXPO_PUBLIC_API_URL}/users/update`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
         firstname,
         lastname,
-        email,
         username,
+        email,
         password,
       }),
-    );
-    navigation.goBack();
+    })
+      .then((Response) => Response.json())
+      .then((data) => {
+        dispatch(
+          profileUser({
+            firstname,
+            lastname,
+            email,
+            username,
+            password,
+          }),
+        );
+        navigation.goBack();
+      });
   };
 
   return (
-    <SafeAreaView >
+    <SafeAreaView>
       <ScrollView contentContainerStyle={styles.container}>
         <Arrow />
         <Text style={styles.title}>Modifier mon profil</Text>
