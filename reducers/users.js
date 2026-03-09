@@ -8,6 +8,10 @@ const initialState = {
     _id: null,
     photos: [],
     car: null,
+
+    // Stripe
+    stripeCustomerId: null,
+    defaultPaymentMethodId: null,
   },
 };
 
@@ -20,13 +24,22 @@ export const userSlice = createSlice({
       // state.value.email = action.payload.email;
       state.value.username = action.payload.username;
       state.value._id = action.payload._id;
+
+      // si le backend renvoie déjà ces champs, on les garde
+      state.value.stripeCustomerId = action.payload.stripeCustomerId || null;
+      state.value.defaultPaymentMethodId =
+        action.payload.defaultPaymentMethodId || null;
     },
     logout: (state) => {
       state.value.token = null;
       // state.value.email = null;
       state.value.username = null;
       state.value._id = null;
-      ((state.value.car = null), (state.value.photos = null));
+      ((state.value.car = null), (state.value.photos = []));
+
+      // reset Stripe
+      state.value.stripeCustomerId = null;
+      state.value.defaultPaymentMethodId = null;
     },
     addPhoto: (state, action) => {
       state.value.photos.push(action.payload);
@@ -41,10 +54,15 @@ export const userSlice = createSlice({
     },
     removeCar: (state, action) => {
       state.value.car = state.value.car.filter((car) => car !== action.payload);
-    },
+);
   },
-});
+  updateStripePaymentMethod: (state, action) => {
+      state.value.stripeCustomerId = action.payload.stripeCustomerId;
+      state.value.defaultPaymentMethodId =
+        action.payload.defaultPaymentMethodId;
+  },
+);
 
-export const { login, logout, addPhoto, removePhoto, addCar } =
+export const { login, logout, addPhoto, removePhoto, addCar, removeCar, updateStripePaymentMethod } =
   userSlice.actions;
 export default userSlice.reducer;

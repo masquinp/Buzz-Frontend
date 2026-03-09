@@ -62,17 +62,11 @@ export default function Profile({ navigation }) {
 
        <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("AddPaymentMethod")}
+        onPress={() => navigation.navigate("Payment")}
         >
         <Text style={styles.textButton}>Paiement</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-  style={styles.button}
-  onPress={() => navigation.navigate("AddPaymentMethod")}
->
-  <Text style={styles.textButton}>Paiement</Text>
-</TouchableOpacity>
       </View>
     </ScrollView>
   );

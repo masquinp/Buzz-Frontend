@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from "react-native";
 import { useStripe } from "@stripe/stripe-react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { updateStripePaymentMethod } from "../reducers/users";
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -10,8 +11,9 @@ export default function AddPaymentMethodScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
 
   // ✅ adapte selon ton store Redux
-  // Ici je suppose que tu stockes le token du user dans state.user.token (à ajuster si besoin)
-  const token = useSelector((state) => state.user?.token);
+const dispatch = useDispatch();
+const user = useSelector((state) => state.user.value);
+const token = user?.token;
 
   const handleAddCard = async () => {
     try {
@@ -60,10 +62,22 @@ export default function AddPaymentMethodScreen({ navigation }) {
       });
 
       const data2 = await r2.json();
-      if (!data2.result) throw new Error(data2.error);
 
-      Alert.alert("✅ Carte enregistrée", "Votre moyen de paiement est prêt.");
-      navigation.goBack();
+if (!data2.result) {
+  throw new Error(data2.error);
+}
+
+// mise à jour Redux
+dispatch(
+  updateStripePaymentMethod({
+    stripeCustomerId: customerId,
+    defaultPaymentMethodId: data2.defaultPaymentMethodId,
+  })
+);
+
+Alert.alert("✅ Carte enregistrée", "Votre moyen de paiement est prêt.");
+navigation.goBack();
+
     } catch (e) {
       Alert.alert("Erreur paiement", e.message);
     } finally {
