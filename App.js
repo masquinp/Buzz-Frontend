@@ -1,5 +1,4 @@
 import React from "react";
-import { StripeProvider } from "@stripe/stripe-react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -28,19 +27,6 @@ import ReviewScreen from "./screens/ReviewScreen";
 import AllRidesScreen from "./screens/AllRidesScreen";
 import DriverHomeScreen from "./screens/DriverHomeScreen";
 import AddRideScreen from "./screens/AddRideScreen";
-import PaymentScreen from "./screens/PaymentScreen";
-import AddPaymentMethodScreen from "./screens/AddPaymentMethodScreen";
-
-/* NEW PASSENGER FLOW */
-import PassengerHomeScreen from "./screens/PassengerHomeScreen";
-import RideSummaryScreen from "./screens/RideSummaryScreen";
-import BookingConfirmedScreen from "./screens/BookingConfirmedScreen";
-
-/* NEW DRIVER FLOW */
-import DriverTripDetailsScreen from "./screens/DriverTripDetailsScreen";
-import DriverQrScannerScreen from "./screens/DriverQrScannerScreen";
-import DriverTripInProgressScreen from "./screens/DriverTripInProgressScreen";
-import DriverTripCompletedScreen from "./screens/DriverTripCompletedScreen";
 
 /* OTHER */
 import MyridesScreen from "./screens/MyridesScreen";
@@ -80,73 +66,30 @@ const TabNavigator = () => {
 
 export default function App() {
   return (
-    <StripeProvider
-     publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY}
-    >
-      <Provider store={store}>
-        <SafeAreaProvider>
-          <NavigationContainer>
-            <Stack.Navigator
-              initialRouteName="Home"
-              screenOptions={{ headerShown: false }}
-            >
-              {/* AUTH / HOME */}
-              <Stack.Screen name="Home" component={HomeScreen} />
-              <Stack.Screen name="Connection" component={ConnectionScreen} />
-              <Stack.Screen name="Register" component={RegisterScreen} />
+    <Provider store={store}>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Home"
+            screenOptions={{ headerShown: false }}
+          >
+            {/* AUTH / HOME */}
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Connection" component={ConnectionScreen} />
+            <Stack.Screen name="Register" component={RegisterScreen} />
+            {/* TAB NAV */}
+            <Stack.Screen name="TabNavigator" component={TabNavigator} />
 
-              {/* TAB NAV */}
-              <Stack.Screen name="TabNavigator" component={TabNavigator} />
-
-              {/* EXISTING */}
-              <Stack.Screen
-                name="AddPaymentMethod"
-                component={AddPaymentMethodScreen}
-              />
-              <Stack.Screen name="AllRides" component={AllRidesScreen} />
-              <Stack.Screen name="Review" component={ReviewScreen} />
-              <Stack.Screen name="DriverHome" component={DriverHomeScreen} />
-              <Stack.Screen name="AddRide" component={AddRideScreen} />
-              <Stack.Screen name="Payment" component={PaymentScreen} />
-              <Stack.Screen name="Profile" component={ProfileScreen} />
-              <Stack.Screen name="MyRides" component={MyridesScreen} />
-              <Stack.Screen name="Messages" component={ChatScreen} />
-
-              {/* PASSENGER FLOW */}
-              <Stack.Screen
-                name="PassengerHome"
-                component={PassengerHomeScreen}
-              />
-              <Stack.Screen name="RideSummary" component={RideSummaryScreen} />
-              <Stack.Screen
-                name="BookingConfirmed"
-                component={BookingConfirmedScreen}
-              />
-
-              {/* DRIVER FLOW */}
-              <Stack.Screen
-                name="DriverTripDetails"
-                component={DriverTripDetailsScreen}
-              />
-              <Stack.Screen
-                name="DriverQrScanner"
-                component={DriverQrScannerScreen}
-              />
-              <Stack.Screen
-                name="DriverTripInProgress"
-                component={DriverTripInProgressScreen}
-              />
-              <Stack.Screen
-                name="DriverTripCompleted"
-                component={DriverTripCompletedScreen}
-              />
-
-              {/* SETTINGS TEMPORAIRE */}
-              <Stack.Screen name="Settings" component={ProfileScreen} />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </SafeAreaProvider>
-      </Provider>
-   </StripeProvider>
+            <Stack.Screen name="AllRides" component={AllRidesScreen} />
+            <Stack.Screen name="Review" component={ReviewScreen} />
+            <Stack.Screen name="Driver" component={DriverHomeScreen} />
+            <Stack.Screen name="AddRide" component={AddRideScreen} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="MyRide" component={MyridesScreen} />
+            <Stack.Screen name="Messages" component={ChatScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </Provider>
   );
 }

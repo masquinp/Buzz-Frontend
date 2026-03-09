@@ -60,13 +60,9 @@ export default function Profile({ navigation }) {
           <Text style={styles.textButton}>Trajets</Text>
         </TouchableOpacity>
 
-       <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate("Payment")}
-        >
-        <Text style={styles.textButton}>Paiement</Text>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.textButton}>Paiement</Text>
         </TouchableOpacity>
-
       </View>
     </ScrollView>
   );
