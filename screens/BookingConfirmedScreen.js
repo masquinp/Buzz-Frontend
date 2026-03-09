@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+
+
 import QRCode from "react-native-qrcode-svg";
 
 export default function BookingConfirmedScreen({ navigation, route }) {
