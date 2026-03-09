@@ -4,7 +4,6 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  Modal,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Arrow from "../components/Arrow";
@@ -25,7 +24,6 @@ export default function AllRidesScreen({ navigation, route }) {
 
   const allRides = useSelector((state) => state.rides.value);
 
-  const [modalVisible, setModalVisible] = useState(false);
   const [selectedRide, setSelectedRide] = useState(null);
 
   // On récupère les filtres envoyés depuis MapScreen, ou des strings vides si aucun filtre
