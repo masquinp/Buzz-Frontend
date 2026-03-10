@@ -22,6 +22,19 @@ export default function Profile({ navigation }) {
     navigation.navigate("Home");
   };
 
+  const handleDelete = () => {
+    fetch(`${EXPO_PUBLIC_API_URL}/users/delete/${user.token}`, {
+      method: "DELETE",
+    })
+      .then((Response) => Response.json())
+      .then((data) => {
+        if (data.result) {
+          dispatch(logout());
+          navigation.navigate("Home");
+        }
+      });
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.profileBox}>
@@ -66,15 +79,16 @@ export default function Profile({ navigation }) {
           <Text style={styles.textButton}>Trajets</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("Payment")}
-        >
+        <TouchableOpacity style={styles.button}>
           <Text style={styles.textButton}>Paiement</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => handleLogout()}>
           <Text style={styles.logoutBtn}>Se deconnecter</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={handleDelete}>
+          <Text style={styles.deleteBtn}>Supprimer mon compte</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -90,7 +104,7 @@ const styles = StyleSheet.create({
 
   profileBox: {
     alignItems: "center",
-    marginBottom: 30,
+    marginBottom: 15,
   },
 
   title: {
@@ -119,7 +133,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     padding: 20,
     borderRadius: 15,
-    marginBottom: 25,
+    marginBottom: 15,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
@@ -139,6 +153,7 @@ const styles = StyleSheet.create({
 
   menuBox: {
     paddingHorizontal: 20,
+    marginBottom: 20,
   },
 
   button: {
@@ -162,7 +177,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#A7333F",
     borderRadius: 10,
     padding: 10,
-    marginTop: 30,
+    marginTop: 15,
     textAlign: "center",
     color: "white",
     fontSize: 15,
@@ -181,5 +196,11 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "600",
+  },
+  deleteBtn: {
+    marginTop: 20,
+    textAlign: "center",
+    color: "#A7333F",
+    fontSize: 15,
   },
 });

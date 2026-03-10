@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   View,
   Text,
+  Image,
   TextInput,
   TouchableOpacity,
   StyleSheet,
@@ -24,7 +25,6 @@ export default function EditProfile({ navigation }) {
   const [username, setUsername] = useState(profile.username || "");
   const [password, setPassword] = useState(profile.password || "");
 
-  //post user/update  https://nodemailer.com/
   const handleSave = () => {
     fetch(`${EXPO_PUBLIC_API_URL}/users/update`, {
       method: "POST",
@@ -58,6 +58,12 @@ export default function EditProfile({ navigation }) {
       <ScrollView contentContainerStyle={styles.container}>
         <Arrow />
         <Text style={styles.title}>Modifier mon profil</Text>
+
+        {/* --- PHOTO CENTRÉE --- */}
+        <View style={styles.photoContainer}>
+          <Image source={{ uri: profile.photo }} style={styles.photo} />
+        </View>
+
         <Text style={styles.label}>Prénom</Text>
         <TextInput
           style={styles.input}
@@ -106,38 +112,65 @@ export default function EditProfile({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: "#f4f6f8",
-    padding: 20,
+    backgroundColor: "#F4F6F8",
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 40,
   },
+
+  photoContainer: {
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  photo: {
+    width: 130,
+    height: 130,
+    borderRadius: 65,
+    backgroundColor: "#000",
+  },
+
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 26,
+    fontWeight: "700",
     color: "#A7333F",
-    marginBottom: 20,
-    alignSelf: "center",
+    marginBottom: 30,
+    textAlign: "center",
   },
+
   label: {
-    fontSize: 16,
-    marginTop: 15,
-    marginBottom: 5,
-    color: "#222",
+    fontSize: 14,
+    color: "#A7333F",
+    marginBottom: 6,
+    marginTop: 18,
+    fontWeight: "500",
   },
+
   input: {
-    backgroundColor: "#fff",
-    padding: 12,
-    borderRadius: 10,
+    backgroundColor: "#FFFFFF",
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: 14,
     fontSize: 16,
+
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
+
   saveButton: {
     backgroundColor: "#A7333F",
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 30,
+    paddingVertical: 16,
+    borderRadius: 14,
+    marginTop: 40,
     alignItems: "center",
   },
+
   saveText: {
-    color: "white",
-    fontWeight: "600",
+    color: "#FFFFFF",
+    fontWeight: "700",
     fontSize: 16,
+    letterSpacing: 0.5,
   },
 });
