@@ -6,6 +6,16 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { deleteBooking } from "../reducers/bookings";
 import { useState } from "react";
+import { addPaidBooking } from "../reducers/payment";
+
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+
+import { faApplePay, faCcVisa } from "@fortawesome/free-brands-svg-icons";
+import {
+  faCreditCard,
+  faPlus,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -34,7 +44,38 @@ export default function PaymentScreen({ navigation, route }) {
         console.log("data.booking :", data.booking);
         if (data.result) {
           dispatch(deleteBooking(bookingId));
+          navigation.goBack();
           alert("Réservation supprimé");
+        } else {
+          alert(data.error);
+        }
+      });
+  };
+
+  const newPayment = () => {
+    if (!booking) return; // Sécurité
+
+    fetch(`${EXPO_PUBLIC_API_URL}/payments/add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token: user.token,
+        amount: ride.price,
+        status: "accepted",
+        booking: booking._id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          dispatch(addPaidBooking(data.payment));
+          alert("Paiment validé !");
+          // Navigation vers l'écran suivant après succès
+          navigation.navigate("ConfirmationPayment", {
+            ride: ride,
+            booking: booking,
+            payment: data.payment,
+          });
         } else {
           alert(data.error);
         }
@@ -56,36 +97,40 @@ export default function PaymentScreen({ navigation, route }) {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <TouchableOpacity
+                onPress={() => handleClose()}
+                style={{
+                  top: 10,
+                  left: 20,
+                  position: "absolute",
+                }}
+              >
+                <FontAwesomeIcon icon={faXmark} size={30} color="white" />
+              </TouchableOpacity>
+              <TouchableOpacity
                 onPress={() => {
                   handleClose();
-                  navigation.navigate("ConfirmationPayment");
+                  newPayment();
                 }}
                 style={styles.button}
                 activeOpacity={0.8}
-              > 
-                <Text style={styles.textButton}>Payez</Text>
+              >
+                <Text style={styles.textButton}>Confirmez le paiement</Text>
               </TouchableOpacity>
             </View>
           </View>
         </Modal>
         <Arrow />
         <Text>{ride.price}€</Text>
-        <TouchableOpacity
-          onPress={() => {
-            removeBooking(booking._id);
-            navigation.goBack();
-          }}
-        >
-          <TouchableOpacity onPress={() => pay()}>
-            <Text>Apple Pay</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => pay()}>
-            <Text>Visa</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            {/* mettre payer dans une modal, quand je clique sur apple pay ou visa une modal apparait et je paie*/}
-            <Text>Payer</Text>
-          </TouchableOpacity>
+        <TouchableOpacity onPress={() => pay()}>
+          <FontAwesomeIcon icon={faApplePay} size={60} />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => pay()}>
+          <FontAwesomeIcon icon={faCcVisa} />
+          <Text>Visa</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => removeBooking(booking._id)}>
           <Text>Supprimer la réservation</Text>
         </TouchableOpacity>
       </View>

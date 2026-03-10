@@ -49,12 +49,14 @@ export default function AllRidesScreen({ navigation, route }) {
     .filter((data) => {
       const matchDeparture = data.departure
         .toLowerCase()
-        .includes(filterDeparture.toLowerCase());
+        .includes(filterDeparture.toLowerCase()); // trie par lieu de départ
       const matchArrival = data.arrival
         .toLowerCase()
-        .includes(filterArrival.toLowerCase());
-      return matchDeparture && matchArrival;
+        .includes(filterArrival.toLowerCase()); // trie par lieu d'arrivée
+      const matchDate = new Date(data.date) >= new Date(); // affiche les trajets à venir uniquement
+      return matchDeparture && matchArrival && matchDate;
     })
+    .sort((a, b) => a.price - b.price) // trie les trajets affichés par prix croissant
     .map((data, i) => {
       return (
         <View key={i} style={styles.card}>
@@ -108,7 +110,7 @@ export default function AllRidesScreen({ navigation, route }) {
         <Arrow />
         <View style={styles.container}>
           <Text style={styles.title}>Trajets disponibles</Text>
-          {rides}
+          {rides.length === 0 ? <Text>Aucun trajet existant avec ces lieux</Text> : rides}
         </View>
       </ScrollView>
     </SafeAreaView>

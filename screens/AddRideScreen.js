@@ -119,7 +119,13 @@ export default function TestScreen({ navigation }) {
             onChangeText={(value) => setPlacesTotal(value)}
             value={placesTotal}
           />
-          <TouchableOpacity style={styles.addBtn} onPress={() => newRide()}>
+          <TouchableOpacity
+            style={styles.addBtn}
+            onPress={() => {
+              newRide();
+              navigation.goBack();
+            }}
+          >
             <Text style={styles.textBtn}>Enregistrez</Text>
           </TouchableOpacity>
         </View>

@@ -7,18 +7,22 @@ import { useSelector, useDispatch } from "react-redux";
 import { formatDate } from "../utils/formatDate";
 import { addBooking } from "../reducers/bookings";
 
-import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCircleUser, faXmark } from "@fortawesome/free-solid-svg-icons";
+
+import { useEffect, useState, useRef } from "react";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export default function BookingScreen({ navigation, route }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  // const booking = useSelector((state) => state.booking.value);
   const { ride } = route.params;
 
   const [message, setMessage] = useState("");
   const [seatsBooked, setSeatsBooked] = useState(1);
+
+  const bottomSheetRef = useRef(null);
 
   const newBooking = () => {
     if (!ride) return; // Sécurité
@@ -50,29 +54,38 @@ export default function BookingScreen({ navigation, route }) {
     <SafeAreaView style={{ flex: 1, backgroundColor: "#d0e2e4" }}>
       <View style={styles.container}>
         <Arrow />
-        <Text>
+        <FontAwesomeIcon icon={faCircleUser} size={80} color="#545e63" />
+        <Text style={{ fontSize: 25, fontWeight: "bold", marginBottom: 15 }}>
           {ride.user?.firstname} {ride.user?.lastname}
         </Text>
-        <Text>
+        <Text style={{ fontSize: 20, marginBottom: 10 }}>
           {ride.departure} ➔ {ride.arrival}
         </Text>
-        <Text>{formatDate(ride.date)}</Text>
-        <Text>{ride.price}€</Text>
-        <Text>
+        <Text style={{ fontSize: 20, marginBottom: 10 }}>
+          {formatDate(ride.date)}
+        </Text>
+        <Text style={{ fontSize: 25, fontWeight: "bold" }}>{ride.price}€</Text>
+        <Text style={{ fontSize: 20, marginTop: 5, marginBottom: 20 }}>
           {ride.user?.car
             ? `${ride.user.car.brand} ${ride.user.car.model} ${ride.user.car.color}`
             : "Voiture non renseignée"}
         </Text>
 
         <TouchableOpacity
+          style={{ width: "50%" }}
           onPress={() => {
             newBooking();
           }}
         >
-          <Text>Réservez</Text>
+          <Text style={styles.bookCancelBtn}>Réservez</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <Text>Annulez</Text>
+        <TouchableOpacity
+          style={{ width: "50%" }}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Text style={styles.bookCancelBtn}>Annulez</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -85,5 +98,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  bookCancelBtn: {
+    backgroundColor: "#A7333F",
+    borderRadius: 50,
+    padding: 10,
+    marginTop: 20,
+    color: "white",
+    fontSize: 22,
+    textAlign: "center",
   },
 });

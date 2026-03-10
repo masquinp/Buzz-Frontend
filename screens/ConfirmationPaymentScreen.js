@@ -3,7 +3,6 @@ import Arrow from "../components/Arrow";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { Touchable } from "react-native";
 
 export default function ConfirmationPaymentScreen({ navigation }) {
   return (
@@ -20,8 +19,13 @@ export default function ConfirmationPaymentScreen({ navigation }) {
           }}
         >
           <Text>
-          <FontAwesome name="comments" size={20} color="black" />;
+            <FontAwesome name="comments" size={20} color="black" />;
           </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("TabNavigator", { screen: "Map" })}
+        >
+          <Text>Retournez sur la page d'accueil</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

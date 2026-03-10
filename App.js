@@ -15,6 +15,8 @@ import user from "./reducers/users";
 import rides from "./reducers/rides";
 import profile from "./reducers/profile";
 import review from "./reducers/review";
+import payments from "./reducers/payment";
+import bookings from "./reducers/bookings";
 
 /* EXISTING SCREENS */
 import HomeScreen from "./screens/HomeScreen";
@@ -36,7 +38,7 @@ import ConfirmationPaymentScreen from "./screens/ConfirmationPaymentScreen";
 import MyridesScreen from "./screens/MyridesScreen";
 
 const store = configureStore({
-  reducer: { user, rides, profile, review },
+  reducer: { user, rides, profile, review, bookings, payments },
 });
 
 const Stack = createNativeStackNavigator();
@@ -89,11 +91,17 @@ export default function App() {
             <Stack.Screen name="AddRide" component={AddRideScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="MyRide" component={MyridesScreen} />
-            <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
+            <Stack.Screen
+              name="EditProfileScreen"
+              component={EditProfileScreen}
+            />
             <Stack.Screen name="Messages" component={ChatScreen} />
             <Stack.Screen name="Booking" component={BookingScreen} />
             <Stack.Screen name="Payment" component={PaymentScreen} />
-            <Stack.Screen name="ConfirmationPayment" component={ConfirmationPaymentScreen} />
+            <Stack.Screen
+              name="ConfirmationPayment"
+              component={ConfirmationPaymentScreen}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

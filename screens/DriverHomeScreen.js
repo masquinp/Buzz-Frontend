@@ -301,7 +301,7 @@ export default function TestScreen({ navigation }) {
               <TouchableOpacity
                 style={styles.registerBtn}
                 onPress={() => {
-                  (newCar(), closeModal(), navigation.goBack());
+                  (newCar(), closeModal());
                 }}
               >
                 <Text style={styles.textBtn}>Enregistrer</Text>
