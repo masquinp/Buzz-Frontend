@@ -105,7 +105,7 @@ export default function AllRidesScreen({ navigation, route }) {
     });
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#d0e2e4" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "fff" }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Arrow />
         <View style={styles.container}>
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
     gap: 15,
-    backgroundColor: "#cbdee1",
+    backgroundColor: "fff",
   },
   title: {
     fontSize: 25,

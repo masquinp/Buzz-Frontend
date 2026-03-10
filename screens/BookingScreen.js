@@ -51,7 +51,7 @@ export default function BookingScreen({ navigation, route }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#d0e2e4" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "fff" }}>
       <View style={styles.container}>
         <Arrow />
         <FontAwesomeIcon icon={faCircleUser} size={80} color="#545e63" />

@@ -116,10 +116,10 @@ export default function PaymentScreen({ navigation, route }) {
                   handleClose();
                   newPayment();
                 }}
-                style={styles.button}
+                style={styles.modalButton}
                 activeOpacity={0.8}
               >
-                <Text style={styles.textButton}>Confirmez le paiement</Text>
+                <Text style={styles.modalText}>Confirmez le paiement</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalView: {
-    backgroundColor: "#c2a7a7",
+    backgroundColor: "#ecebeb",
     borderRadius: 20,
     padding: 30,
     alignItems: "center",
@@ -237,4 +237,11 @@ const styles = StyleSheet.create({
     color: "#1a1a1a",
     
   },
+  modalText: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 10,
+    color: "black",
+
+  }
 });
