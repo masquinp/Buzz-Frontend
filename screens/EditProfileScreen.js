@@ -16,6 +16,7 @@ const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 export default function EditProfile({ navigation }) {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.profile.value);
+  const user = useSelector((state) => state.user.value);
 
   const [firstname, setFirstname] = useState(profile.firstname || "");
   const [lastname, setLastname] = useState(profile.lastname || "");
@@ -34,6 +35,7 @@ export default function EditProfile({ navigation }) {
         username,
         email,
         password,
+        token: user.token,
       }),
     })
       .then((Response) => Response.json())
@@ -56,7 +58,6 @@ export default function EditProfile({ navigation }) {
       <ScrollView contentContainerStyle={styles.container}>
         <Arrow />
         <Text style={styles.title}>Modifier mon profil</Text>
-
         <Text style={styles.label}>Prénom</Text>
         <TextInput
           style={styles.input}
@@ -64,7 +65,6 @@ export default function EditProfile({ navigation }) {
           onChangeText={setFirstname}
           placeholder="Prénom"
         />
-
         <Text style={styles.label}>Nom</Text>
         <TextInput
           style={styles.input}
@@ -72,7 +72,6 @@ export default function EditProfile({ navigation }) {
           onChangeText={setLastname}
           placeholder="Nom"
         />
-
         <Text style={styles.label}>Email</Text>
         <TextInput
           style={styles.input}
@@ -81,7 +80,6 @@ export default function EditProfile({ navigation }) {
           placeholder="Email"
           keyboardType="email-address"
         />
-
         <Text style={styles.label}>Nom d'utilisateur</Text>
         <TextInput
           style={styles.input}
@@ -89,7 +87,6 @@ export default function EditProfile({ navigation }) {
           onChangeText={setUsername}
           placeholder="Nom d'utilisateur"
         />
-
         <Text style={styles.label}>Mot de passe</Text>
         <TextInput
           style={styles.input}
@@ -98,7 +95,6 @@ export default function EditProfile({ navigation }) {
           placeholder="Mot de passe"
           secureTextEntry
         />
-
         <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
           <Text style={styles.saveText}>Enregistrer</Text>
         </TouchableOpacity>
