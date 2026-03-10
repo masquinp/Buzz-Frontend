@@ -8,10 +8,6 @@ const initialState = {
     _id: null,
     photos: [],
     car: null,
-
-    // Stripe
-    stripeCustomerId: null,
-    defaultPaymentMethodId: null,
   },
 };
 
@@ -49,6 +45,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { login, logout, addPhoto, removePhoto, addCar, removeCar } =
-  userSlice.actions;
+export const { login, logout, addPhoto, removePhoto, addCar, removeCar } = userSlice.actions;
 export default userSlice.reducer;

@@ -43,7 +43,6 @@ export default function BookingScreen({ navigation, route }) {
           dispatch(addBooking(data.booking));
           // Navigation vers l'écran suivant après succès
           navigation.navigate("Payment", { ride: ride, booking: data.booking });
-          alert("Réservation réussie !");
         } else {
           alert(data.error);
         }

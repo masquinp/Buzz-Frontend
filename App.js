@@ -17,6 +17,7 @@ import profile from "./reducers/profile";
 import review from "./reducers/review";
 import payments from "./reducers/payment";
 import bookings from "./reducers/bookings";
+import messages from "./reducers/messages";
 
 /* EXISTING SCREENS */
 import HomeScreen from "./screens/HomeScreen";
@@ -34,12 +35,13 @@ import PaymentScreen from "./screens/PaymentScreen";
 import EditProfileScreen from "./screens/EditProfileScreen";
 import ConfirmationPaymentScreen from "./screens/ConfirmationPaymentScreen";
 import AddReviewScreen from "./screens/AddReviewScreen";
+import MessagesScreen from "./screens/MessagesScreen";
 
 /* OTHER */
 import MyridesScreen from "./screens/MyridesScreen";
 
 const store = configureStore({
-  reducer: { user, rides, profile, review, bookings, payments },
+  reducer: { user, rides, profile, review, bookings, payments, messages },
 });
 
 const Stack = createNativeStackNavigator();
@@ -54,7 +56,7 @@ const TabNavigator = () => {
 
           if (route.name === "Map") {
             iconName = "map";
-          } else if (route.name === "Chat") {
+          } else if (route.name === "Messages") {
             iconName = "comments";
           }
 
@@ -66,7 +68,7 @@ const TabNavigator = () => {
       })}
     >
       <Tab.Screen name="Map" component={MapScreen} />
-      <Tab.Screen name="Chat" component={ChatScreen} />
+      <Tab.Screen name="Messages" component={MessagesScreen} />
     </Tab.Navigator>
   );
 };
@@ -96,7 +98,7 @@ export default function App() {
               name="EditProfileScreen"
               component={EditProfileScreen}
             />
-            <Stack.Screen name="Messages" component={ChatScreen} />
+            <Stack.Screen name="Chat" component={ChatScreen} />
             <Stack.Screen name="Booking" component={BookingScreen} />
             <Stack.Screen name="Payment" component={PaymentScreen} />
             <Stack.Screen
@@ -104,6 +106,7 @@ export default function App() {
               component={ConfirmationPaymentScreen}
             />
             <Stack.Screen name="AddReview" component={AddReviewScreen} />
+            {/* <Stack.Screen name="Conversations" component={ConversationsScreen} /> */}
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

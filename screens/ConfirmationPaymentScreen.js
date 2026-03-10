@@ -63,7 +63,7 @@ export default function ConfirmationPaymentScreen({ navigation, route }) {
 
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Messages");
+            navigation.navigate("Chat", { bookingId: booking._id });
           }}
         >
           <Text>

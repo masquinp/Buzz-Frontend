@@ -29,7 +29,6 @@ export default function AllRidesScreen({ navigation, route }) {
   // On récupère les filtres envoyés depuis MapScreen, ou des strings vides si aucun filtre
   const filterDeparture = route.params?.departure || "";
   const filterArrival = route.params?.arrival || "";
-  // const filterDate = route.params?.date || "";
 
   useEffect(() => {
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/rides`)
@@ -110,7 +109,11 @@ export default function AllRidesScreen({ navigation, route }) {
         <Arrow />
         <View style={styles.container}>
           <Text style={styles.title}>Trajets disponibles</Text>
-          {rides.length === 0 ? <Text>Aucun trajet existant avec ces lieux</Text> : rides}
+          {rides.length === 0 ? (
+            <Text>Aucun trajet existant avec ces lieux</Text>
+          ) : (
+            rides
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>

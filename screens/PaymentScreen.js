@@ -73,7 +73,6 @@ export default function PaymentScreen({ navigation, route }) {
       .then((data) => {
         if (data.result) {
           dispatch(addPaidBooking(data.payment));
-          alert("Paiment validé !");
           // Navigation vers l'écran suivant après succès
           navigation.navigate("ConfirmationPayment", {
             ride: ride,
