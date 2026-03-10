@@ -10,7 +10,11 @@ import { addPaidBooking } from "../reducers/payment";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
-import { faApplePay, faCcVisa } from "@fortawesome/free-brands-svg-icons";
+import {
+  faApplePay,
+  faCcVisa,
+  faPaypal,
+} from "@fortawesome/free-brands-svg-icons";
 import {
   faCreditCard,
   faPlus,
@@ -91,7 +95,8 @@ export default function PaymentScreen({ navigation, route }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#d0e2e4" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+      <Arrow top={80} />
       <View style={styles.container}>
         <Modal visible={modalVisible} animationType="fade" transparent>
           <View style={styles.centeredView}>
@@ -119,19 +124,32 @@ export default function PaymentScreen({ navigation, route }) {
             </View>
           </View>
         </Modal>
-        <Arrow />
-        <Text>{ride.price}€</Text>
-        <TouchableOpacity onPress={() => pay()}>
-          <FontAwesomeIcon icon={faApplePay} size={60} />
+
+        <Text style={styles.price}>{ride.price}€</Text>
+        <Text style={styles.subtitle}>Choisissez votre moyen de paiement</Text>
+        <View style={styles.paymentMethod}>
+          <TouchableOpacity style={styles.paymentMethod} onPress={() => pay()}>
+            <FontAwesomeIcon icon={faApplePay} size={60} />
+            <Text style={styles.applePaypalLabel}>Apple Pay</Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity style={styles.paymentMethod} onPress={() => pay()}>
+          <View style={styles.visaRow}>
+            <FontAwesomeIcon icon={faCcVisa} size={50} />
+            <Text style={styles.visaNumber}>•••• 4242</Text>
+          </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => pay()}>
-          <FontAwesomeIcon icon={faCcVisa} />
-          <Text>Visa</Text>
-        </TouchableOpacity>
+        <View style={styles.paymentMethod}>
+          <TouchableOpacity style={styles.paymentMethod} onPress={() => pay()}>
+            <FontAwesomeIcon icon={faPaypal} size={40} />
+            <Text style={styles.applePaypalLabel}>Paypal</Text>
+          </TouchableOpacity>
+        </View>
 
         <TouchableOpacity onPress={() => removeBooking(booking._id)}>
-          <Text>Supprimer la réservation</Text>
+          <Text style={styles.deleteText}>Supprimer la réservation</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -143,7 +161,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
+    top: 80,
   },
   centeredView: {
     flex: 1,
@@ -163,5 +181,60 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+  price: {
+    fontSize: 42,
+    fontWeight: "bold",
+    color: "#1a1a1a",
+    marginTop: 20,
+    marginBottom: 16,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: "#888",
+    marginBottom: 30,
+  },
+
+  visaRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  visaNumber: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: "#1a1a1a",
+    flex: 1,
+    textAlign: "center",
+  },
+  deleteText: {
+    color: "#999",
+    fontSize: 16,
+    textDecorationLine: "underline",
+    marginTop: 26,
+  },
+  paymentMethod: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    backgroundColor: "#ecebeb",
+    padding: 8,
+    borderRadius: 14,
+    marginBottom: 20,
+    width: "80%",
+    justifyContent: "center",
+  },
+  visaRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    width: "80%",
+    borderRadius: 14,
+    padding: 12,
+  },
+  applePaypalLabel: {
+    fontSize: 15,
+    color: "#1a1a1a",
+    
   },
 });
