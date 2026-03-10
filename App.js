@@ -33,6 +33,7 @@ import BookingScreen from "./screens/BookingScreen";
 import PaymentScreen from "./screens/PaymentScreen";
 import EditProfileScreen from "./screens/EditProfileScreen";
 import ConfirmationPaymentScreen from "./screens/ConfirmationPaymentScreen";
+import AddReviewScreen from "./screens/AddReviewScreen";
 
 /* OTHER */
 import MyridesScreen from "./screens/MyridesScreen";
@@ -102,6 +103,7 @@ export default function App() {
               name="ConfirmationPayment"
               component={ConfirmationPaymentScreen}
             />
+            <Stack.Screen name="AddReview" component={AddReviewScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

@@ -24,11 +24,6 @@ export const userSlice = createSlice({
       // state.value.email = action.payload.email;
       state.value.username = action.payload.username;
       state.value._id = action.payload._id;
-
-      // si le backend renvoie déjà ces champs, on les garde
-      state.value.stripeCustomerId = action.payload.stripeCustomerId || null;
-      state.value.defaultPaymentMethodId =
-        action.payload.defaultPaymentMethodId || null;
     },
     logout: (state) => {
       state.value.token = null;
@@ -36,10 +31,6 @@ export const userSlice = createSlice({
       state.value.username = null;
       state.value._id = null;
       ((state.value.car = null), (state.value.photos = []));
-
-      // reset Stripe
-      state.value.stripeCustomerId = null;
-      state.value.defaultPaymentMethodId = null;
     },
     addPhoto: (state, action) => {
       state.value.photos.push(action.payload);
