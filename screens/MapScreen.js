@@ -51,7 +51,6 @@ export default function MapScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Carte */}
       <MapView
         style={styles.map}
         initialRegion={{
@@ -68,13 +67,11 @@ export default function MapScreen({ navigation }) {
         />
       </MapView>
 
-      {/* Bonjour + Arrow */}
       <View style={styles.topContainer}>
         <Text style={styles.welcome}>Bonjour {user.username}</Text>
         <Arrow />
       </View>
 
-      {/* Header avec "Où allez-vous ?" et icône profil */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.rideBtn} onPress={openModal}>
           <Text style={styles.message}>Où allez-vous ?</Text>
@@ -84,7 +81,6 @@ export default function MapScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* Modal itinéraire */}
       <Modal visible={modalVisible} animationType="fade" transparent>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -134,7 +130,6 @@ export default function MapScreen({ navigation }) {
         </View>
       </Modal>
 
-      {/* Bouton principal et phrase cliquable */}
       <View style={styles.bottomContainer}>
         <TouchableOpacity
           style={styles.ridesButton}
