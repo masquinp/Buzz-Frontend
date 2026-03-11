@@ -89,6 +89,7 @@ export default function ConnectionScreen({ navigation }) {
         ></Image>
         <View style={styles.inputContainer}>
           <TextInput
+          placeholderTextColor="#ad7b80"
             accessibilityLabel="Nom d'utilisateur"
             placeholder="Username"
             style={styles.input}
@@ -96,6 +97,7 @@ export default function ConnectionScreen({ navigation }) {
             value={username}
           />
           <TextInput
+            placeholderTextColor="#ad7b80"
             accessibilityLabel="Mot de passe"
             placeholder="Password"
             style={styles.input}

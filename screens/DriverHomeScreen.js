@@ -120,32 +120,10 @@ export default function TestScreen({ navigation }) {
              C'est l'URL permanente stockée sur Cloudinary.
           */
             dispatch(addPhoto(data.url));
-            console.log("Photo sauvegardée sur le cloud :", data.url);
           }
         });
     }
   };
-
-  const photos = user.photos?.map((data, i) => {
-    return (
-      <View key={i} style={styles.photoContainer}>
-        <TouchableOpacity
-          onPress={() => deletePicture(data)}
-          accessibilityRole="button"
-          accessibilityLabel="Supprimer la photo"
-        >
-          <FontAwesome
-            name="times"
-            size={20}
-            color="#000000"
-            style={styles.deleteIcon}
-          />
-        </TouchableOpacity>
-
-        <Image source={{ uri: data }} style={styles.photo} />
-      </View>
-    );
-  });
 
   const deletePicture = (photoUrl) => {
     if (!user.token) {
@@ -164,7 +142,6 @@ export default function TestScreen({ navigation }) {
       .then((data) => {
         if (data.result) {
           dispatch(removePhoto(photoUrl));
-          alert("Photo supprimé");
         } else {
           alert(data.error);
         }
@@ -184,7 +161,7 @@ export default function TestScreen({ navigation }) {
         brand,
         model,
         color,
-        nbSeats,
+        nbSeats: Number(nbSeats), // conversion en nombre
         licencePlate,
       }),
     })
@@ -200,10 +177,31 @@ export default function TestScreen({ navigation }) {
       });
   };
 
+  const photos = user.photos?.map((data, i) => {
+    return (
+      <View key={i} style={styles.photoContainer}>
+        <TouchableOpacity
+          onPress={() => deletePicture(data)}
+          accessibilityRole="button"
+          accessibilityLabel="Supprimer la photo"
+        >
+          <FontAwesome
+            name="times"
+            size={22}
+            color="#000000"
+            style={styles.deleteIcon}
+          />
+        </TouchableOpacity>
+
+        <Image source={{ uri: data }} style={styles.photo} />
+      </View>
+    );
+  });
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#d0e2e4" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "fff" }}>
       <KeyboardAvoidingView
-        style={{ flex: 1, backgroundColor: "#cbdee1" }}
+        style={{ flex: 1, backgroundColor: "fff" }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <Modal visible={activeModal === "camera"} animationType="slide">
@@ -280,6 +278,7 @@ export default function TestScreen({ navigation }) {
               <Text style={styles.modalTitle}>Ma Voiture</Text>
 
               <TextInput
+                placeholderTextColor="#aaa"
                 accessibilityLabel="Ajouter la marque "
                 placeholder="Marque"
                 style={styles.input}
@@ -287,6 +286,7 @@ export default function TestScreen({ navigation }) {
                 value={brand}
               />
               <TextInput
+                placeholderTextColor="#aaa"
                 accessibilityLabel="Ajouter le modèle"
                 placeholder="Modèle"
                 style={styles.input}
@@ -294,6 +294,7 @@ export default function TestScreen({ navigation }) {
                 value={model}
               />
               <TextInput
+                placeholderTextColor="#aaa"
                 accessibilityLabel="Ajouter la couleur"
                 placeholder="Couleur"
                 style={styles.input}
@@ -301,6 +302,7 @@ export default function TestScreen({ navigation }) {
                 value={color}
               />
               <TextInput
+                placeholderTextColor="#aaa"
                 accessibilityLabel="Ajouter le nombre de places"
                 placeholder="Nombre de places"
                 style={styles.input}
@@ -308,6 +310,7 @@ export default function TestScreen({ navigation }) {
                 value={nbSeats}
               />
               <TextInput
+                placeholderTextColor="#aaa"
                 accessibilityLabel="Ajouter la plaque d'immatriculation"
                 placeholder="Plaque d'immatriculation"
                 style={styles.input}
@@ -334,20 +337,20 @@ export default function TestScreen({ navigation }) {
           <View style={styles.header}>
             <Text
               style={{
-                fontSize: 28,
+                fontSize: 25,
                 fontWeight: "bold",
                 color: "#A7333F",
                 textAlign: "center",
               }}
             >
-              Espace Conducteur
+              Mon espace Conducteur
             </Text>
             <Text style={{ fontSize: 15, color: "#888", margin: 15 }}>
               Complétez votre profil pour proposer des trajets
             </Text>
           </View>
           <View style={styles.bloc}>
-            <Text style={styles.blocTitle}>📄 Mon permis de conduire</Text>
+            <Text style={styles.blocTitle}>Mon permis de conduire</Text>
             <Text style={styles.blocDesc}>
               Prenez une photo de votre permis
             </Text>
@@ -362,7 +365,7 @@ export default function TestScreen({ navigation }) {
               onPress={() => openModal("camera")}
             >
               <Text style={styles.btnText}>
-                {hasPhoto ? "✓ Document ajouté" : "📷 Prendre une photo"}
+                {hasPhoto ? "✓ Document ajouté" : "Prendre une photo"}
               </Text>
             </TouchableOpacity>
 
@@ -370,7 +373,7 @@ export default function TestScreen({ navigation }) {
           </View>
 
           <View style={styles.bloc}>
-            <Text style={styles.blocTitle}>🚗 Ma voiture</Text>
+            <Text style={styles.blocTitle}>Ma voiture</Text>
             <Text style={styles.blocDesc}>
               Ajoutez les infos de votre véhicule
             </Text>
@@ -393,7 +396,7 @@ export default function TestScreen({ navigation }) {
           </View>
 
           <View style={styles.bloc}>
-            <Text style={styles.blocTitle}>🗺️ Proposer un trajet</Text>
+            <Text style={styles.blocTitle}>Proposer un trajet</Text>
             <Text style={styles.blocDesc}>
               {hasPhoto && hasCar
                 ? "Vous êtes prêt à proposer un trajet !"
@@ -465,7 +468,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   btnDone: {
-    backgroundColor: "#274928",
+    backgroundColor: "#26496c",
   },
   btnDisabled: {
     backgroundColor: "#ccc",
@@ -476,23 +479,26 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   input: {
-    width: 250,
-    marginTop: 25,
-    borderColor: "#A7333F",
-    borderBottomWidth: 1,
-    fontSize: 20,
+    width: "90%",
+    borderBottomColor: "#A7333F",
+    borderBottomWidth: 0.5,
+    fontSize: 16,
+    paddingVertical: 8,
+    color: "#1a1a1a",
+    marginBottom: 8,
   },
   textBtn: {
-    fontSize: 25,
     color: "white",
-    textAlign: "center",
+    fontWeight: "700",
+    fontSize: 18,
   },
   registerBtn: {
     backgroundColor: "#A7333F",
-    borderRadius: 10,
-    padding: 10,
-    marginTop: 20,
+    borderRadius: 12,
+    paddingVertical: 14,
     width: "100%",
+    alignItems: "center",
+    marginTop: 20,
   },
   centeredView: {
     flex: 1,
@@ -500,7 +506,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalView: {
-    backgroundColor: "#d7bebe",
+    backgroundColor: "#fff",
     borderRadius: 20,
     padding: 30,
     alignItems: "center",
@@ -515,7 +521,8 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "white",
+    color: "#A7333F",
+    marginBottom: 8,
   },
   cameraButtons: {
     position: "absolute",

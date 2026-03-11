@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   modalView: {
     backgroundColor: "#ecebeb",
     borderRadius: 20,
-    padding: 30,
+    padding: 55,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     color: "#1a1a1a",
   },
   modalText: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "600",
     marginBottom: 10,
     color: "black",

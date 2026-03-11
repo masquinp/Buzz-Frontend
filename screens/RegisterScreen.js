@@ -95,6 +95,7 @@ export default function RegisterScreen({ navigation }) {
         ></Image>
         <View>
           <TextInput
+            placeholderTextColor="#ad7b80"
             accessibilityLabel="Prénom"
             placeholder="Firstname"
             style={styles.input}
@@ -102,6 +103,7 @@ export default function RegisterScreen({ navigation }) {
             value={firstname}
           />
           <TextInput
+            placeholderTextColor="#ad7b80"
             accessibilityLabel="Nom de famille"
             placeholder="Lastname"
             style={styles.input}
@@ -109,6 +111,7 @@ export default function RegisterScreen({ navigation }) {
             value={lastname}
           />
           <TextInput
+            placeholderTextColor="#ad7b80"
             accessibilityLabel="Nom d'utilisateur"
             placeholder="Username"
             style={styles.input}
@@ -116,6 +119,7 @@ export default function RegisterScreen({ navigation }) {
             value={username}
           />
           <TextInput
+            placeholderTextColor="#ad7b80"
             accessibilityLabel="Adresse email"
             placeholder="Email"
             autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
@@ -131,6 +135,7 @@ export default function RegisterScreen({ navigation }) {
             <Text style={styles.error}>Invalid email address</Text>
           )}
           <TextInput
+            placeholderTextColor="#ad7b80"
             accessibilityLabel="Mot de passe"
             placeholder="Password"
             style={styles.input}

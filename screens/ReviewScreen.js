@@ -9,23 +9,26 @@ import Arrow from "../components/Arrow";
 export default function ReviewScreen() {
   const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
   const dispatch = useDispatch();
-  const reviews = useSelector((state) => state.review.reviews);
+  const reviews = useSelector((state) => state.review.reviews) || [];
+  const user = useSelector((state) => state.user.value);
 
   const moyenne =
     reviews.reduce((sum, review) => sum + Number(review.note), 0) /
       reviews.length || 0;
 
   useEffect(() => {
-    fetch(`${EXPO_PUBLIC_API_URL}/reviews`)
+    fetch(`${EXPO_PUBLIC_API_URL}/reviews/${user.token}`)
       .then((response) => response.json())
       .then((data) => {
-        dispatch(reviewUser(data.reviews));
+        if (data.result) {
+          dispatch(reviewUser(data.reviews));
+        }
       });
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <Arrow top={80}/>
+      <Arrow top={80} />
       <View style={styles.header}>
         <Text style={styles.title}>Mes évaluations</Text>
       </View>
@@ -37,8 +40,9 @@ export default function ReviewScreen() {
         {reviews.map((data, i) => (
           <Review
             key={i}
-            photo={data.user?.photo}
-            name={data.user?.name}
+            photo={data.reviewer?.photo}
+            firstname={data.reviewer?.firstname}
+            lastname={data.reviewer?.lastname}
             note={data.note}
             text={data.message}
           />

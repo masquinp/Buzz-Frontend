@@ -55,6 +55,7 @@ export default function ConfirmationPaymentScreen({ navigation, route }) {
           }}
         >
           <Marker
+            style={styles.driverMarker}
             accessibilityLabel="La position de votre chauffeur"
             coordinate={driverPosition}
             title="Votre chauffeur"
@@ -63,9 +64,10 @@ export default function ConfirmationPaymentScreen({ navigation, route }) {
           </Marker>
         </MapView>
 
-        <Text>Contacter votre chauffeur</Text>
+        <Text style={styles.contactDriver}>Contacter votre chauffeur</Text>
 
         <TouchableOpacity
+          style={styles.chatButton}
           accessibilityRole="button"
           accessibilityLabel="Contacter votre chauffeur"
           onPress={() => {
@@ -73,17 +75,13 @@ export default function ConfirmationPaymentScreen({ navigation, route }) {
           }}
         >
           <Text>
-            <FontAwesome name="comments" size={20} color="black" />;
+            <FontAwesome name="comments" size={25} color="white" />;
           </Text>
+          <Text style={styles.contactDriver}>Contacter votre chauffeur</Text>
         </TouchableOpacity>
+
         <TouchableOpacity
-          accessibilityRole="button"
-          accessibilityLabel="Retour à l'accueil"
-          onPress={() => navigation.navigate("TabNavigator", { screen: "Map" })}
-        >
-          <Text>Retour à l'accueil</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+          style={styles.arrivedBtn}
           accessibilityRole="button"
           accessibilityLabel="Confirmer que vous êtes arrivé à destination"
           onPress={() =>
@@ -94,7 +92,14 @@ export default function ConfirmationPaymentScreen({ navigation, route }) {
             })
           }
         >
-          <Text>Bien arrivé à destination</Text>
+          <Text style={styles.arrivedText}>Bien arrivé à destination</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          accessibilityRole="button"
+          accessibilityLabel="Retour à l'accueil"
+          onPress={() => navigation.navigate("TabNavigator", { screen: "Map" })}
+        >
+          <Text style={styles.homeText}>Retour à l'accueil</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -110,9 +115,60 @@ const styles = StyleSheet.create({
   },
   map: {
     width: "90%",
-    height: 280,
+    height: 300,
     borderRadius: 16,
     overflow: "hidden",
-    marginBottom: 20,
+    marginBottom: 30,
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: "bold",
+    color: "#A7333F",
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#616060",
+  },
+  contactDriver: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#fff",
+    marginBottom: 5,
+  },
+  chatButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    backgroundColor: "#A7333F",
+    borderRadius: 14,
+    padding: 16,
+    width: "75%",
+    justifyContent: "center",
+    marginBottom: 12,
+  },
+  homeText: {
+    color: "#999",
+    fontSize: 16,
+    textDecorationLine: "underline",
+  },
+  arrivedBtn: {
+    width: "70%",
+    borderRadius: 14,
+    padding: 16,
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#A7333F",
+    marginBottom: 25,
+  },
+  arrivedText: {
+    color: "#A7333F",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  header: {
+    marginBottom: 30,
+    alignItems: "center",
+    marginTop: -10,
   },
 });

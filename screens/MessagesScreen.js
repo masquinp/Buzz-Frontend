@@ -30,8 +30,8 @@ export default function MessagesScreen() {
   const conversationList = messages.map((msg, i) => {
     return (
       <TouchableOpacity
-      accessibilityRole="button"
-      accessibilityLabel="Ouvrir la conversation avec cet utilisateur"
+        accessibilityRole="button"
+        accessibilityLabel="Ouvrir la conversation avec cet utilisateur"
         key={i}
         style={styles.card}
         onPress={() =>
@@ -45,10 +45,11 @@ export default function MessagesScreen() {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "fff" }}>
+    <SafeAreaView style={{ backgroundColor: "fff" }}>
       <View style={styles.container}></View>
+
       <Text style={styles.title}>Mes conversations</Text>
-      <ScrollView>
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         {messages.length === 0 ? (
           <Text style={styles.empty}>Aucune conversation</Text>
         ) : (
@@ -72,6 +73,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     padding: 16,
     color: "#A7333F",
+    top: 30,
   },
   card: {
     backgroundColor: "#f5f5f5",

@@ -6,7 +6,7 @@ export default function Review (props) {
     <View style={styles.boxCard}>
       <Image source={{ uri: props.photo }} style={styles.photo} />
       <View style={styles.contentCard}>
-        <Text style={styles.nameText}>{props.name}</Text>
+        <Text style={styles.nameText}>{props.firstname} {props.lastname}</Text>
 
         <View style={styles.Box}>
           <Text style={styles.noteText}>{props.note}/5</Text>

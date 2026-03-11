@@ -39,7 +39,8 @@ export default function RideScreen() {
           <Ride
             key={i}
             photo={data.ride?.user?.photo}
-            name={data.ride?.user?.name}
+            firstname={data.ride?.user?.firstname}
+            lastname={data.ride?.user?.lastname}
             car={data.ride?.car}
             note={data.ride?.note}
             date={formatDate(data.ride?.date)}

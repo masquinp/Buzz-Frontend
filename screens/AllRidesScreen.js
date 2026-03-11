@@ -107,8 +107,8 @@ export default function AllRidesScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "fff" }}>
+      <Arrow top={80} />
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <Arrow />
         <View style={styles.container}>
           <Text style={styles.title}>Trajets disponibles</Text>
           {rides.length === 0 ? (
@@ -128,11 +128,12 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     gap: 15,
     backgroundColor: "fff",
+    paddingHorizontal: 10, // paddingHorizontal pour ajouter de l'espace à gauche et à droite
   },
   title: {
-    fontSize: 25,
+    fontSize: 24,
     textAlign: "center",
-    marginBottom: 12,
+    marginBottom: 16,
     fontWeight: "bold",
     color: "#A7333F",
   },
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
   boxCard: {
     backgroundColor: "#fff",
     borderRadius: 15,
-    padding: 10,
+    padding: 12,
     shadowOpacity: 0.1,
     shadowRadius: 6,
     paddingTop: -10,

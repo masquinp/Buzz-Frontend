@@ -6,7 +6,7 @@ export default function Ride (props) {
         <View style={styles.boxCard}>
             <Image source={{ uri: props.photo }} style={styles.photo} />
           <View styles={styles.firstCard}>
-                <Text style={styles.nameText}>{props.name}</Text>
+                <Text style={styles.nameText}>{props.firstname} {props.lastname}</Text>
                 <Text style={styles.carText}>{props.car}</Text>
             <View style={styles.secondCard}>
               <Text style={styles.noteText}>{props.note}/5</Text>

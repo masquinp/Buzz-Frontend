@@ -5,12 +5,13 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Arrow from "../components/Arrow";
-
 
 import { addMessage, loadMessages } from "../reducers/messages";
 
@@ -33,7 +34,8 @@ export default function ChatScreen({ route }) {
         .then((res) => res.json())
         .then((data) => {
           if (data.result) {
-            dispatch(loadMessages(data.messages));}
+            dispatch(loadMessages(data.messages));
+          }
         });
     }, 3000); // affiche les nouveaux messages toutes les 3 secondes
 
@@ -56,7 +58,6 @@ export default function ChatScreen({ route }) {
       .then((data) => {
         if (data.result) {
           dispatch(addMessage(data.message));
-          // Navigation ?
         } else {
           alert(data.error);
         }
@@ -65,46 +66,52 @@ export default function ChatScreen({ route }) {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <Arrow top={80}/>
-      <Text style={styles.title}>Chat</Text>
-
-      <ScrollView
-        ref={scrollViewRef}
-        style={styles.messagesContainer}
-        onContentSizeChange={() => scrollViewRef.current?.scrollToEnd()}
+      <Arrow top={80} />
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        {messages.map((msg, i) => {
-          const isMe = msg.username === user.username;
+        <Text style={styles.title}>Chat</Text>
 
-          if (isMe) {
-            return (
-              <View key={i} style={styles.myBubble}>
-                <Text style={styles.myText}>{msg.message}</Text>
-              </View>
-            );
-          } else {
-            return (
-              <View key={i} style={styles.otherBubble}>
-                <Text style={styles.username}>{msg.username}</Text>
-                <Text style={styles.otherText}>{msg.message}</Text>
-              </View>
-            );
-          }
-        })}
-      </ScrollView>
+        <ScrollView ref={scrollViewRef} style={styles.messagesContainer}>
+          {messages.map((msg, i) => {
+            const isMe = msg.username === user.username;
 
-      <View style={styles.inputRow}>
-        <TextInput
-          accessibilityLabel="Écrire un message"
-          style={styles.input}
-          placeholder="Écrire un message..."
-          value={inputText}
-          onChangeText={(text) => setInputText(text)}
-        />
-        <TouchableOpacity  style={styles.sendButton} onPress={sendMessage} accessibilityRole="button" accessibilityLabel="Envoyer le message">
-          <Text style={styles.sendButtonText}>Envoyer</Text>
-        </TouchableOpacity>
-      </View>
+            if (isMe) {
+              return (
+                <View key={i} style={styles.myMessage}>
+                  <Text style={styles.myText}>{msg.message}</Text>
+                </View>
+              );
+            } else {
+              return (
+                <View key={i} style={styles.otherMessage}>
+                  <Text style={styles.username}>{msg.username}</Text>
+                  <Text style={styles.otherText}>{msg.message}</Text>
+                </View>
+              );
+            }
+          })}
+        </ScrollView>
+
+        <View style={styles.inputRow}>
+          <TextInput
+            accessibilityLabel="Écrire un message"
+            style={styles.input}
+            placeholder="Écrire un message..."
+            value={inputText}
+            onChangeText={(text) => setInputText(text)}
+          />
+          <TouchableOpacity
+            style={styles.sendButton}
+            onPress={sendMessage}
+            accessibilityRole="button"
+            accessibilityLabel="Envoyer le message"
+          >
+            <Text style={styles.sendButtonText}>Envoyer</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -125,7 +132,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
   },
-  myBubble: {
+  myMessage: {
     backgroundColor: "#A7333F",
     alignSelf: "flex-end",
     borderRadius: 14,
@@ -133,7 +140,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     maxWidth: "75%",
   },
-  otherBubble: {
+  otherMessage: {
     backgroundColor: "#f0f0f0",
     alignSelf: "flex-start",
     borderRadius: 14,
@@ -179,4 +186,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "600",
   },
+  container: {
+    flex:1,
+  }
 });

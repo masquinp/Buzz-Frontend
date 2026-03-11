@@ -141,14 +141,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "bold",
     color: "#1a1a1a",
     marginTop: 20,
     marginBottom: 4,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#888",
     marginBottom: 24,
   },
