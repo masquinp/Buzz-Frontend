@@ -51,6 +51,7 @@ export default function ConnectionScreen({ navigation }) {
               lastname: data.user.lastname,
               email: data.user.email,
               username: data.user.username,
+              avatar: data.user.avatar,
             }),
           );
           // Si l'utilisateur a des photos, on les charge une par une dans Redux
