@@ -22,11 +22,7 @@ export const userSlice = createSlice({
       state.value._id = action.payload._id;
     },
     logout: (state) => {
-      state.value.token = null;
-      // state.value.email = null;
-      state.value.username = null;
-      state.value._id = null;
-      ((state.value.car = null), (state.value.photos = []));
+     state.value = {}; // on remet tous les champs à null en se déconnectant
     },
     addPhoto: (state, action) => {
       state.value.photos.push(action.payload);

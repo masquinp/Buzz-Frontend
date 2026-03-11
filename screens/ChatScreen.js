@@ -24,11 +24,23 @@ export default function ChatScreen({ route }) {
   const messages = useSelector((state) => state.messages.value);
 
   const bookingId = route.params?.bookingId;
+  const receiverId = route.params?.receiverId;
+  const senderId = route.params?.senderId;
 
   const [inputText, setInputText] = useState("");
   const scrollViewRef = useRef(null);
 
   useEffect(() => {
+    // fetch immédiat au montage avec les bons messages
+    fetch(`${EXPO_PUBLIC_API_URL}/messages/${bookingId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.result) {
+          dispatch(loadMessages(data.messages));
+        }
+      });
+
+    // puis polling toutes les 3 secondes
     const interval = setInterval(() => {
       fetch(`${EXPO_PUBLIC_API_URL}/messages/${bookingId}`)
         .then((res) => res.json())
@@ -52,12 +64,15 @@ export default function ChatScreen({ route }) {
         token: user.token,
         message: inputText,
         booking: bookingId,
+        receiver: receiverId,
+        sender: senderId,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
           dispatch(addMessage(data.message));
+          setInputText("");
         } else {
           alert(data.error);
         }
@@ -75,7 +90,7 @@ export default function ChatScreen({ route }) {
 
         <ScrollView ref={scrollViewRef} style={styles.messagesContainer}>
           {messages.map((msg, i) => {
-            const isMe = msg.username === user.username;
+            const isMe = msg.sender?.username === user.username;
 
             if (isMe) {
               return (
@@ -187,6 +202,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   container: {
-    flex:1,
-  }
+    flex: 1,
+  },
 });

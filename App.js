@@ -18,6 +18,7 @@ import review from "./reducers/review";
 import payments from "./reducers/payment";
 import bookings from "./reducers/bookings";
 import messages from "./reducers/messages";
+import conversations from "./reducers/conversations";
 
 /* EXISTING SCREENS */
 import HomeScreen from "./screens/HomeScreen";
@@ -41,7 +42,7 @@ import MessagesScreen from "./screens/MessagesScreen";
 import MyridesScreen from "./screens/MyridesScreen";
 
 const store = configureStore({
-  reducer: { user, rides, profile, review, bookings, payments, messages },
+  reducer: { user, rides, profile, review, bookings, payments, messages, conversations },
 });
 
 const Stack = createNativeStackNavigator();

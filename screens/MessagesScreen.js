@@ -1,33 +1,39 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { loadMessages } from "../reducers/messages";
+import { loadConversations } from "../reducers/conversations";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 // screen pour afficher les messages de plusieurs conversations, au clique sur une conversation, navigate sur ChatScreen
 // bouton contacter le chauffeur, qui navigate sur ChatScreen aussi
-export default function MessagesScreen() {
+export default function MessagesScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value);
-  const messages = useSelector((state) => state.messages.value);
+  const conversations = useSelector((state) => state.conversations.value);
 
   useEffect(() => {
     fetch(`${EXPO_PUBLIC_API_URL}/messages/conversations/${user.token}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.result) {
-          dispatch(loadMessages(data.messages));
+          dispatch(loadConversations(data.messages));
         }
       });
   }, []);
 
   // On affiche chaque message comme une conversation
-  const conversationList = messages.map((msg, i) => {
+  const conversationList = conversations.map((conversations, i) => {
     return (
       <TouchableOpacity
         accessibilityRole="button"
@@ -35,11 +41,16 @@ export default function MessagesScreen() {
         key={i}
         style={styles.card}
         onPress={() =>
-          navigation.navigate("ChatScreen", { bookingId: msg.booking })
+          navigation.navigate("Chat", {
+            bookingId: conversations.booking?._id,
+            receiverId: conversations.receiver?._id,
+            senderId: conversations.sender?._id,
+          })
         }
       >
-        <Text style={styles.username}>{msg.user?.username}</Text>
-        <Text style={styles.lastMessage}>{msg.message}</Text>
+        <Text style={styles.username}>{conversations.sender?.username}</Text>
+        <Text style={styles.username}>{conversations.receiver?.username}</Text>
+        <Text style={styles.lastMessage}>{conversations.message}</Text>
       </TouchableOpacity>
     );
   });
@@ -50,7 +61,7 @@ export default function MessagesScreen() {
 
       <Text style={styles.title}>Mes conversations</Text>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-        {messages.length === 0 ? (
+        {conversations.length === 0 ? (
           <Text style={styles.empty}>Aucune conversation</Text>
         ) : (
           conversationList
@@ -74,6 +85,7 @@ const styles = StyleSheet.create({
     padding: 16,
     color: "#A7333F",
     top: 30,
+    marginBottom: 30,
   },
   card: {
     backgroundColor: "#f5f5f5",
