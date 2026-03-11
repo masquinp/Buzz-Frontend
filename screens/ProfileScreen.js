@@ -40,7 +40,12 @@ export default function Profile({ navigation }) {
       <View style={styles.profileBox}>
         <Arrow />
         <Text style={styles.title}>Mon Compte</Text>
-        <Image source={{ uri: profile.photo }} style={styles.photo} />
+        <Image
+          source={{
+            uri: profile.avatar,
+          }}
+          style={styles.photo}
+        />
         <Text style={styles.nameText}>
           {profile.firstname} {profile.lastname}
         </Text>
@@ -115,9 +120,9 @@ const styles = StyleSheet.create({
   },
 
   photo: {
-    width: 110,
-    height: 110,
-    borderRadius: 55,
+    width: 130,
+    height: 130,
+    borderRadius: 65,
     marginBottom: 15,
     backgroundColor: "#000",
   },
