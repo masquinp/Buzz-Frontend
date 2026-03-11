@@ -54,14 +54,20 @@ export default function ConfirmationPaymentScreen({ navigation, route }) {
             longitudeDelta: 0.01,
           }}
         >
-          <Marker coordinate={driverPosition} title="Votre chauffeur">
+          <Marker
+            accessibilityLabel="La position de votre chauffeur"
+            coordinate={driverPosition}
+            title="Votre chauffeur"
+          >
             <Text style={{ fontSize: 30 }}>🚗</Text>
           </Marker>
         </MapView>
 
-        <Text>Contactez votre chauffeur</Text>
+        <Text>Contacter votre chauffeur</Text>
 
         <TouchableOpacity
+          accessibilityRole="button"
+          accessibilityLabel="Contacter votre chauffeur"
           onPress={() => {
             navigation.navigate("Chat", { bookingId: booking._id });
           }}
@@ -71,11 +77,15 @@ export default function ConfirmationPaymentScreen({ navigation, route }) {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
+          accessibilityRole="button"
+          accessibilityLabel="Retour à l'accueil"
           onPress={() => navigation.navigate("TabNavigator", { screen: "Map" })}
         >
           <Text>Retour à l'accueil</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          accessibilityRole="button"
+          accessibilityLabel="Confirmer que vous êtes arrivé à destination"
           onPress={() =>
             navigation.navigate("AddReview", {
               ride: ride,

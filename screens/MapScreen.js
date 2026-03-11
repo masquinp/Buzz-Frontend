@@ -76,12 +76,14 @@ export default function MapScreen({ navigation }) {
               <View>
                 <Text style={styles.itinéraire}>Votre intinéraire</Text>
                 <TextInput
+                  accessibilityLabel="Lieu de départ"
                   placeholder="Départ"
                   onChangeText={(value) => setDeparture(value)}
                   value={departure}
                   style={styles.input}
                 />
                 <TextInput
+                  accessibilityLabel="Lieu d'arrivée"
                   placeholder="Arrivée"
                   onChangeText={(value) => setArrival(value)}
                   value={arrival}
@@ -89,10 +91,13 @@ export default function MapScreen({ navigation }) {
                 />
 
                 <TouchableOpacity
+                  accessibilityLabel="Choisir une date de trajet"
                   onPress={() => setShowPicker(true)}
                   style={styles.input}
                 >
-                  <Text style={{ fontSize: 18, color: date ? "#715858" : "#aaa" }}>
+                  <Text
+                    style={{ fontSize: 18, color: date ? "#715858" : "#aaa" }}
+                  >
                     {date ? date.toLocaleDateString("fr-FR") : "Date"}
                   </Text>
                 </TouchableOpacity>
@@ -110,6 +115,7 @@ export default function MapScreen({ navigation }) {
                 )}
               </View>
               <TouchableOpacity
+                accessibilityRole="button"
                 onPress={() => {
                   handleClose();
                   navigation.navigate("AllRides", { departure, arrival, date });
@@ -117,14 +123,15 @@ export default function MapScreen({ navigation }) {
                 style={styles.button}
                 activeOpacity={0.8}
               >
-                <Text style={styles.textButton}>Continuez</Text>
+                <Text style={styles.textButton}>Continuer</Text>
               </TouchableOpacity>
               <TouchableOpacity
+                accessibilityRole="button"
                 onPress={() => handleClose()}
                 style={styles.button}
                 activeOpacity={0.8}
               >
-                <Text style={styles.textButton}>Fermez</Text>
+                <Text style={styles.textButton}>Fermer</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -134,10 +141,18 @@ export default function MapScreen({ navigation }) {
           <Text style={styles.welcome}>Bonjour {user.username}</Text>
         </View>
         <View style={styles.header}>
-          <TouchableOpacity style={styles.rideBtn} onPress={() => addRide()}>
+          <TouchableOpacity
+            accessibilityRole="button"
+            style={styles.rideBtn}
+            onPress={() => addRide()}
+          >
             <Text style={styles.message}>Où allez-vous?</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+          <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel="Voir mon profil"
+            onPress={() => navigation.navigate("Profile")}
+          >
             <FontAwesomeIcon icon={faUser} size={40} color="#A7333F" />
           </TouchableOpacity>
         </View>
@@ -151,6 +166,7 @@ export default function MapScreen({ navigation }) {
           }}
         >
           <Marker
+            accessibilityLabel="Votre position actuelle"
             testID="marker"
             style={styles.marker}
             title="Vous êtes ici"
@@ -160,6 +176,7 @@ export default function MapScreen({ navigation }) {
         </MapView>
         <View>
           <TouchableOpacity
+            accessibilityRole="button"
             style={styles.textBtn}
             onPress={() => navigation.navigate("AllRides")}
           >
@@ -169,6 +186,7 @@ export default function MapScreen({ navigation }) {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            accessibilityRole="button"
             style={styles.textBtn}
             onPress={() => navigation.navigate("Driver")}
           >
@@ -252,7 +270,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: "white",
     textAlign: "center",
-     marginBottom: -20,
+    marginBottom: -20,
   },
   rideBtn: {
     backgroundColor: "#c2a7a7",

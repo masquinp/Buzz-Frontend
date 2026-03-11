@@ -30,6 +30,8 @@ export default function MessagesScreen() {
   const conversationList = messages.map((msg, i) => {
     return (
       <TouchableOpacity
+      accessibilityRole="button"
+      accessibilityLabel="Ouvrir la conversation avec cet utilisateur"
         key={i}
         style={styles.card}
         onPress={() =>

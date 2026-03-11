@@ -31,7 +31,6 @@ export default function BookingScreen({ navigation, route }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         token: user.token,
-        // status : status,
         ride: ride._id,
         message: message,
         seatsBooked: seatsBooked,
@@ -71,20 +70,24 @@ export default function BookingScreen({ navigation, route }) {
         </Text>
 
         <TouchableOpacity
+          accessibilityRole="button"
+          accessibilityLabel="Réserver ce trajet"
           style={{ width: "50%" }}
           onPress={() => {
             newBooking();
           }}
         >
-          <Text style={styles.bookCancelBtn}>Réservez</Text>
+          <Text style={styles.bookCancelBtn}>Réserver</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          accessibilityRole="button"
+          accessibilityLabel="Annuler la réservation"
           style={{ width: "50%" }}
           onPress={() => {
             navigation.goBack();
           }}
         >
-          <Text style={styles.bookCancelBtn}>Annulez</Text>
+          <Text style={styles.bookCancelBtn}>Annuler</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

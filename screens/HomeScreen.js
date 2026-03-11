@@ -8,17 +8,22 @@ export default function HomeScreen({ navigation }) {
       <Image
         style={styles.image}
         source={require("../assets/image4.png")}
+        accessibilityLabel="Logo de l'application Buzz, une voiture sur la route"
       ></Image>
-      <View style={styles.btnContainer}>
+      <View>
         <TouchableOpacity
           style={styles.connectionBtn}
           onPress={() => navigation.navigate("Connection")}
+          accessibilityRole="button"
+          accessibilityLabel="Se connecter à mon compte"
         >
           <Text style={styles.textBtn}> Connexion </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.inscriptionBtn}
           onPress={() => navigation.navigate("Register")}
+          accessibilityRole="button"
+          accessibilityLabel="Créer un compte"
         >
           <Text style={styles.textBtn}> Inscription </Text>
         </TouchableOpacity>

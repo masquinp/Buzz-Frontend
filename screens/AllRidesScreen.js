@@ -60,6 +60,8 @@ export default function AllRidesScreen({ navigation, route }) {
       return (
         <View key={i} style={styles.card}>
           <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel="Sélectionner ce trajet"
             onPress={() => {
               setSelectedRide(data);
               navigation.navigate("Booking", { ride: data });

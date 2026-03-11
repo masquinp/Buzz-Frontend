@@ -22,7 +22,6 @@ const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 export default function ConnectionScreen({ navigation }) {
   const dispatch = useDispatch();
 
- 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -82,27 +81,34 @@ export default function ConnectionScreen({ navigation }) {
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        {/* goBack = pratique de React Navigation qui fonctionne comme un bouton précedent*/}
         <Arrow />
         <Image
           style={styles.logo}
           source={require("../assets/logo7.png")}
+          accessibilityLabel="Logo de l'application Buzz"
         ></Image>
         <View style={styles.inputContainer}>
           <TextInput
+            accessibilityLabel="Nom d'utilisateur"
             placeholder="Username"
             style={styles.input}
             onChangeText={(value) => setUsername(value)}
             value={username}
           />
           <TextInput
+            accessibilityLabel="Mot de passe"
             placeholder="Password"
             style={styles.input}
             onChangeText={(value) => setPassword(value)}
             value={password}
           />
         </View>
-        <TouchableOpacity style={styles.connectionBtn} onPress={() => signIn()}>
+        <TouchableOpacity
+          style={styles.connectionBtn}
+          onPress={() => signIn()}
+          accessibilityRole="button"
+          accessibilityLabel="Se connecter à mon compte"
+        >
           <Text style={styles.textBtn}>Connexion</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>

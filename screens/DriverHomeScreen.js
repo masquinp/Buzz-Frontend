@@ -129,7 +129,11 @@ export default function TestScreen({ navigation }) {
   const photos = user.photos?.map((data, i) => {
     return (
       <View key={i} style={styles.photoContainer}>
-        <TouchableOpacity onPress={() => deletePicture(data)}>
+        <TouchableOpacity
+          onPress={() => deletePicture(data)}
+          accessibilityRole="button"
+          accessibilityLabel="Supprimer la photo"
+        >
           <FontAwesome
             name="times"
             size={20}
@@ -190,8 +194,6 @@ export default function TestScreen({ navigation }) {
           console.log(data);
           dispatch(addCar(data.car));
           alert("Voiture ajoutée !");
-          // Navigation vers l'écran suivant après succès
-          // navigation.navigate("TabNavigator", { screen: "Map" });
         } else {
           alert(data.error);
         }
@@ -214,6 +216,8 @@ export default function TestScreen({ navigation }) {
             />
 
             <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityLabel="Fermer la caméra"
               onPress={() => closeModal()}
               style={{
                 top: 80,
@@ -225,6 +229,8 @@ export default function TestScreen({ navigation }) {
             </TouchableOpacity>
             <View style={styles.cameraButtons}>
               <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel="Activer ou désactiver le flash"
                 style={styles.flashButton}
                 onPress={toggleFlash}
               >
@@ -232,6 +238,8 @@ export default function TestScreen({ navigation }) {
               </TouchableOpacity>
 
               <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel="Prendre une photo"
                 style={{ alignItems: "center" }}
                 onPress={async () => {
                   await takePicture(); // on attend que la photo soit prise
@@ -242,6 +250,8 @@ export default function TestScreen({ navigation }) {
               </TouchableOpacity>
 
               <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel="Changer de caméra"
                 style={styles.rotateButton}
                 onPress={toggleCameraFacing}
               >
@@ -250,7 +260,7 @@ export default function TestScreen({ navigation }) {
             </View>
           </View>
         </Modal>
-        {/* MODALE 2 : AJOUT VOITURE */}
+        {/* Modal pour ajouter sa voiture */}
         <Modal
           visible={activeModal === "car"}
           animationType="fade"
@@ -259,6 +269,8 @@ export default function TestScreen({ navigation }) {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel="Fermer le formulaire d'ajout de voiture"
                 onPress={closeModal}
                 style={{ alignSelf: "flex-end" }}
               >
@@ -268,30 +280,35 @@ export default function TestScreen({ navigation }) {
               <Text style={styles.modalTitle}>Ma Voiture</Text>
 
               <TextInput
+                accessibilityLabel="Ajouter la marque "
                 placeholder="Marque"
                 style={styles.input}
                 onChangeText={setBrand}
                 value={brand}
               />
               <TextInput
+                accessibilityLabel="Ajouter le modèle"
                 placeholder="Modèle"
                 style={styles.input}
                 onChangeText={setModel}
                 value={model}
               />
               <TextInput
+                accessibilityLabel="Ajouter la couleur"
                 placeholder="Couleur"
                 style={styles.input}
                 onChangeText={setColor}
                 value={color}
               />
               <TextInput
+                accessibilityLabel="Ajouter le nombre de places"
                 placeholder="Nombre de places"
                 style={styles.input}
                 onChangeText={setNbSeats}
                 value={nbSeats}
               />
               <TextInput
+                accessibilityLabel="Ajouter la plaque d'immatriculation"
                 placeholder="Plaque d'immatriculation"
                 style={styles.input}
                 onChangeText={setLicencePlate}
@@ -299,6 +316,8 @@ export default function TestScreen({ navigation }) {
               />
 
               <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel="Enregistrer les informations de ma voiture"
                 style={styles.registerBtn}
                 onPress={() => {
                   (newCar(), closeModal());
@@ -333,6 +352,12 @@ export default function TestScreen({ navigation }) {
               Prenez une photo de votre permis
             </Text>
             <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityLabel={
+                hasPhoto
+                  ? "Modifier la photo de mon permis de conduire"
+                  : "Ajouter une photo de mon permis de conduire"
+              }
               style={[styles.btn, hasPhoto && styles.btnDone]}
               onPress={() => openModal("camera")}
             >
@@ -350,6 +375,12 @@ export default function TestScreen({ navigation }) {
               Ajoutez les infos de votre véhicule
             </Text>
             <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityLabel={
+                hasCar
+                  ? "Modifier les informations de ma voiture"
+                  : "Ajouter les informations de ma voiture"
+              }
               style={[styles.btn, hasCar && styles.btnDone]}
               onPress={() => openModal("car")}
             >
@@ -369,6 +400,12 @@ export default function TestScreen({ navigation }) {
                 : "Complétez les étapes ci-dessus d'abord"}
             </Text>
             <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityLabel={
+                hasPhoto && hasCar
+                  ? "Proposer un nouveau trajet"
+                  : "Complétez votre profil pour proposer un trajet"
+              }
               style={[styles.btn, !(hasPhoto && hasCar) && styles.btnDisabled]}
               disabled={!(hasPhoto && hasCar)}
               onPress={() => navigation.navigate("AddRide")}

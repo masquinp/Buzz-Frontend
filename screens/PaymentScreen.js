@@ -101,6 +101,8 @@ export default function PaymentScreen({ navigation, route }) {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel="Fermer le modal"
                 onPress={() => handleClose()}
                 style={{
                   top: 10,
@@ -111,6 +113,8 @@ export default function PaymentScreen({ navigation, route }) {
                 <FontAwesomeIcon icon={faXmark} size={30} color="white" />
               </TouchableOpacity>
               <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel="Confirmer le paiement"
                 onPress={() => {
                   handleClose();
                   newPayment();
@@ -127,13 +131,13 @@ export default function PaymentScreen({ navigation, route }) {
         <Text style={styles.price}>{ride.price}€</Text>
         <Text style={styles.subtitle}>Choisissez votre moyen de paiement</Text>
         <View style={styles.paymentMethod}>
-          <TouchableOpacity style={styles.paymentMethod} onPress={() => pay()}>
+          <TouchableOpacity  style={styles.paymentMethod} onPress={() => pay()} accessibilityRole="button" accessibilityLabel="Choisir Apple Pay">
             <FontAwesomeIcon icon={faApplePay} size={60} />
             <Text style={styles.applePaypalLabel}>Apple Pay</Text>
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.paymentMethod} onPress={() => pay()}>
+        <TouchableOpacity style={styles.paymentMethod} onPress={() => pay()} accessibilityRole="button" accessibilityLabel="Choisir Visa">
           <View style={styles.visaRow}>
             <FontAwesomeIcon icon={faCcVisa} size={50} />
             <Text style={styles.visaNumber}>•••• 4242</Text>
@@ -141,13 +145,13 @@ export default function PaymentScreen({ navigation, route }) {
         </TouchableOpacity>
 
         <View style={styles.paymentMethod}>
-          <TouchableOpacity style={styles.paymentMethod} onPress={() => pay()}>
+          <TouchableOpacity style={styles.paymentMethod} onPress={() => pay()} accessibilityRole="button" accessibilityLabel="Choisir Paypal">
             <FontAwesomeIcon icon={faPaypal} size={40} />
             <Text style={styles.applePaypalLabel}>Paypal</Text>
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity onPress={() => removeBooking(booking._id)}>
+        <TouchableOpacity onPress={() => removeBooking(booking._id)} accessibilityRole="button" accessibilityLabel="Supprimer la réservation">
           <Text style={styles.deleteText}>Supprimer la réservation</Text>
         </TouchableOpacity>
       </View>
@@ -234,13 +238,11 @@ const styles = StyleSheet.create({
   applePaypalLabel: {
     fontSize: 15,
     color: "#1a1a1a",
-    
   },
   modalText: {
     fontSize: 18,
     fontWeight: "600",
     marginBottom: 10,
     color: "black",
-
-  }
+  },
 });

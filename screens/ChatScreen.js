@@ -95,12 +95,13 @@ export default function ChatScreen({ route }) {
 
       <View style={styles.inputRow}>
         <TextInput
+          accessibilityLabel="Écrire un message"
           style={styles.input}
           placeholder="Écrire un message..."
           value={inputText}
           onChangeText={(text) => setInputText(text)}
         />
-        <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
+        <TouchableOpacity  style={styles.sendButton} onPress={sendMessage} accessibilityRole="button" accessibilityLabel="Envoyer le message">
           <Text style={styles.sendButtonText}>Envoyer</Text>
         </TouchableOpacity>
       </View>

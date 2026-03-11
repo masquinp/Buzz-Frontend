@@ -78,18 +78,21 @@ export default function TestScreen({ navigation }) {
         <View style={styles.card}>
           <Text style={styles.title}> Nouveau trajet</Text>
           <TextInput
+            accessibilityLabel="Lieu de départ"
             placeholder="Départ"
             style={styles.input}
             onChangeText={(value) => setDeparture(value)}
             value={departure}
           />
           <TextInput
+            accessibilityLabel="Lieu d'arrivée"
             placeholder="Arrivée"
             style={styles.input}
             onChangeText={(value) => setArrival(value)}
             value={arrival}
           />
           <TouchableOpacity
+            accessibilityLabel="Choisir une date de trajet"
             onPress={() => setShowPicker(true)}
             style={styles.input}
           >
@@ -100,6 +103,7 @@ export default function TestScreen({ navigation }) {
 
           {showPicker && (
             <DateTimePicker
+              accessibilityLabel="Choisir la date du trajet"
               value={date}
               mode="date"
               display={Platform.OS === "ios" ? "spinner" : "calendar"}
@@ -108,25 +112,29 @@ export default function TestScreen({ navigation }) {
             />
           )}
           <TextInput
+            accessibilityLabel="Chosir le prix du trajet"
             placeholder="Prix"
             style={styles.input}
             onChangeText={(value) => setPrice(value)}
             value={price}
           />
           <TextInput
+            accessibilityLabel="Chosir le nombre de places disponibles"
             placeholder="Nombre de places disponibles"
             style={styles.input}
             onChangeText={(value) => setPlacesTotal(value)}
             value={placesTotal}
           />
           <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel="Ajouter ce trajet"
             style={styles.addBtn}
             onPress={() => {
               newRide();
               navigation.goBack();
             }}
           >
-            <Text style={styles.textBtn}>Enregistrez</Text>
+            <Text style={styles.textBtn}>Enregistrer</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>

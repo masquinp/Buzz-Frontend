@@ -66,7 +66,12 @@ export default function AddReviewScreen({ navigation, route }) {
     // on boucle de 1 à 5
     for (let star = 1; star <= 5; star++) {
       stars.push(
-        <TouchableOpacity key={star} onPress={() => setNote(star)}>
+        <TouchableOpacity
+          accessibilityRole="button"
+          accessibilityLabel="mettre une note de 1 à 5 étoiles"
+          key={star}
+          onPress={() => setNote(star)}
+        >
           <FontAwesomeIcon
             // Si l'étoile est inférieur ou égale à la note choisie, elle est pleine, sinon vide
             icon={star <= note ? faStar : faStarEmpty}
@@ -105,12 +110,15 @@ export default function AddReviewScreen({ navigation, route }) {
           <View style={styles.starsRow}>{reviewStars()}</View>
 
           <TextInput
+            accessibilityLabel="Laisser un commentaire"
             style={styles.input}
             placeholder="Laissez un commentaire..."
             value={message}
             onChangeText={(text) => setMessage(text)} // met à jour message
           />
           <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel="Envoyer mon avis"
             style={styles.submitBtn}
             onPress={() => {
               navigation.navigate("TabNavigator", { screen: "Map" });

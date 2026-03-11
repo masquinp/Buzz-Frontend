@@ -82,7 +82,7 @@ export default function RegisterScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#fdf6f0'}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fdf6f0" }}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -91,27 +91,32 @@ export default function RegisterScreen({ navigation }) {
         <Image
           style={styles.logo}
           source={require("../assets/logo7.png")}
+          accessibilityLabel="Logo de l'application Buzz"
         ></Image>
         <View>
           <TextInput
+            accessibilityLabel="Prénom"
             placeholder="Firstname"
             style={styles.input}
             onChangeText={(value) => setFirstname(value)}
             value={firstname}
           />
           <TextInput
+            accessibilityLabel="Nom de famille"
             placeholder="Lastname"
             style={styles.input}
             onChangeText={(value) => setLastname(value)}
             value={lastname}
           />
           <TextInput
+            accessibilityLabel="Nom d'utilisateur"
             placeholder="Username"
             style={styles.input}
             onChangeText={(value) => setUsername(value)}
             value={username}
           />
           <TextInput
+            accessibilityLabel="Adresse email"
             placeholder="Email"
             autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
             keyboardType="email-address" // https://reactnative.dev/docs/textinput#keyboardtype
@@ -126,12 +131,15 @@ export default function RegisterScreen({ navigation }) {
             <Text style={styles.error}>Invalid email address</Text>
           )}
           <TextInput
+            accessibilityLabel="Mot de passe"
             placeholder="Password"
             style={styles.input}
             onChangeText={(value) => setPassword(value)}
             value={password}
           />
           <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel="S'inscrire"
             style={styles.registerBtn}
             onPress={() => Register()}
           >
