@@ -38,7 +38,7 @@ export default function RideScreen() {
         {bookings.map((data, i) => (
           <Ride
             key={i}
-            photo={data.ride?.user?.photo}
+            photo={data.ride?.user?.avatar}
             firstname={data.ride?.user?.firstname}
             lastname={data.ride?.user?.lastname}
             car={data.ride?.car}

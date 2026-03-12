@@ -37,9 +37,9 @@ export default function ConnectionScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          const userId = data.user ? data.user._id : data._id;
           dispatch(
             login({
+              // on stocke dans Redux les infos de l'utilisateur
               username: data.user.username,
               token: data.token,
               _id: data.user._id,
@@ -47,6 +47,7 @@ export default function ConnectionScreen({ navigation }) {
           );
           dispatch(
             profileUser({
+              // on stocke dans Redux les infos de profil de l'utilisateur
               firstname: data.user.firstname,
               lastname: data.user.lastname,
               email: data.user.email,
@@ -57,15 +58,16 @@ export default function ConnectionScreen({ navigation }) {
           // Si l'utilisateur a des photos, on les charge une par une dans Redux
           if (data.user.photos && data.user.photos.length > 0) {
             for (const url of data.user.photos) {
-              dispatch(addPhoto(url));
+              // on parcourt les URLs des photos
+              dispatch(addPhoto(url)); // on ajoute chaque photo à Redux avec l'action addPhoto
             }
           }
-          // setEmail("");
+
           setUsername("");
           setPassword("");
           // si l'utilisateur a enregistré une voiture, on l'affiche avec ça :
           if (data.user.car) {
-            dispatch(addCar(data.user.car));
+            dispatch(addCar(data.user.car)); // on ajoute la voiture à Redux avec l'action addCar
           }
           // Navigation vers l'écran suivant après succès
           navigation.navigate("TabNavigator", { screen: "Map" });
@@ -90,9 +92,9 @@ export default function ConnectionScreen({ navigation }) {
         ></Image>
         <View style={styles.inputContainer}>
           <TextInput
-          placeholderTextColor="#ad7b80"
+            placeholderTextColor="#ad7b80"
             accessibilityLabel="Nom d'utilisateur"
-            placeholder="Username"
+            placeholder="Nom d'utilisateur"
             style={styles.input}
             onChangeText={(value) => setUsername(value)}
             value={username}
@@ -100,7 +102,8 @@ export default function ConnectionScreen({ navigation }) {
           <TextInput
             placeholderTextColor="#ad7b80"
             accessibilityLabel="Mot de passe"
-            placeholder="Password"
+            placeholder="Mot de passe"
+            secureTextEntry={true}
             style={styles.input}
             onChangeText={(value) => setPassword(value)}
             value={password}
@@ -134,7 +137,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     borderColor: "#A7333F",
     borderBottomWidth: 1,
-    fontSize: 22,
+    fontSize: 20,
     marginLeft: 35,
   },
 

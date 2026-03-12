@@ -15,11 +15,7 @@ import {
   faCcVisa,
   faPaypal,
 } from "@fortawesome/free-brands-svg-icons";
-import {
-  faCreditCard,
-  faPlus,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -45,11 +41,10 @@ export default function PaymentScreen({ navigation, route }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("data.booking :", data.booking);
         if (data.result) {
-          dispatch(deleteBooking(bookingId));
+          dispatch(deleteBooking(bookingId)); // supprime la réservation du store redux
           navigation.goBack();
-          alert("Réservation supprimé");
+          alert("Réservation supprimée");
         } else {
           alert(data.error);
         }
@@ -72,9 +67,8 @@ export default function PaymentScreen({ navigation, route }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(addPaidBooking(data.payment));
-          // Navigation vers l'écran suivant après succès
-          navigation.navigate("ConfirmationPayment", {
+          dispatch(addPaidBooking(data.payment)); // ajoute la réservation payée au store redux
+          navigation.navigate("ConfirmationPayment", { // navigue en passant infos trajet, réservation et paiement
             ride: ride,
             booking: booking,
             payment: data.payment,
@@ -102,7 +96,7 @@ export default function PaymentScreen({ navigation, route }) {
             <View style={styles.modalView}>
               <TouchableOpacity
                 accessibilityRole="button"
-                accessibilityLabel="Fermer le modal"
+                accessibilityLabel="Fermer la modal"
                 onPress={() => handleClose()}
                 style={{
                   top: 10,
@@ -131,13 +125,23 @@ export default function PaymentScreen({ navigation, route }) {
         <Text style={styles.price}>{ride.price}€</Text>
         <Text style={styles.subtitle}>Choisissez votre moyen de paiement</Text>
         <View style={styles.paymentMethod}>
-          <TouchableOpacity  style={styles.paymentMethod} onPress={() => pay()} accessibilityRole="button" accessibilityLabel="Choisir Apple Pay">
+          <TouchableOpacity
+            style={styles.paymentMethod}
+            onPress={() => pay()}
+            accessibilityRole="button"
+            accessibilityLabel="Choisir Apple Pay"
+          >
             <FontAwesomeIcon icon={faApplePay} size={60} />
             <Text style={styles.applePaypalLabel}>Apple Pay</Text>
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.paymentMethod} onPress={() => pay()} accessibilityRole="button" accessibilityLabel="Choisir Visa">
+        <TouchableOpacity
+          style={styles.paymentMethod}
+          onPress={() => pay()}
+          accessibilityRole="button"
+          accessibilityLabel="Choisir Visa"
+        >
           <View style={styles.visaRow}>
             <FontAwesomeIcon icon={faCcVisa} size={50} />
             <Text style={styles.visaNumber}>•••• 4242</Text>
@@ -145,13 +149,22 @@ export default function PaymentScreen({ navigation, route }) {
         </TouchableOpacity>
 
         <View style={styles.paymentMethod}>
-          <TouchableOpacity style={styles.paymentMethod} onPress={() => pay()} accessibilityRole="button" accessibilityLabel="Choisir Paypal">
+          <TouchableOpacity
+            style={styles.paymentMethod}
+            onPress={() => pay()}
+            accessibilityRole="button"
+            accessibilityLabel="Choisir Paypal"
+          >
             <FontAwesomeIcon icon={faPaypal} size={40} />
             <Text style={styles.applePaypalLabel}>Paypal</Text>
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity onPress={() => removeBooking(booking._id)} accessibilityRole="button" accessibilityLabel="Supprimer la réservation">
+        <TouchableOpacity
+          onPress={() => removeBooking(booking._id)}
+          accessibilityRole="button"
+          accessibilityLabel="Supprimer la réservation"
+        >
           <Text style={styles.deleteText}>Supprimer la réservation</Text>
         </TouchableOpacity>
       </View>

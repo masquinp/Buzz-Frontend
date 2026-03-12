@@ -4,6 +4,9 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import Arrow from "../components/Arrow";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -20,26 +23,28 @@ const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 export default function BookingScreen({ navigation, route }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  const { ride } = route.params;
+  const { ride } = route.params; // on récupère le trajet passé en paramètre lors de la navigation
 
   const [seatsBooked] = useState(1);
+  const [message, setMessage] = useState("");
 
   const newBooking = () => {
     if (!ride) return;
     fetch(`${EXPO_PUBLIC_API_URL}/bookings/add`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+      body: JSON.stringify({ 
+        message,
         token: user.token,
         ride: ride._id,
-        seatsBooked: seatsBooked,
+        seatsBooked,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(addBooking(data.booking));
-          navigation.navigate("Payment", { ride: ride, booking: data.booking });
+          dispatch(addBooking(data.booking)); // on ajoute la réservation au store
+          navigation.navigate("Payment", { ride: ride, booking: data.booking }); // on navigue en passant le trajet et la réservation en paramètres
         } else {
           alert(data.error);
         }
@@ -48,84 +53,97 @@ export default function BookingScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Arrow />
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <Arrow />
 
-        <View style={styles.driverSection}>
-          <FontAwesomeIcon icon={faCircleUser} size={90} color="#545e63" />
-          <View style={styles.driverInfo}>
-            <Text style={styles.driverName}>
-              {ride.user?.firstname} {ride.user?.lastname}
-            </Text>
-            <View style={styles.starsRow}>
-              <FontAwesomeIcon icon={faStar} size={16} color="#F5A623" />
-              <FontAwesomeIcon icon={faStar} size={16} color="#F5A623" />
-              <FontAwesomeIcon icon={faStar} size={16} color="#F5A623" />
-              <FontAwesomeIcon icon={faStar} size={16} color="#F5A623" />
-              <FontAwesomeIcon icon={faStarEmpty} size={16} color="#F5A623" />
+          <View style={styles.driverSection}>
+            <FontAwesomeIcon icon={faCircleUser} size={80} color="#545e63" />
+            <View style={styles.driverInfo}>
+              <Text style={styles.driverName}>
+                {ride.user?.firstname} {ride.user?.lastname}
+              </Text>
+              <View style={styles.starsRow}>
+                <FontAwesomeIcon icon={faStar} size={15} color="#F5A623" />
+                <FontAwesomeIcon icon={faStar} size={15} color="#F5A623" />
+                <FontAwesomeIcon icon={faStar} size={15} color="#F5A623" />
+                <FontAwesomeIcon icon={faStar} size={15} color="#F5A623" />
+                <FontAwesomeIcon icon={faStarEmpty} size={15} color="#F5A623" />
+              </View>
             </View>
           </View>
-        </View>
 
-        <View style={styles.tripCard}>
-          <View style={styles.tripRow}>
-            <Text style={styles.tripLabel}>Départ</Text>
-            <Text style={styles.tripValue}>{ride.departure}</Text>
+          <View style={styles.tripCard}>
+            <View style={styles.tripRow}>
+              <Text style={styles.tripLabel}>Départ</Text>
+              <Text style={styles.tripValue}>{ride.departure}</Text>
+            </View>
+            <View style={styles.divider} />
+            <View style={styles.tripRow}>
+              <Text style={styles.tripLabel}>Arrivée</Text>
+              <Text style={styles.tripValue}>{ride.arrival}</Text>
+            </View>
+            <View style={styles.divider} />
+            <View style={styles.tripRow}>
+              <Text style={styles.tripLabel}>Date</Text>
+              <Text style={styles.tripValue}>{formatDate(ride.date)}</Text>
+            </View>
+            <View style={styles.divider} />
+            <View style={styles.tripRow}>
+              <Text style={styles.tripLabel}>Voiture</Text>
+              <Text style={styles.tripValue}>
+                {ride.user?.car
+                  ? `${ride.user.car.brand} ${ride.user.car.model}`
+                  : "Non renseignée"}
+              </Text>
+            </View>
           </View>
-          <View style={styles.divider} />
-          <View style={styles.tripRow}>
-            <Text style={styles.tripLabel}>Arrivée</Text>
-            <Text style={styles.tripValue}>{ride.arrival}</Text>
-          </View>
-          <View style={styles.divider} />
-          <View style={styles.tripRow}>
-            <Text style={styles.tripLabel}>Date</Text>
-            <Text style={styles.tripValue}>{formatDate(ride.date)}</Text>
-          </View>
-          <View style={styles.divider} />
-          <View style={styles.tripRow}>
-            <Text style={styles.tripLabel}>Voiture</Text>
-            <Text style={styles.tripValue}>
-              {ride.user?.car
-                ? `${ride.user.car.brand} ${ride.user.car.model}`
-                : "Non renseignée"}
-            </Text>
-          </View>
-        </View>
 
-        {/* Section pour les autres passagers */}
-        <Text style={styles.sectionTitle}>Autres passagers</Text>
-        <View style={styles.passengersCard}>
-          <View style={styles.passengerItem}>
-            <FontAwesomeIcon icon={faCircleUser} size={50} color="#545e63" />
-            <Text style={styles.passengerName}>Marc</Text>
+          {/* Section pour les autres passagers */}
+          <Text style={styles.sectionTitle}>Autres passagers</Text>
+          <View style={styles.passengersCard}>
+            <View style={styles.passengerItem}>
+              <FontAwesomeIcon icon={faCircleUser} size={50} color="#545e63" />
+              <Text style={styles.passengerName}>John</Text>
+            </View>
+            <View style={styles.passengerItem}>
+              <FontAwesomeIcon icon={faCircleUser} size={50} color="#545e63" />
+              <Text style={styles.passengerName}>Vanessa</Text>
+            </View>
           </View>
-          <View style={styles.passengerItem}>
-            <FontAwesomeIcon icon={faCircleUser} size={50} color="#545e63" />
-            <Text style={styles.passengerName}>Léa</Text>
-          </View>
-        </View>
 
-        <Text style={styles.price}>{ride.price}€</Text>
+          <Text style={styles.price}>{ride.price}€</Text>
+          <TextInput
+            placeholder="Message pour le conducteur (optionnel)"
+            placeholderTextColor="#888"
+            style={styles.messageInput}
+            onChangeText={(value) => setMessage(value)}
+            value={message}
+            multiline
+          />
 
-        <TouchableOpacity
-          style={styles.bookButton}
-          accessibilityRole="button"
-          accessibilityLabel="Réserver ce trajet"
-          onPress={newBooking}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.bookButtonText}>Valider le trajet</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.bookButton}
+            accessibilityRole="button"
+            accessibilityLabel="Réserver ce trajet"
+            onPress={newBooking}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.bookButtonText}>Valider le trajet</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          accessibilityRole="button"
-          accessibilityLabel="Annuler"
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.cancelText}>Annuler</Text>
-        </TouchableOpacity>
-      </ScrollView>
+          <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel="Annuler"
+            onPress={() => navigation.goBack()}
+          >
+            <Text style={styles.cancelText}>Annuler</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -151,7 +169,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   driverName: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#1a1a1a",
   },
@@ -163,13 +181,13 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#f5f5f5",
     borderRadius: 16,
-    padding: 16,
-    marginBottom: 24,
+    padding: 15,
+    marginBottom: 18,
   },
   tripRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 10,
+    paddingVertical: 8,
   },
   tripLabel: {
     fontSize: 15,
@@ -195,10 +213,10 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#f5f5f5",
     borderRadius: 16,
-    padding: 16,
+    padding: 13,
     flexDirection: "row",
     gap: 80,
-    marginBottom: 24,
+    marginBottom: 18,
     justifyContent: "space-between",
     paddingLeft: 65,
     paddingRight: 65,
@@ -212,10 +230,10 @@ const styles = StyleSheet.create({
     color: "#555",
   },
   price: {
-    fontSize: 32,
+    fontSize: 30,
     fontWeight: "bold",
     color: "#1a1a1a",
-    marginBottom: 24,
+    marginBottom: 18,
   },
   bookButton: {
     width: "100%",
@@ -235,5 +253,15 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textDecorationLine: "underline",
   },
+  messageInput: {
+    width: "100%",
+    backgroundColor: "#f5f5f5",
+    borderRadius: 14,
+    padding: 16,
+    marginBottom: 20,
+    fontSize: 15,
+    color: "#1a1a1a",
+    minHeight: 80,
+    textAlignVertical: "top", // pour Android, le texte commence en haut
+  },
 });
-

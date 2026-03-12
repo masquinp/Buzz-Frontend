@@ -9,7 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Arrow from "../components/Arrow";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faCircleUser, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -42,7 +42,6 @@ export default function AllRidesScreen({ navigation, route }) {
   }, []);
 
   // ride = info du trajet
-
   // on filtre tous les rides pour récupérer ceux qui nous interesse
   const rides = allRides
     .filter((data) => {
@@ -51,9 +50,9 @@ export default function AllRidesScreen({ navigation, route }) {
         .includes(filterDeparture.toLowerCase()); // trie par lieu de départ
       const matchArrival = data.arrival
         .toLowerCase()
-        .includes(filterArrival.toLowerCase()); // trie par lieu d'arrivée
+        .includes(filterArrival.toLowerCase()); // trie par lieu d'arrivée 
       const matchDate = new Date(data.date) >= new Date(); // affiche les trajets à venir uniquement
-      return matchDeparture && matchArrival && matchDate;
+      return matchDeparture && matchArrival && matchDate; // on affiche les trajets qui correspondent aux filtres et qui sont à venir
     })
     .sort((a, b) => a.price - b.price) // trie les trajets affichés par prix croissant
     .map((data, i) => {
@@ -64,7 +63,7 @@ export default function AllRidesScreen({ navigation, route }) {
             accessibilityLabel="Sélectionner ce trajet"
             onPress={() => {
               setSelectedRide(data);
-              navigation.navigate("Booking", { ride: data });
+              navigation.navigate("Booking", { ride: data }); // on envoie les infos du trajets sélectionné au prochain écran
             }}
           >
             <View style={styles.boxCard}>
@@ -81,6 +80,7 @@ export default function AllRidesScreen({ navigation, route }) {
                 </View>
                 <View style={styles.carAndStars}>
                   <Text style={{ paddingTop: 15, alignSelf: "flex-end" }}>
+                    { /* si l'utilisateur a une voiture, on affiche la marque et le modèle, sinon une string vide */ }
                     {data.user?.car
                       ? `${data.user.car.brand} ${data.user.car.model}`
                       : ""}
@@ -106,11 +106,12 @@ export default function AllRidesScreen({ navigation, route }) {
     });
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "fff" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <Arrow top={80} />
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
           <Text style={styles.title}>Trajets disponibles</Text>
+          { /* Si aucun trajet ne correspond aux filtres, on affiche un message, sinon on affiche les trajets filtrés */ }
           {rides.length === 0 ? (
             <Text>Aucun trajet existant avec ces lieux</Text>
           ) : (

@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   value: {
     token: null,
-    // email: null,
     username: null,
     _id: null,
     photos: [],
@@ -17,20 +16,23 @@ export const userSlice = createSlice({
   reducers: {
     login: (state, action) => {
       state.value.token = action.payload.token;
-      // state.value.email = action.payload.email;
       state.value.username = action.payload.username;
       state.value._id = action.payload._id;
     },
     logout: (state) => {
-     state.value = {}; // on remet tous les champs à null en se déconnectant
+      state.value = {
+        token: null,
+        username: null,
+        _id: null,
+        photos: [],
+        car: null,
+      };
     },
     addPhoto: (state, action) => {
       state.value.photos.push(action.payload);
     },
-    removePhoto: (state, action) => {
-      state.value.photos = state.value.photos.filter(
-        (photo) => photo !== action.payload,
-      );
+    removeCar: (state) => {
+      state.value.car = null;
     },
     addCar: (state, action) => {
       state.value.car = action.payload;
@@ -41,5 +43,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { login, logout, addPhoto, removePhoto, addCar, removeCar } = userSlice.actions;
+export const { login, logout, addPhoto, removePhoto, addCar, removeCar } =
+  userSlice.actions;
 export default userSlice.reducer;

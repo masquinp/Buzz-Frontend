@@ -13,7 +13,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { addReview } from "../reducers/review";
 import { useSelector, useDispatch } from "react-redux";
-import { formatDate } from "../utils/formatDate";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCircleUser, faStar } from "@fortawesome/free-solid-svg-icons";
@@ -26,7 +25,7 @@ export default function AddReviewScreen({ navigation, route }) {
   const review = useSelector((state) => state.review.value);
   const dispatch = useDispatch();
 
-  const { ride, booking, payment } = route.params;
+  const { ride, payment } = route.params;
 
   const [message, setMessage] = useState("");
   const [note, setNote] = useState(0); // note de 1 à 5
@@ -51,8 +50,6 @@ export default function AddReviewScreen({ navigation, route }) {
       .then((data) => {
         if (data.result) {
           dispatch(addReview(data.review));
-          // Navigation vers l'écran suivant après succès
-          //  navigation.navigate("Payment", { ride: ride, booking: data.booking });
           alert("Note enregistrée !");
         } else {
           alert(data.error);
@@ -61,7 +58,7 @@ export default function AddReviewScreen({ navigation, route }) {
   };
 
   const reviewStars = () => {
-    const stars = [];
+    const stars = []; // tableau pour stocker les étoiles
 
     // on boucle de 1 à 5
     for (let star = 1; star <= 5; star++) {

@@ -13,7 +13,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Arrow from "../components/Arrow";
 
-import { addMessage, loadMessages } from "../reducers/messages";
+import { addMessage, loadMessages } from "../reducers/messages"; 
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -23,20 +23,20 @@ export default function ChatScreen({ route }) {
   const user = useSelector((state) => state.user.value);
   const messages = useSelector((state) => state.messages.value);
 
-  const bookingId = route.params?.bookingId;
-  const receiverId = route.params?.receiverId;
-  const senderId = route.params?.senderId;
+  const bookingId = route.params?.bookingId; // on récupère l'id de la réservation pour laquelle on veut afficher les messages
+  const receiverId = route.params?.receiverId; // on récupère l'id du destinataire pour savoir à qui envoyer les messages
+  const senderId = route.params?.senderId; // on récupère l'id de l'expéditeur pour savoir qui envoie les messages
 
   const [inputText, setInputText] = useState("");
-  const scrollViewRef = useRef(null);
+  const scrollViewRef = useRef(null); // référence pour faire défiler la ScrollView jusqu'en bas à chaque nouveau message
 
   useEffect(() => {
-    // fetch immédiat au montage avec les bons messages
+    // fetch avec les bons messages
     fetch(`${EXPO_PUBLIC_API_URL}/messages/${bookingId}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.result) {
-          dispatch(loadMessages(data.messages));
+          dispatch(loadMessages(data.messages)); // on stocke les messages dans le store pour les afficher ensuite
         }
       });
 
@@ -62,17 +62,17 @@ export default function ChatScreen({ route }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         token: user.token,
-        message: inputText,
-        booking: bookingId,
-        receiver: receiverId,
-        sender: senderId,
+        message: inputText, // le contenu du message
+        booking: bookingId, // pour savoir à quelle réservation le message est lié
+        receiver: receiverId, // pour savoir à qui envoyer le message
+        sender: senderId, 
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(addMessage(data.message));
-          setInputText("");
+          dispatch(addMessage(data.message)); // ajout le message au store pour l'afficher
+          setInputText(""); // on vide le champ
         } else {
           alert(data.error);
         }
@@ -84,21 +84,22 @@ export default function ChatScreen({ route }) {
       <Arrow top={80} />
       <KeyboardAvoidingView
         style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === "ios" ? "padding" : "height"} 
       >
         <Text style={styles.title}>Chat</Text>
 
         <ScrollView ref={scrollViewRef} style={styles.messagesContainer}>
+          { /* on affiche les messages en différenciant ceux de l'utilisateur (alignés à droite) et ceux de l'autre personne (alignés à gauche) */ }
           {messages.map((msg, i) => {
             const isMe = msg.sender?.username === user.username;
 
-            if (isMe) {
+            if (isMe) { // si c'est moi :
               return (
                 <View key={i} style={styles.myMessage}>
                   <Text style={styles.myText}>{msg.message}</Text>
                 </View>
               );
-            } else {
+            } else { // si c'est l'autre :
               return (
                 <View key={i} style={styles.otherMessage}>
                   <Text style={styles.username}>{msg.username}</Text>

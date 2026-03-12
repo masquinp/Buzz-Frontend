@@ -1,5 +1,4 @@
 import {
-  Button,
   StyleSheet,
   Text,
   View,
@@ -20,7 +19,7 @@ import { profileUser } from "../reducers/profile";
 import Arrow from "../components/Arrow";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
-// Grabbed from emailregex.com
+// emailregex.com
 const EMAIL_REGEX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -56,10 +55,11 @@ export default function RegisterScreen({ navigation }) {
       .then((data) => {
         if (data.result) {
           dispatch(
+            // stocke infos utilisateur et token dans store redux
             login({
               username: username,
               token: data.token,
-              _id: data.user._id,
+              _id: data.user._id, // _id vient de data.user dans la route signin
             }),
           );
 
@@ -73,7 +73,6 @@ export default function RegisterScreen({ navigation }) {
             }),
           );
 
-          // Navigation vers l'écran suivant après succès
           navigation.navigate("TabNavigator", { screen: "Map" });
         } else {
           alert(data.error);
@@ -97,7 +96,7 @@ export default function RegisterScreen({ navigation }) {
           <TextInput
             placeholderTextColor="#ad7b80"
             accessibilityLabel="Prénom"
-            placeholder="Firstname"
+            placeholder="Prénom"
             style={styles.input}
             onChangeText={(value) => setFirstname(value)}
             value={firstname}
@@ -105,7 +104,7 @@ export default function RegisterScreen({ navigation }) {
           <TextInput
             placeholderTextColor="#ad7b80"
             accessibilityLabel="Nom de famille"
-            placeholder="Lastname"
+            placeholder="Nom de famille"
             style={styles.input}
             onChangeText={(value) => setLastname(value)}
             value={lastname}
@@ -113,7 +112,7 @@ export default function RegisterScreen({ navigation }) {
           <TextInput
             placeholderTextColor="#ad7b80"
             accessibilityLabel="Nom d'utilisateur"
-            placeholder="Username"
+            placeholder="Nom d'utilisateur"
             style={styles.input}
             onChangeText={(value) => setUsername(value)}
             value={username}
@@ -131,13 +130,15 @@ export default function RegisterScreen({ navigation }) {
             style={styles.input}
           />
 
+          {/* Affiche un message d'erreur si l'email n'est pas valide */}
           {emailError && (
-            <Text style={styles.error}>Invalid email address</Text>
+            <Text style={styles.error}>Adresse email invalide</Text>
           )}
           <TextInput
             placeholderTextColor="#ad7b80"
             accessibilityLabel="Mot de passe"
-            placeholder="Password"
+            placeholder="Mot de passe"
+            secureTextEntry={true} // masque le texte pour le mot de passe
             style={styles.input}
             onChangeText={(value) => setPassword(value)}
             value={password}

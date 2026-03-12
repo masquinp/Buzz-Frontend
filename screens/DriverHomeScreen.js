@@ -32,15 +32,14 @@ export default function TestScreen({ navigation }) {
 
   const user = useSelector((state) => state.user.value);
 
-  const formData = new FormData();
+  const formData = new FormData(); // pour préparer l'envoi de la photo au backend
 
-  // Reference to the camera
+  // ref à la caméra
   const cameraRef = useRef(null);
 
-  // const [modalVisible, setModalVisible] = useState(false);
   const [activeModal, setActiveModal] = useState(null); // null = aucune modal ouverte
-  const openModal = (type) => setActiveModal(type);
-  const closeModal = () => setActiveModal(null);
+  const openModal = (type) => setActiveModal(type); // type peut être "camera" ou "car"
+  const closeModal = () => setActiveModal(null); // on ferme en remettant à null
 
   const [brand, setBrand] = useState("");
   const [color, setColor] = useState("");
@@ -50,21 +49,30 @@ export default function TestScreen({ navigation }) {
 
   // Permission hooks
   const [hasPermission, setHasPermission] = useState(false);
-  const [facing, setFacing] = useState("back");
-  const [flash, setFlash] = useState("off");
+  const [facing, setFacing] = useState("back"); // caméra arrière par défaut
+  const [flash, setFlash] = useState("off"); // flash off par défaut
 
-  const hasPhoto = user.photos && user.photos.length > 0;
-  const hasCar = !!user.car;
+  const hasPhoto = user.photos && user.photos.length > 0; // vérifie si l'utilisateur a déjà une photo
+  const hasCar = !!user.car; // vérifie si l'utilisateur a déjà une voiture enregistrée
 
-  // Effect hook to check permission upon each mount
+  // demande de permission pour accéder à la caméra à l'ouverture du composant
   useEffect(() => {
     (async () => {
-      const result = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(result && result?.status === "granted");
+      const result = await Camera.requestCameraPermissionsAsync(); // demande de permission
+      setHasPermission(result && result?.status === "granted"); // on met à jour le state en fonction de la réponse
     })();
   }, []);
 
-  if (!hasPermission || !isFocused) {
+  // si pas de permission ou si l'écran n'est pas au premier plan, on affiche un message
+  // if (!isFocused) {
+  //   return (
+  //     <SafeAreaView>
+  //       <Text>Permission caméra requise</Text>
+  //     </SafeAreaView>
+  //   );
+  // }
+
+  if (!hasPermission) {
     return (
       <SafeAreaView>
         <Text>Permission caméra requise</Text>
@@ -72,7 +80,7 @@ export default function TestScreen({ navigation }) {
     );
   }
 
-  // Functions to toggle camera facing and flash status
+  // fonctions pour les boutons de la caméra
   const toggleCameraFacing = () => {
     setFacing((current) => (current === "back" ? "front" : "back"));
   };
@@ -81,51 +89,52 @@ export default function TestScreen({ navigation }) {
     setFlash((current) => (current === "off" ? "on" : "off"));
   };
 
-  const takePicture = async () => {
-    // 1. Déclenchement de la prise de vue.
+   const takePicture = async () => {
+    // déclenchement de la prise de vue
     // On utilise 'await' pour attendre que l'appareil photo termine l'enregistrement de l'image.
     const photo = await cameraRef.current?.takePictureAsync({
       quality: 0.3, // On réduit la qualité pour que l'upload soit plus rapide
     });
 
-    // 2. Sécurité : On vérifie que la photo a bien été prise avant de continuer
+    // On vérifie que la photo a bien été prise avant de continuer (sécurité)
     if (photo) {
       // pour afficher la photo directement
       dispatch(addPhoto(photo.uri));
-      // 3. Préparation du "paquet" (FormData) pour l'expédition au backend.
+      // on prépare le "paquet" (FormData) pour l'expédition au backend.
       // Le FormData est nécessaire pour envoyer des fichiers via HTTP.
       const formData = new FormData();
 
       // On ajoute un champ "photoFromFront" qui doit correspondre au nom
-      // attendu par ton backend (ex: dans ton routeur avec 'formidable' ou 'multer')
+      // attendu par le backend
       formData.append("photoFromFront", {
         uri: photo.uri, // Le chemin local temporaire sur le téléphone
         name: "photo.jpg", // Le nom que le fichier aura sur le serveur
-        type: "image/jpeg", // Le type MIME pour que le serveur sache que c'est une image
+        type: "image/jpeg", // Le type pour que le serveur sache que c'est une image
       });
       formData.append("token", user.token);
 
-      // 4. Envoi de la photo vers le serveur local (Backend)
+      // envoi de la photo vers le serveur local (Backend)
       fetch(`${EXPO_PUBLIC_API_URL}/users/upload`, {
         method: "POST",
         body: formData, // On passe le FormData ici. Pas besoin de 'headers', fetch le gère seul.
       })
         .then((response) => response.json()) // On convertit la réponse brute du serveur en objet JSON
         .then((data) => {
-          // 5. Traitement de la réponse du backend
-          // data.result : vérifie si l'upload sur Cloudinary a réussi côté serveur
+          // traitement de la réponse du backend
+          // vérifie si l'upload sur Cloudinary a réussi côté serveur
           if (data.result) {
-            /* CRUCIAL : Au lieu de dispatcher 'photo.uri' (qui est temporaire),
+            /* Au lieu de dispatcher 'photo.uri' (qui est temporaire),
              on dispatche 'data.url' (ou la clé renvoyée par ton serveur).
-             C'est l'URL permanente stockée sur Cloudinary.
+             c'est l'URL permanente stockée sur Cloudinary.
           */
-            dispatch(addPhoto(data.url));
-          }
+             dispatch(addPhoto(data.url));
+         }
         });
     }
-  };
+   }; 
 
   const deletePicture = (photoUrl) => {
+    // photoUrl est l'URL de la photo à supprimer
     if (!user.token) {
       alert("Erreur : Utilisateur non identifié. Reconnectez-vous.");
       return;
@@ -141,7 +150,7 @@ export default function TestScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(removePhoto(photoUrl));
+          dispatch(removePhoto(photoUrl)); // on met à jour le state en supprimant la photo
         } else {
           alert(data.error);
         }
@@ -177,7 +186,9 @@ export default function TestScreen({ navigation }) {
       });
   };
 
+  // préparation de l'affichage des photos
   const photos = user.photos?.map((data, i) => {
+    // on boucle sur les photos de l'utilisateur pour les afficher, 'data' est l'URL de la photo
     return (
       <View key={i} style={styles.photoContainer}>
         <TouchableOpacity
@@ -199,17 +210,17 @@ export default function TestScreen({ navigation }) {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "fff" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <KeyboardAvoidingView
-        style={{ flex: 1, backgroundColor: "fff" }}
+        style={{ flex: 1, backgroundColor: "#fff" }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <Modal visible={activeModal === "camera"} animationType="slide">
           <View style={{ flex: 1 }}>
             <CameraView
               style={{ flex: 1 }}
-              ref={cameraRef}
-              facing={facing}
+              ref={cameraRef} // on attache la ref à la caméra pour pouvoir l'utiliser dans takePicture
+              facing={facing} // caméra avant ou arrière selon le state
               flash={flash}
             />
 
@@ -240,7 +251,10 @@ export default function TestScreen({ navigation }) {
                 accessibilityLabel="Prendre une photo"
                 style={{ alignItems: "center" }}
                 onPress={async () => {
+                  console.log("bouton appuyé");
                   await takePicture(); // on attend que la photo soit prise
+                  console.log("photo prise");
+
                   closeModal();
                 }}
               >
@@ -258,78 +272,83 @@ export default function TestScreen({ navigation }) {
             </View>
           </View>
         </Modal>
-        {/* Modal pour ajouter sa voiture */}
+
         <Modal
           visible={activeModal === "car"}
           animationType="fade"
           transparent={true}
         >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <TouchableOpacity
-                accessibilityRole="button"
-                accessibilityLabel="Fermer le formulaire d'ajout de voiture"
-                onPress={closeModal}
-                style={{ alignSelf: "flex-end" }}
-              >
-                <FontAwesomeIcon icon={faXmark} size={30} color="#A7333F" />
-              </TouchableOpacity>
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <TouchableOpacity
+                  accessibilityRole="button"
+                  accessibilityLabel="Fermer le formulaire d'ajout de voiture"
+                  onPress={closeModal}
+                  style={{ alignSelf: "flex-end" }}
+                >
+                  <FontAwesomeIcon icon={faXmark} size={30} color="#A7333F" />
+                </TouchableOpacity>
 
-              <Text style={styles.modalTitle}>Ma Voiture</Text>
+                <Text style={styles.modalTitle}>Ma Voiture</Text>
 
-              <TextInput
-                placeholderTextColor="#aaa"
-                accessibilityLabel="Ajouter la marque "
-                placeholder="Marque"
-                style={styles.input}
-                onChangeText={setBrand}
-                value={brand}
-              />
-              <TextInput
-                placeholderTextColor="#aaa"
-                accessibilityLabel="Ajouter le modèle"
-                placeholder="Modèle"
-                style={styles.input}
-                onChangeText={setModel}
-                value={model}
-              />
-              <TextInput
-                placeholderTextColor="#aaa"
-                accessibilityLabel="Ajouter la couleur"
-                placeholder="Couleur"
-                style={styles.input}
-                onChangeText={setColor}
-                value={color}
-              />
-              <TextInput
-                placeholderTextColor="#aaa"
-                accessibilityLabel="Ajouter le nombre de places"
-                placeholder="Nombre de places"
-                style={styles.input}
-                onChangeText={setNbSeats}
-                value={nbSeats}
-              />
-              <TextInput
-                placeholderTextColor="#aaa"
-                accessibilityLabel="Ajouter la plaque d'immatriculation"
-                placeholder="Plaque d'immatriculation"
-                style={styles.input}
-                onChangeText={setLicencePlate}
-                value={licencePlate}
-              />
+                <TextInput
+                  placeholderTextColor="#aaa"
+                  accessibilityLabel="Ajouter la marque "
+                  placeholder="Marque"
+                  style={styles.input}
+                  onChangeText={setBrand}
+                  value={brand}
+                />
+                <TextInput
+                  placeholderTextColor="#aaa"
+                  accessibilityLabel="Ajouter le modèle"
+                  placeholder="Modèle"
+                  style={styles.input}
+                  onChangeText={setModel}
+                  value={model}
+                />
+                <TextInput
+                  placeholderTextColor="#aaa"
+                  accessibilityLabel="Ajouter la couleur"
+                  placeholder="Couleur"
+                  style={styles.input}
+                  onChangeText={setColor}
+                  value={color}
+                />
+                <TextInput
+                  placeholderTextColor="#aaa"
+                  accessibilityLabel="Ajouter le nombre de places"
+                  placeholder="Nombre de places"
+                  style={styles.input}
+                  onChangeText={setNbSeats}
+                  value={nbSeats}
+                />
+                <TextInput
+                  placeholderTextColor="#aaa"
+                  accessibilityLabel="Ajouter la plaque d'immatriculation"
+                  placeholder="Plaque d'immatriculation"
+                  style={styles.input}
+                  onChangeText={setLicencePlate}
+                  value={licencePlate}
+                />
 
-              <TouchableOpacity
-                accessibilityRole="button"
-                accessibilityLabel="Enregistrer les informations de ma voiture"
-                style={styles.registerBtn}
-                onPress={() => {
-                  (newCar(), closeModal());
-                }}
-              >
-                <Text style={styles.textBtn}>Enregistrer</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  accessibilityRole="button"
+                  accessibilityLabel="Enregistrer les informations de ma voiture"
+                  style={styles.registerBtn}
+                  onPress={() => {
+                    (newCar(), closeModal());
+                  }}
+                >
+                  <Text style={styles.textBtn}>Enregistrer</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          </KeyboardAvoidingView>
         </Modal>
         <Arrow />
 
@@ -357,18 +376,21 @@ export default function TestScreen({ navigation }) {
             <TouchableOpacity
               accessibilityRole="button"
               accessibilityLabel={
+                // le label change selon que l'utilisateur a déjà une photo ou pas
                 hasPhoto
                   ? "Modifier la photo de mon permis de conduire"
                   : "Ajouter une photo de mon permis de conduire"
               }
-              style={[styles.btn, hasPhoto && styles.btnDone]}
+              style={[styles.btn, hasPhoto && styles.btnDone]} // si l'utilisateur a déjà une photo, on applique un style différent pour indiquer que c'est bon
               onPress={() => openModal("camera")}
             >
               <Text style={styles.btnText}>
                 {hasPhoto ? "✓ Document ajouté" : "Prendre une photo"}
               </Text>
             </TouchableOpacity>
+            {/* le texte du bouton change aussi selon la situation */}
 
+            {/* si l'utilisateur a une photo, on l'affiche en dessous du bouton */}
             {hasPhoto && <View style={styles.photoContainer}>{photos}</View>}
           </View>
 
@@ -380,6 +402,7 @@ export default function TestScreen({ navigation }) {
             <TouchableOpacity
               accessibilityRole="button"
               accessibilityLabel={
+                // le label change selon que l'utilisateur a déjà une voiture ou pas
                 hasCar
                   ? "Modifier les informations de ma voiture"
                   : "Ajouter les informations de ma voiture"
@@ -388,7 +411,7 @@ export default function TestScreen({ navigation }) {
               onPress={() => openModal("car")}
             >
               <Text style={styles.btnText}>
-                {hasCar
+                {hasCar // le texte du bouton change selon que l'utilisateur a déjà une voiture ou pas. S'il en a une, on affiche la marque et le modèle pour confirmer que c'est bien enregistré
                   ? `✓ ${user.car.brand} ${user.car.model}`
                   : "Ajouter ma voiture"}
               </Text>
@@ -398,19 +421,20 @@ export default function TestScreen({ navigation }) {
           <View style={styles.bloc}>
             <Text style={styles.blocTitle}>Proposer un trajet</Text>
             <Text style={styles.blocDesc}>
-              {hasPhoto && hasCar
+              {hasPhoto && hasCar // si l'utilisateur a une photo et une voiture, on affiche un message de confirmation, sinon on invite à compléter les étapes précédentes
                 ? "Vous êtes prêt à proposer un trajet !"
                 : "Complétez les étapes ci-dessus d'abord"}
             </Text>
             <TouchableOpacity
               accessibilityRole="button"
               accessibilityLabel={
+                // le label change selon que l'utilisateur a déjà une photo et une voiture ou pas
                 hasPhoto && hasCar
                   ? "Proposer un nouveau trajet"
                   : "Complétez votre profil pour proposer un trajet"
               }
-              style={[styles.btn, !(hasPhoto && hasCar) && styles.btnDisabled]}
-              disabled={!(hasPhoto && hasCar)}
+              style={[styles.btn, !(hasPhoto && hasCar) && styles.btnDisabled]} // si l'utilisateur n'a pas de photo ou de voiture, on désactive le bouton et on change son style pour indiquer que c'est bloqué
+              disabled={!(hasPhoto && hasCar)} // le bouton est désactivé tant que l'utilisateur n'a pas de photo et de voiture
               onPress={() => navigation.navigate("AddRide")}
             >
               <Text style={styles.btnText}>Créer un trajet</Text>

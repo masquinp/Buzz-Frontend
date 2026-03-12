@@ -13,10 +13,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 import Arrow from "../components/Arrow";
-import { addRide, deleteRide } from "../reducers/rides";
+import { addRide } from "../reducers/rides";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -28,15 +28,15 @@ export default function TestScreen({ navigation }) {
 
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
-  // const [date, setDate] = useState("");
   const [price, setPrice] = useState(0);
   const [placesTotal, setPlacesTotal] = useState(0);
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
 
+  // Fonction pour gérer le changement de date depuis le DateTimePicker
   const onChange = (event, selectedDate) => {
-    if (Platform.OS === "android") setShowPicker(false);
-    if (selectedDate) setDate(selectedDate);
+    if (Platform.OS === "android") setShowPicker(false); // Ferme le picker sur Android après la sélection
+    if (selectedDate) setDate(selectedDate); // Met à jour la date sélectionnée
   };
 
   const newRide = () => {
@@ -49,7 +49,7 @@ export default function TestScreen({ navigation }) {
         arrival,
         date,
 
-        price: Number(price),
+        price: Number(price), // converti en nombre
         placesTotal: Number(placesTotal),
       }),
     })
@@ -59,8 +59,6 @@ export default function TestScreen({ navigation }) {
           console.log(data);
           dispatch(addRide(data.ride));
           alert("Trajet ajouté !");
-          // Navigation vers l'écran suivant après succès
-          // navigation.navigate("TabNavigator", { screen: "Map" });
         } else {
           alert(data.error);
         }
@@ -76,7 +74,7 @@ export default function TestScreen({ navigation }) {
         <Arrow />
 
         <View style={styles.card}>
-          <Text style={styles.title}> Nouveau trajet</Text>
+          <Text style={styles.title}>Nouveau trajet</Text>
           <TextInput
             accessibilityLabel="Lieu de départ"
             placeholder="Départ"
@@ -100,15 +98,15 @@ export default function TestScreen({ navigation }) {
               {date ? date.toLocaleDateString("fr-FR") : "Date"}
             </Text>
           </TouchableOpacity>
-
-          {showPicker && (
+             { /* affiche le picker  */ } 
+          {showPicker && ( 
             <DateTimePicker
               accessibilityLabel="Choisir la date du trajet"
               value={date}
-              mode="date"
-              display={Platform.OS === "ios" ? "spinner" : "calendar"}
-              onChange={onChange}
-              minimumDate={new Date()}
+              mode="date" // on choisit uniquement la date, pas l'heure
+              display={Platform.OS === "ios" ? "spinner" : "calendar"} // sur iOS, on affiche un spinner, sur Android un calendrier
+              onChange={onChange} // fonction appelée à chaque changement de date
+              minimumDate={new Date()} // on ne peut pas choisir une date passée
             />
           )}
           <TextInput

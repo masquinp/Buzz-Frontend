@@ -32,12 +32,12 @@ export default function ConfirmationPaymentScreen({ navigation, route }) {
       }));
     }, 2000);
 
-    // Quand on quitte l'écran, on arrête le setInterval pour éviter les fuites mémoire
+    // quand on quitte l'écran, on arrête le setInterval pour éviter les fuites mémoire
     return () => clearInterval(interval);
   }, []); // [] = se lance une seule fois au chargement de l'écran
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "fff" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View style={styles.container}>
         <Arrow />
         <View style={styles.header}>
@@ -71,11 +71,11 @@ export default function ConfirmationPaymentScreen({ navigation, route }) {
           accessibilityRole="button"
           accessibilityLabel="Contacter votre chauffeur"
           onPress={() => {
-            navigation.navigate("Chat", { bookingId: booking._id });
+            navigation.navigate("Chat", { bookingId: booking._id }); // on passe l'id du booking pour envoyer un message au chauffeur concerné
           }}
         >
           <Text>
-            <FontAwesome name="comments" size={25} color="white" />;
+            <FontAwesome name="comments" size={25} color="white" />
           </Text>
           <Text style={styles.contactDriver}>Contacter votre chauffeur</Text>
         </TouchableOpacity>
@@ -85,7 +85,7 @@ export default function ConfirmationPaymentScreen({ navigation, route }) {
           accessibilityRole="button"
           accessibilityLabel="Confirmer que vous êtes arrivé à destination"
           onPress={() =>
-            navigation.navigate("AddReview", {
+            navigation.navigate("AddReview", { // on passe les infos nécessaires pour laisser un avis après le trajet
               ride: ride,
               booking: booking,
               payment: payment,

@@ -5,7 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -27,7 +27,7 @@ export default function MessagesScreen({ navigation }) {
       .then((res) => res.json())
       .then((data) => {
         if (data.result) {
-          dispatch(loadConversations(data.messages));
+          dispatch(loadConversations(data.messages)); // on stocke les conversations dans le store
         }
       });
   }, []);
@@ -41,14 +41,14 @@ export default function MessagesScreen({ navigation }) {
         key={i}
         style={styles.card}
         onPress={() =>
-          navigation.navigate("Chat", {
+          navigation.navigate("Chat", { // navige en passant les infos nécessaires pour afficher la bonne conv 
             bookingId: conversations.booking?._id,
             receiverId: conversations.receiver?._id,
             senderId: conversations.sender?._id,
           })
         }
       >
-        <Text style={styles.username}>{conversations.sender?.username}</Text>
+        <Text style={styles.username}>{conversations.sender?.username}</Text> 
         <Text style={styles.username}>{conversations.receiver?.username}</Text>
         <Text style={styles.lastMessage}>{conversations.message}</Text>
       </TouchableOpacity>
@@ -56,11 +56,12 @@ export default function MessagesScreen({ navigation }) {
   });
 
   return (
-    <SafeAreaView style={{ backgroundColor: "fff" }}>
+    <SafeAreaView style={{ backgroundColor: "#fff" }}>
       <View style={styles.container}></View>
 
       <Text style={styles.title}>Mes conversations</Text>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        { /* Si aucune conversation, on affiche un message, sinon on affiche la liste des conversations */ }
         {conversations.length === 0 ? (
           <Text style={styles.empty}>Aucune conversation</Text>
         ) : (

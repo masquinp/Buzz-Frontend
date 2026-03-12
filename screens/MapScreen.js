@@ -30,16 +30,18 @@ export default function MapScreen({ navigation }) {
   const [arrival, setArrival] = useState("");
 
   const [date, setDate] = useState(new Date());
-  const [showPicker, setShowPicker] = useState(false);
+  const [showPicker, setShowPicker] = useState(false); // pour afficher ou non le picker
   const onChange = (event, selectedDate) => {
-    if (Platform.OS === "android") setShowPicker(false);
-    if (selectedDate) setDate(selectedDate);
+    // fonction pour gérer le changement de date depuis le DateTimePicker
+    if (Platform.OS === "android") setShowPicker(false); // ferme le picker sur android après la sélection
+    if (selectedDate) setDate(selectedDate); // met à jour la date sélectionnée
   };
 
+  // on demande la permission d'accéder à la localisation
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
-
+      // on récupère la position en temps réel avec interval d'actualisation (si on a eu la permission)
       if (status === "granted") {
         Location.watchPositionAsync(
           { distanceInterval: 10 }, // récupérer la position en temps réel en précisant l'intervalle d’actualisation avec Location.watchPositionAsync.
@@ -51,7 +53,7 @@ export default function MapScreen({ navigation }) {
     })();
   }, []);
 
-  // 1. SI la location est nulle, on affiche un écran d'attente, attention, ne fonctionne pas sans ces lignes
+  // si la location est nulle, on affiche un écran d'attente
   if (!location) {
     return <View style={{ flex: 1 }}></View>;
   }
@@ -100,18 +102,18 @@ export default function MapScreen({ navigation }) {
                   <Text
                     style={{ fontSize: 18, color: date ? "#67262d" : "#aaa" }}
                   >
-                    {date ? date.toLocaleDateString("fr-FR") : "Date"}
+                    {date ? date.toLocaleDateString("fr-FR") : "Date"} { /* affiche la date choisi ou 'Date' si aucune choisie */ }
                   </Text>
                 </TouchableOpacity>
-
+                { /* affiche si 'true' */ }
                 {showPicker && (
-                  <View style={{ transform: [{ scale: 0.9 }] }}>
+                  <View style={{ transform: [{ scale: 0.9 }] }}> 
                     <DateTimePicker
                       value={date}
-                      mode="date"
-                      display={Platform.OS === "ios" ? "spinner" : "calendar"}
+                      mode="date" // affiche uniquement la date
+                      display={Platform.OS === "ios" ? "spinner" : "calendar"} // afficher un spinner sur iOs, calendrier sur Android
                       onChange={onChange}
-                      minimumDate={new Date()}
+                      minimumDate={new Date()} // désactive les dates passées
                     />
                   </View>
                 )}
@@ -120,7 +122,7 @@ export default function MapScreen({ navigation }) {
                 accessibilityRole="button"
                 onPress={() => {
                   handleClose();
-                  navigation.navigate("AllRides", { departure, arrival, date });
+                  navigation.navigate("AllRides", { departure, arrival, date }); // on navigue en passant les infos de l'itinéraire
                 }}
                 style={styles.button}
                 activeOpacity={0.8}
@@ -511,9 +513,9 @@ const styles = StyleSheet.create({
 //     marginBottom: 10,
 //     alignItems: "center",
 //   },
-//   ridesText: { 
-//     color: "#fff", 
-//     fontSize: 16, 
+//   ridesText: {
+//     color: "#fff",
+//     fontSize: 16,
 //     fontWeight: "600" },
 
 //   driverText: {
@@ -569,4 +571,3 @@ const styles = StyleSheet.create({
 //   },
 //   textButton: { color: "#fff", fontSize: 18, fontWeight: "600" },
 // });
-
