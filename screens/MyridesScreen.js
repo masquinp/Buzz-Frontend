@@ -34,7 +34,7 @@ export default function RideScreen() {
       <View style={styles.header}>
         <Text style={styles.trajetText}>Historique des Trajets</Text>
       </View>
-      <ScrollView style={styles.listeBox}>
+      <ScrollView style={styles.listeBox} contentContainerStyle={{ paddingBottom: 30 }}>
         {bookings.map((data, i) => (
           <Ride
             key={i}
@@ -70,5 +70,8 @@ const styles = StyleSheet.create({
   },
   listeBox: {
     paddingHorizontal: 15,
+  },
+  rideItem: {
+    marginBottom: 20, 
   },
 });

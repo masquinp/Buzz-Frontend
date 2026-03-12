@@ -61,7 +61,7 @@ export default function EditProfile({ navigation }) {
 
         {/* --- PHOTO CENTRÉE --- */}
         <View style={styles.photoContainer}>
-          <Image source={{ uri: profile.photo }} style={styles.photo} />
+          <Image source={{ uri: profile.avatar }} style={styles.photo} />
         </View>
 
         <Text style={styles.label}>Prénom</Text>

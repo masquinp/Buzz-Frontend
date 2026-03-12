@@ -54,11 +54,21 @@ export default function Profile({ navigation }) {
       <View style={styles.infoCard}>
         <Text style={styles.title}>Mes informations</Text>
         <View style={styles.info}>
-          <Text style={styles.value}>Nom : {profile.lastname}</Text>
-          <Text style={styles.value}>Prénom : {profile.firstname}</Text>
-          <Text style={styles.value}>Email : {profile.email}</Text>
           <Text style={styles.value}>
-            Nom d'utilisateur : {profile.username}
+            <Text style={styles.label}>Nom : </Text>
+            {profile.lastname}
+          </Text>
+          <Text style={styles.value}>
+            <Text style={styles.label}>Prénom : </Text>
+            {profile.firstname}
+          </Text>
+          <Text style={styles.value}>
+            <Text style={styles.label}>Email : </Text>
+            {profile.email}
+          </Text>
+          <Text style={styles.value}>
+            <Text style={styles.label}>Nom d'utilisateur : </Text>
+            {profile.username}
           </Text>
         </View>
         <TouchableOpacity
@@ -112,6 +122,10 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
 
+  label: {
+    color: "#A7333F",
+  },
+
   title: {
     fontSize: 24,
     fontWeight: "bold",
@@ -124,7 +138,7 @@ const styles = StyleSheet.create({
     height: 130,
     borderRadius: 65,
     marginBottom: 15,
-    backgroundColor: "#000",
+    backgroundColor: "#000000",
   },
 
   nameText: {
