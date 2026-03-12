@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
   globalNote: {
     alignItems: "center",
-    marginBottom: 25,
+    marginBottom: 20,
   },
   noteNumber: {
     fontSize: 40,
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   reviewItem: {
-    marginBottom: 20, // <-- espace entre chaque profil
+    marginBottom: 0, 
   },
 });
 

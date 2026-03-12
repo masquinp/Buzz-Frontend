@@ -3,7 +3,6 @@ import {
   Text,
   View,
   ScrollView,
-  TouchableOpacity,
 } from "react-native";
 import Ride from "../components/Ride";
 import Arrow from "../components/Arrow";
@@ -31,21 +30,27 @@ export default function RideScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <Arrow top={80} />
+
       <View style={styles.header}>
         <Text style={styles.trajetText}>Historique des Trajets</Text>
       </View>
-      <ScrollView style={styles.listeBox} contentContainerStyle={{ paddingBottom: 30 }}>
+
+      <ScrollView
+        style={styles.listeBox}
+        contentContainerStyle={{ paddingBottom: 40 }}
+      >
         {bookings.map((data, i) => (
-          <Ride
-            key={i}
-            photo={data.ride?.user?.avatar}
-            firstname={data.ride?.user?.firstname}
-            lastname={data.ride?.user?.lastname}
-            car={data.ride?.car}
-            note={data.ride?.note}
-            date={formatDate(data.ride?.date)}
-            price={data.ride?.price}
-          />
+          <View key={i} style={styles.rideItem}>
+            <Ride
+              photo={data.ride?.user?.avatar}
+              firstname={data.ride?.user?.firstname}
+              lastname={data.ride?.user?.lastname}
+              car={data.ride?.car}
+              note={data.ride?.note}
+              date={formatDate(data.ride?.date)}
+              price={data.ride?.price}
+            />
+          </View>
         ))}
       </ScrollView>
     </SafeAreaView>
@@ -58,20 +63,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#f4f6f8",
     paddingTop: 60,
   },
+
   header: {
     paddingHorizontal: 20,
     marginBottom: 20,
   },
+
   trajetText: {
     fontSize: 26,
     fontWeight: "bold",
     color: "#A7333F",
     textAlign: "center",
   },
+
   listeBox: {
     paddingHorizontal: 15,
   },
+
   rideItem: {
-    marginBottom: 20, 
+    marginBottom: 10, 
   },
 });

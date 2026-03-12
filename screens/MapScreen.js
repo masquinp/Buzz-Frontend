@@ -1,3 +1,5 @@
+
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -5,18 +7,13 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
-  KeyboardAvoidingView,
   Platform,
 } from "react-native";
-
 import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import DateTimePicker from "@react-native-community/datetimepicker";
-
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Arrow from "../components/Arrow";
@@ -24,570 +21,264 @@ import Arrow from "../components/Arrow";
 export default function MapScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
 
-  const [location, setLocation] = useState(null); // useState obligé pour récupérer la position
+  const [location, setLocation] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
-
   const [date, setDate] = useState(new Date());
-  const [showPicker, setShowPicker] = useState(false); // pour afficher ou non le picker
+  const [showPicker, setShowPicker] = useState(false);
+
   const onChange = (event, selectedDate) => {
-    // fonction pour gérer le changement de date depuis le DateTimePicker
-    if (Platform.OS === "android") setShowPicker(false); // ferme le picker sur android après la sélection
-    if (selectedDate) setDate(selectedDate); // met à jour la date sélectionnée
+    if (Platform.OS === "android") setShowPicker(false);
+    if (selectedDate) setDate(selectedDate);
   };
 
-  // on demande la permission d'accéder à la localisation
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
-      // on récupère la position en temps réel avec interval d'actualisation (si on a eu la permission)
       if (status === "granted") {
-        Location.watchPositionAsync(
-          { distanceInterval: 10 }, // récupérer la position en temps réel en précisant l'intervalle d’actualisation avec Location.watchPositionAsync.
-          (location) => {
-            setLocation(location.coords); // le setLocation ici avec les coordonnées
-          },
+        Location.watchPositionAsync({ distanceInterval: 10 }, (loc) =>
+          setLocation(loc.coords),
         );
       }
     })();
   }, []);
 
-  // si la location est nulle, on affiche un écran d'attente
-  if (!location) {
-    return <View style={{ flex: 1 }}></View>;
-  }
+  if (!location)
+    return <View style={{ flex: 1, backgroundColor: "#fdf6f0" }} />;
 
-  const addRide = () => {
-    setModalVisible(true);
-  };
-
-  const handleClose = () => {
-    setModalVisible(false);
-  };
+  const openModal = () => setModalVisible(true);
+  const closeModal = () => setModalVisible(false);
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      {/* Carte */}
+      <MapView
+        style={styles.map}
+        initialRegion={{
+          latitude: location.latitude,
+          longitude: location.longitude,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
+        }}
       >
-        <Modal visible={modalVisible} animationType="fade" transparent>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <View>
-                <Text style={styles.itinéraire}>Votre intinéraire</Text>
-                <TextInput
-                  placeholderTextColor="#67262d"
-                  accessibilityLabel="Lieu de départ"
-                  placeholder="Départ"
-                  onChangeText={(value) => setDeparture(value)}
-                  value={departure}
-                  style={styles.input}
-                />
-                <TextInput
-                  placeholderTextColor="#67262d"
-                  accessibilityLabel="Lieu d'arrivée"
-                  placeholder="Arrivée"
-                  onChangeText={(value) => setArrival(value)}
-                  value={arrival}
-                  style={styles.input}
-                />
+        <Marker
+          title="Vous êtes ici"
+          pinColor="#A7333F"
+          coordinate={location}
+        />
+      </MapView>
 
-                <TouchableOpacity
-                  accessibilityLabel="Choisir une date de trajet"
-                  onPress={() => setShowPicker(true)}
-                  style={styles.input}
-                >
-                  <Text
-                    style={{ fontSize: 18, color: date ? "#67262d" : "#aaa" }}
-                  >
-                    {date ? date.toLocaleDateString("fr-FR") : "Date"} { /* affiche la date choisi ou 'Date' si aucune choisie */ }
-                  </Text>
-                </TouchableOpacity>
-                { /* affiche si 'true' */ }
-                {showPicker && (
-                  <View style={{ transform: [{ scale: 0.9 }] }}> 
-                    <DateTimePicker
-                      value={date}
-                      mode="date" // affiche uniquement la date
-                      display={Platform.OS === "ios" ? "spinner" : "calendar"} // afficher un spinner sur iOs, calendrier sur Android
-                      onChange={onChange}
-                      minimumDate={new Date()} // désactive les dates passées
-                    />
-                  </View>
-                )}
-              </View>
-              <TouchableOpacity
-                accessibilityRole="button"
-                onPress={() => {
-                  handleClose();
-                  navigation.navigate("AllRides", { departure, arrival, date }); // on navigue en passant les infos de l'itinéraire
-                }}
-                style={styles.button}
-                activeOpacity={0.8}
-              >
-                <Text style={styles.textButton}>Continuer</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                accessibilityRole="button"
-                onPress={() => handleClose()}
-                style={styles.button}
-                activeOpacity={0.8}
-              >
-                <Text style={styles.textButton}>Fermer</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+      {/* Bonjour + Arrow */}
+      <View style={styles.topContainer}>
+        <Text style={styles.welcome}>Bonjour {user.username}</Text>
         <Arrow />
-        <View>
-          <Text style={styles.welcome}>Bonjour {user.username}</Text>
+      </View>
+
+      {/* Header avec "Où allez-vous ?" et icône profil */}
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.rideBtn} onPress={openModal}>
+          <Text style={styles.message}>Où allez-vous ?</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+          <View style={styles.profileIconContainer}>
+            <FontAwesomeIcon icon={faUser} size={30} color="#A7333F" />
+          </View>
+        </TouchableOpacity>
+      </View>
+
+      {/* Modal itinéraire */}
+      <Modal visible={modalVisible} animationType="fade" transparent>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.itinerary}>Votre itinéraire</Text>
+            <TextInput
+              placeholder="Départ"
+              onChangeText={setDeparture}
+              value={departure}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="Arrivée"
+              onChangeText={setArrival}
+              value={arrival}
+              style={styles.input}
+            />
+            <TouchableOpacity
+              onPress={() => setShowPicker(true)}
+              style={styles.input}
+            >
+              <Text style={{ fontSize: 18, color: date ? "#715858" : "#aaa" }}>
+                {date ? date.toLocaleDateString("fr-FR") : "Date"}
+              </Text>
+            </TouchableOpacity>
+            {showPicker && (
+              <DateTimePicker
+                value={date}
+                mode="date"
+                display={Platform.OS === "ios" ? "spinner" : "calendar"}
+                onChange={onChange}
+                minimumDate={new Date()}
+              />
+            )}
+            <TouchableOpacity
+              onPress={() => {
+                closeModal();
+                navigation.navigate("AllRides", { departure, arrival, date });
+              }}
+              style={styles.button}
+            >
+              <Text style={styles.textButton}>Continuez</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={closeModal} style={styles.button}>
+              <Text style={styles.textButton}>Fermez</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.header}>
-          <TouchableOpacity
-            accessibilityRole="button"
-            style={styles.rideBtn}
-            onPress={() => addRide()}
-          >
-            <Text style={styles.message}>Où allez-vous?</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            accessibilityRole="button"
-            accessibilityLabel="Voir mon profil"
-            onPress={() => navigation.navigate("Profile")}
-          >
-            <FontAwesomeIcon icon={faUser} size={40} color="#A7333F" />
-          </TouchableOpacity>
-        </View>
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: location.latitude,
-            longitude: location.longitude,
-            latitudeDelta: 0.05,
-            longitudeDelta: 0.05,
-          }}
+      </Modal>
+
+      {/* Bouton principal et phrase cliquable */}
+      <View style={styles.bottomContainer}>
+        <TouchableOpacity
+          style={styles.ridesButton}
+          onPress={() => navigation.navigate("AllRides")}
         >
-          <Marker
-            accessibilityLabel="Votre position actuelle"
-            testID="marker"
-            style={styles.marker}
-            title="Vous êtes ici"
-            pinColor="#A7333F"
-            coordinate={location}
-          />
-        </MapView>
-        <View>
-          <TouchableOpacity
-            accessibilityRole="button"
-            style={styles.textBtn}
-            onPress={() => navigation.navigate("AllRides")}
-          >
-            <Text style={styles.getRidesBtn}>
-              {" "}
-              Tous les trajets disponibles{" "}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            accessibilityRole="button"
-            style={styles.textBtn}
-            onPress={() => navigation.navigate("Driver")}
-          >
-            <Text style={styles.driverBtn}>Espace conducteur</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
+          <Text style={styles.ridesText}>
+            Voir tous les trajets disponibles
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate("Driver")}>
+          <Text style={styles.driverText}>Conducteur ? Cliquez-ici</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fdf6f0",
+  container: { flex: 1 },
+  map: { ...StyleSheet.absoluteFillObject },
+
+  topContainer: {
+    position: "absolute",
+    top: 50,
+    width: "100%",
+    alignItems: "center",
   },
-  map: {
-    flex: 1,
+  welcome: { fontSize: 22, fontWeight: "600", color: "#333", marginBottom: 30 },
+
+  header: {
+    position: "absolute",
+    top: 100,
+    left: 20,
+    right: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
+  rideBtn: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+    marginRight: 10,
+  },
+  message: { fontSize: 18, color: "#715858" },
+
+  profileIconContainer: {
+    backgroundColor: "#fff",
+    height:50,
+    padding: 8,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+
+  bottomContainer: {
+    position: "absolute",
+    bottom: 20,
+    left: 20,
+    right: 20,
+    alignItems: "center",
+  },
+
+  ridesButton: {
+    width: "100%",
+    backgroundColor: "#A7333F",
+    paddingVertical: 15,
+    borderRadius: 12,
+    marginBottom: 10,
+    alignItems: "center",
+  },
+  ridesText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600" },
+
+  driverText: {
+    color: "#A7333F",
+    fontSize: 18,
+    fontWeight: "800",
+    textDecorationLine: "underline",
+  },
+
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.3)",
   },
   modalView: {
-    backgroundColor: "#cbb1b1",
+    width: "85%",
+    backgroundColor: "white",
     borderRadius: 20,
-    padding: 30,
+    padding: 20,
     alignItems: "center",
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
   },
-  input: {
-    width: 180,
-    borderBottomColor: "#A7333F",
-    borderBottomWidth: 1,
+  itinerary: {
     fontSize: 20,
-    color: "#67262d",
-    marginBottom: 20,
+    fontWeight: "600",
+    marginBottom: 15,
+    color: "#A7333F",
+  },
+  input: {
+    width: "100%",
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 10,
+    marginVertical: 8,
+    fontSize: 16,
+    color: "#333",
   },
   button: {
-    width: 150,
-    alignItems: "center",
-    marginTop: 20,
-    paddingTop: 8,
     backgroundColor: "#A7333F",
     borderRadius: 10,
-  },
-  textButton: {
-    color: "#ffffff",
-    height: 20,
-    fontWeight: "600",
-    fontSize: 15,
-  },
-  getRidesBtn: {
-    backgroundColor: "#A7333F",
-    margin: "15",
-    borderRadius: 5,
-    padding: 8,
-    fontSize: 16,
-    color: "white",
-    textAlign: "center",
-    marginBottom: -5,
-    marginTop: 8,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 5,
-  },
-  driverBtn: {
-    backgroundColor: "#A7333F",
-    margin: "15",
-    borderRadius: 5,
-    padding: 5,
-    fontSize: 17,
-    color: "white",
-    textAlign: "center",
-    marginBottom: -20,
-  },
-  rideBtn: {
-    backgroundColor: "#cbb1b1",
-    borderRadius: 25,
-    justifyContent: "center",
-    marginLeft: 75,
-    alignItems: "center",
-    flex: 1,
-    marginRight: 30,
-  },
-  message: {
-    fontSize: 20,
-    color: "#67262d",
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    marginTop: 10,
+    width: "100%",
     alignItems: "center",
   },
-  welcome: {
-    textAlign: "center",
-    top: 0,
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  itinéraire: {
-    color: "#67262d",
-    alignSelf: "center",
-    marginBottom: 30,
-    fontSize: 20,
-    fontWeight: 500,
-  },
+  textButton: { 
+    color: "#fff", 
+    fontSize: 18, 
+    fontWeight: "600" },
 });
-
-
-// import React, { useEffect, useState } from "react";
-// import {
-//   StyleSheet,
-//   Text,
-//   View,
-//   TouchableOpacity,
-//   Modal,
-//   TextInput,
-//   Platform,
-// } from "react-native";
-// import { SafeAreaView } from "react-native-safe-area-context";
-// import MapView, { Marker } from "react-native-maps";
-// import * as Location from "expo-location";
-// import DateTimePicker from "@react-native-community/datetimepicker";
-// import { useSelector } from "react-redux";
-// import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-// import { faUser } from "@fortawesome/free-solid-svg-icons";
-// import Arrow from "../components/Arrow";
-
-// export default function MapScreen({ navigation }) {
-//   const user = useSelector((state) => state.user.value);
-
-//   const [location, setLocation] = useState(null);
-//   const [modalVisible, setModalVisible] = useState(false);
-//   const [departure, setDeparture] = useState("");
-//   const [arrival, setArrival] = useState("");
-//   const [date, setDate] = useState(new Date());
-//   const [showPicker, setShowPicker] = useState(false);
-
-//   const onChange = (event, selectedDate) => {
-//     if (Platform.OS === "android") setShowPicker(false);
-//     if (selectedDate) setDate(selectedDate);
-//   };
-
-//   useEffect(() => {
-//     (async () => {
-//       const { status } = await Location.requestForegroundPermissionsAsync();
-//       if (status === "granted") {
-//         Location.watchPositionAsync({ distanceInterval: 10 }, (loc) =>
-//           setLocation(loc.coords),
-//         );
-//       }
-//     })();
-//   }, []);
-
-//   if (!location)
-//     return <View style={{ flex: 1, backgroundColor: "#fdf6f0" }} />;
-
-//   const openModal = () => setModalVisible(true);
-//   const closeModal = () => setModalVisible(false);
-
-//   return (
-//     <SafeAreaView style={styles.container}>
-//       {/* Carte */}
-//       <MapView
-//         style={styles.map}
-//         initialRegion={{
-//           latitude: location.latitude,
-//           longitude: location.longitude,
-//           latitudeDelta: 0.05,
-//           longitudeDelta: 0.05,
-//         }}
-//       >
-//         <Marker
-//           title="Vous êtes ici"
-//           pinColor="#A7333F"
-//           coordinate={location}
-//         />
-//       </MapView>
-
-//       {/* Bonjour + Arrow */}
-//       <View style={styles.topContainer}>
-//         <Text style={styles.welcome}>Bonjour {user.username}</Text>
-//         <Arrow />
-//       </View>
-
-//       {/* Header avec "Où allez-vous ?" et icône profil */}
-//       <View style={styles.header}>
-//         <TouchableOpacity style={styles.rideBtn} onPress={openModal}>
-//           <Text style={styles.message}>Où allez-vous ?</Text>
-//         </TouchableOpacity>
-
-//         <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-//           <View style={styles.profileIconContainer}>
-//             <FontAwesomeIcon icon={faUser} size={30} color="#A7333F" />
-//           </View>
-//         </TouchableOpacity>
-//       </View>
-
-//       {/* Modal itinéraire */}
-//       <Modal visible={modalVisible} animationType="fade" transparent>
-//         <View style={styles.centeredView}>
-//           <View style={styles.modalView}>
-//             <Text style={styles.itinerary}>Votre itinéraire</Text>
-//             <TextInput
-//               placeholder="Départ"
-//               onChangeText={setDeparture}
-//               value={departure}
-//               style={styles.input}
-//             />
-//             <TextInput
-//               placeholder="Arrivée"
-//               onChangeText={setArrival}
-//               value={arrival}
-//               style={styles.input}
-//             />
-//             <TouchableOpacity
-//               onPress={() => setShowPicker(true)}
-//               style={styles.input}
-//             >
-//               <Text style={{ fontSize: 18, color: date ? "#715858" : "#aaa" }}>
-//                 {date ? date.toLocaleDateString("fr-FR") : "Date"}
-//               </Text>
-//             </TouchableOpacity>
-//             {showPicker && (
-//               <DateTimePicker
-//                 value={date}
-//                 mode="date"
-//                 display={Platform.OS === "ios" ? "spinner" : "calendar"}
-//                 onChange={onChange}
-//                 minimumDate={new Date()}
-//               />
-//             )}
-//             <TouchableOpacity
-//               onPress={() => {
-//                 closeModal();
-//                 navigation.navigate("AllRides", { departure, arrival, date });
-//               }}
-//               style={styles.button}
-//             >
-//               <Text style={styles.textButton}>Continuez</Text>
-//             </TouchableOpacity>
-//             <TouchableOpacity onPress={closeModal} style={styles.button}>
-//               <Text style={styles.textButton}>Fermez</Text>
-//             </TouchableOpacity>
-//           </View>
-//         </View>
-//       </Modal>
-
-//       {/* Bouton principal et phrase cliquable */}
-//       <View style={styles.bottomContainer}>
-//         <TouchableOpacity
-//           style={styles.ridesButton}
-//           onPress={() => navigation.navigate("AllRides")}
-//         >
-//           <Text style={styles.ridesText}>
-//             Voir tous les trajets disponibles
-//           </Text>
-//         </TouchableOpacity>
-
-//         <TouchableOpacity onPress={() => navigation.navigate("Driver")}>
-//           <Text style={styles.driverText}>Conducteur ? Cliquez-ici</Text>
-//         </TouchableOpacity>
-//       </View>
-//     </SafeAreaView>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: { flex: 1 },
-//   map: { ...StyleSheet.absoluteFillObject },
-
-//   topContainer: {
-//     position: "absolute",
-//     top: 50,
-//     width: "100%",
-//     alignItems: "center",
-//   },
-//   welcome: { fontSize: 22, fontWeight: "600", color: "#333", marginBottom: 30 },
-
-//   header: {
-//     position: "absolute",
-//     top: 100,
-//     left: 20,
-//     right: 20,
-//     flexDirection: "row",
-//     justifyContent: "space-between",
-//     alignItems: "center",
-//   },
-//   rideBtn: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     paddingVertical: 15,
-//     paddingHorizontal: 20,
-//     borderRadius: 12,
-//     shadowColor: "#000",
-//     shadowOffset: { width: 0, height: 2 },
-//     shadowOpacity: 0.2,
-//     shadowRadius: 4,
-//     elevation: 3,
-//     marginRight: 10,
-//   },
-//   message: { fontSize: 18, color: "#715858" },
-
-//   profileIconContainer: {
-//     backgroundColor: "#fff",
-//     height:50,
-//     padding: 8,
-//     borderRadius: 12,
-//     shadowColor: "#000",
-//     shadowOffset: { width: 0, height: 1 },
-//     shadowOpacity: 0.2,
-//     shadowRadius: 2,
-//     elevation: 2,
-//   },
-
-//   bottomContainer: {
-//     position: "absolute",
-//     bottom: 20,
-//     left: 20,
-//     right: 20,
-//     alignItems: "center",
-//   },
-
-//   ridesButton: {
-//     width: "100%",
-//     backgroundColor: "#A7333F",
-//     paddingVertical: 15,
-//     borderRadius: 12,
-//     marginBottom: 10,
-//     alignItems: "center",
-//   },
-<<<<<<< HEAD
-//   ridesText: {
-//     color: "#fff",
-//     fontSize: 16,
-//     fontWeight: "600" },
-=======
-//   ridesText: { color: "#fff", fontSize: 16, fontWeight: "600" },
->>>>>>> de72588bc4f5d976ccc00bb8dc596e03223ec64e
-
-//   driverText: {
-//     color: "#A7333F",
-//     fontSize: 18,
-//     fontWeight: "800",
-//     textDecorationLine: "underline",
-//   },
-
-//   centeredView: {
-//     flex: 1,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     backgroundColor: "rgba(0,0,0,0.3)",
-//   },
-//   modalView: {
-//     width: "85%",
-//     backgroundColor: "white",
-//     borderRadius: 20,
-//     padding: 20,
-//     alignItems: "center",
-//     shadowColor: "#000",
-//     shadowOffset: { width: 0, height: 2 },
-//     shadowOpacity: 0.25,
-//     shadowRadius: 4,
-//     elevation: 5,
-//   },
-//   itinerary: {
-//     fontSize: 20,
-//     fontWeight: "600",
-//     marginBottom: 15,
-//     color: "#A7333F",
-//   },
-//   input: {
-//     width: "100%",
-//     paddingVertical: 12,
-//     paddingHorizontal: 15,
-//     borderWidth: 1,
-//     borderColor: "#ccc",
-//     borderRadius: 10,
-//     marginVertical: 8,
-//     fontSize: 16,
-//     color: "#333",
-//   },
-//   button: {
-//     backgroundColor: "#A7333F",
-//     borderRadius: 10,
-//     paddingVertical: 12,
-//     paddingHorizontal: 25,
-//     marginTop: 10,
-//     width: "100%",
-//     alignItems: "center",
-//   },
-//   textButton: { color: "#fff", fontSize: 18, fontWeight: "600" },
-// });

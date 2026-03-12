@@ -1,32 +1,33 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
 
 export default function Ride(props) {
   return (
     <View style={styles.boxCard}>
       <Image source={{ uri: props.photo }} style={styles.photo} />
-      <View styles={styles.firstCard}>
+
+      <View style={styles.content}>
         <Text style={styles.nameText}>
           {props.firstname} {props.lastname}
         </Text>
+
         <Text style={styles.carText}>{props.car}</Text>
-        <View style={styles.secondCard}>
-          <Text style={styles.noteText}>{props.note}/5</Text>
-          <Text style={styles.dateText}>{props.date}</Text>
-          <Text style={styles.priceText}>{props.price}€</Text>
-        </View>
+
+        <Text style={styles.dateText}>{props.date}</Text>
+      </View>
+
+      {/* Cercle prix */}
+      <View style={styles.priceCircle}>
+        <Text style={styles.priceText}>{props.price}€</Text>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 15,
-  },
-
   boxCard: {
     flexDirection: "row",
+    alignItems: "center",
     backgroundColor: "#fff",
     borderRadius: 15,
     padding: 15,
@@ -34,6 +35,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 6,
     elevation: 5,
+    marginBottom: 10, // réduit l'espace entre chaque Ride
   },
 
   photo: {
@@ -46,11 +48,7 @@ const styles = StyleSheet.create({
 
   content: {
     flex: 1,
-    justifyContent: "space-between",
-  },
-
-  header: {
-    marginBottom: 8,
+    justifyContent: "center",
   },
 
   nameText: {
@@ -65,26 +63,27 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 
-  footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-
-  noteText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#f5a623",
-  },
-
   dateText: {
     fontSize: 12,
     color: "#999",
+    marginTop: 4,
+  },
+
+  priceCircle: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: "#fff", 
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 10,
+    borderWidth: 3,          
+    borderColor: "#2ecc71",  
   },
 
   priceText: {
-    fontSize: 14,
+    fontSize: 20,
     fontWeight: "bold",
-    color: "#2ecc71",
+    color: '#2ecc71',       
   },
 });

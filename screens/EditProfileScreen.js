@@ -56,8 +56,8 @@ export default function EditProfile({ navigation }) {
   return (
     <SafeAreaView>
       <ScrollView contentContainerStyle={styles.container}>
-        <Arrow />
         <Text style={styles.title}>Modifier mon profil</Text>
+        <Arrow />
 
         {/* --- PHOTO CENTRÉE --- */}
         <View style={styles.photoContainer}>
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: "#F4F6F8",
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 10,
     paddingBottom: 40,
   },
 
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: "700",
     color: "#A7333F",
-    marginBottom: 30,
+    marginBottom: 20,
     textAlign: "center",
   },
 
