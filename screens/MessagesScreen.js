@@ -41,14 +41,15 @@ export default function MessagesScreen({ navigation }) {
         key={i}
         style={styles.card}
         onPress={() =>
-          navigation.navigate("Chat", { // navige en passant les infos nécessaires pour afficher la bonne conv 
+          navigation.navigate("Chat", {
+            // navigue en passant les infos nécessaires pour afficher la bonne conv
             bookingId: conversations.booking?._id,
             receiverId: conversations.receiver?._id,
             senderId: conversations.sender?._id,
           })
         }
       >
-        <Text style={styles.username}>{conversations.sender?.username}</Text> 
+        <Text style={styles.username}>{conversations.sender?.username}</Text>
         <Text style={styles.username}>{conversations.receiver?.username}</Text>
         <Text style={styles.lastMessage}>{conversations.message}</Text>
       </TouchableOpacity>
@@ -61,7 +62,7 @@ export default function MessagesScreen({ navigation }) {
 
       <Text style={styles.title}>Mes conversations</Text>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-        { /* Si aucune conversation, on affiche un message, sinon on affiche la liste des conversations */ }
+        {/* Si aucune conversation, on affiche un message, sinon on affiche la liste des conversations */}
         {conversations.length === 0 ? (
           <Text style={styles.empty}>Aucune conversation</Text>
         ) : (

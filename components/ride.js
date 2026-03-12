@@ -11,7 +11,6 @@ export default function Ride(props) {
         </Text>
         <Text style={styles.carText}>{props.car}</Text>
         <View style={styles.secondCard}>
-          <Text style={styles.noteText}>{props.note}/5</Text>
           <Text style={styles.dateText}>{props.date}</Text>
           <Text style={styles.priceText}>{props.price}€</Text>
         </View>
