@@ -32,20 +32,23 @@ export default function ReviewScreen() {
       <View style={styles.header}>
         <Text style={styles.title}>Mes évaluations</Text>
       </View>
+
       <View style={styles.globalNote}>
-        <Text style={styles.noteNumber}>{moyenne}</Text>
+        <Text style={styles.noteNumber}>{moyenne.toFixed(1)}</Text>
         <Text style={styles.noteText}>Note moyenne</Text>
       </View>
-      <ScrollView style={styles.listeBox}>
+
+      <ScrollView style={styles.listeBox} contentContainerStyle={{ paddingBottom: 30 }}>
         {reviews.map((data, i) => (
-          <Review
-            key={i}
-            photo={data.reviewer?.photo}
-            firstname={data.reviewer?.firstname}
-            lastname={data.reviewer?.lastname}
-            note={data.note}
-            text={data.message}
-          />
+          <View key={i} style={styles.reviewItem}>
+            <Review
+              photo={data.reviewer?.avatar}
+              firstname={data.reviewer?.firstname}
+              lastname={data.reviewer?.lastname}
+              note={data.note}
+              text={data.message}
+            />
+          </View>
         ))}
       </ScrollView>
     </SafeAreaView>
@@ -84,4 +87,9 @@ const styles = StyleSheet.create({
   listeBox: {
     paddingHorizontal: 15,
   },
+  reviewItem: {
+    marginBottom: 20, // <-- espace entre chaque profil
+  },
 });
+
+

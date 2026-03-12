@@ -22,7 +22,6 @@ export const profileSlice = createSlice ({
         state.value.username = action.payload.username;
         state.value.password = action.payload.password;
         state.value.avatar = action.payload.avatar;
-
        }
     }
 })

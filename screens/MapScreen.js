@@ -304,6 +304,7 @@ const styles = StyleSheet.create({
   },
 });
 
+
 // import React, { useEffect, useState } from "react";
 // import {
 //   StyleSheet,
@@ -385,8 +386,11 @@ const styles = StyleSheet.create({
 //         <TouchableOpacity style={styles.rideBtn} onPress={openModal}>
 //           <Text style={styles.message}>Où allez-vous ?</Text>
 //         </TouchableOpacity>
+
 //         <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-//           <FontAwesomeIcon icon={faUser} size={40} color="#A7333F" />
+//           <View style={styles.profileIconContainer}>
+//             <FontAwesomeIcon icon={faUser} size={30} color="#A7333F" />
+//           </View>
 //         </TouchableOpacity>
 //       </View>
 
@@ -495,6 +499,18 @@ const styles = StyleSheet.create({
 //   },
 //   message: { fontSize: 18, color: "#715858" },
 
+//   profileIconContainer: {
+//     backgroundColor: "#fff",
+//     height:50,
+//     padding: 8,
+//     borderRadius: 12,
+//     shadowColor: "#000",
+//     shadowOffset: { width: 0, height: 1 },
+//     shadowOpacity: 0.2,
+//     shadowRadius: 2,
+//     elevation: 2,
+//   },
+
 //   bottomContainer: {
 //     position: "absolute",
 //     bottom: 20,
@@ -511,10 +527,7 @@ const styles = StyleSheet.create({
 //     marginBottom: 10,
 //     alignItems: "center",
 //   },
-//   ridesText: { 
-//     color: "#fff", 
-//     fontSize: 16, 
-//     fontWeight: "600" },
+//   ridesText: { color: "#fff", fontSize: 16, fontWeight: "600" },
 
 //   driverText: {
 //     color: "#A7333F",
@@ -569,4 +582,3 @@ const styles = StyleSheet.create({
 //   },
 //   textButton: { color: "#fff", fontSize: 18, fontWeight: "600" },
 // });
-

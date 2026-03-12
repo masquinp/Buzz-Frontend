@@ -34,18 +34,19 @@ export default function RideScreen() {
       <View style={styles.header}>
         <Text style={styles.trajetText}>Historique des Trajets</Text>
       </View>
-      <ScrollView style={styles.listeBox}>
+      <ScrollView style={styles.listeBox} contentContainerStyle={{ paddingBottom: 30 }}>
         {bookings.map((data, i) => (
-          <Ride
-            key={i}
-            photo={data.ride?.user?.photo}
-            firstname={data.ride?.user?.firstname}
-            lastname={data.ride?.user?.lastname}
-            car={data.ride?.car}
-            note={data.ride?.note}
-            date={formatDate(data.ride?.date)}
-            price={data.ride?.price}
-          />
+          <View key={i} style={styles.rideItem}>
+            <Ride
+              photo={data.ride?.user?.photo}
+              firstname={data.ride?.user?.firstname}
+              lastname={data.ride?.user?.lastname}
+              car={data.ride?.car}
+              note={data.ride?.note}
+              date={formatDate(data.ride?.date)}
+              price={data.ride?.price}
+            />
+          </View>
         ))}
       </ScrollView>
     </SafeAreaView>
@@ -70,5 +71,8 @@ const styles = StyleSheet.create({
   },
   listeBox: {
     paddingHorizontal: 15,
+  },
+  rideItem: {
+    marginBottom: 20, 
   },
 });
