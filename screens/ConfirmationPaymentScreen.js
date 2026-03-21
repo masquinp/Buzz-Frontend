@@ -9,12 +9,12 @@ import { useEffect, useState } from "react";
 
 // fausse position du chauffeur
 const FAKE_DRIVER_START = {
-  latitude: 48.8566,
-  longitude: 2.3522,
+  latitude: 43.2977,
+  longitude: 5.381, // Réformés Canebière
 };
 const FAKE_PASSENGER_START = {
-  latitude: 48.8566,
-  longitude: 2.3522,
+  latitude: 43.2887,
+  longitude: 5.3956, // Rue Auguste Blanqui
 };
 
 export default function ConfirmationPaymentScreen({ navigation, route }) {
@@ -50,17 +50,26 @@ export default function ConfirmationPaymentScreen({ navigation, route }) {
           region={{
             latitude: driverPosition.latitude,
             longitude: driverPosition.longitude,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
+            latitudeDelta: 0.02,
+            longitudeDelta: 0.02,
           }}
         >
+          {/* Marker chauffeur */}
           <Marker
-            style={styles.driverMarker}
             accessibilityLabel="La position de votre chauffeur"
             coordinate={driverPosition}
             title="Votre chauffeur"
           >
             <Text style={{ fontSize: 30 }}>🚗</Text>
+          </Marker>
+
+          {/* Marker passager */}
+          <Marker
+            coordinate={FAKE_PASSENGER_START}
+            title="Votre position"
+            accessibilityLabel="Votre position"
+          >
+            <Text style={{ fontSize: 30 }}>📍</Text>
           </Marker>
         </MapView>
 
@@ -85,7 +94,8 @@ export default function ConfirmationPaymentScreen({ navigation, route }) {
           accessibilityRole="button"
           accessibilityLabel="Confirmer que vous êtes arrivé à destination"
           onPress={() =>
-            navigation.navigate("AddReview", { // on passe les infos nécessaires pour laisser un avis après le trajet
+            navigation.navigate("AddReview", {
+              // on passe les infos nécessaires pour laisser un avis après le trajet
               ride: ride,
               booking: booking,
               payment: payment,

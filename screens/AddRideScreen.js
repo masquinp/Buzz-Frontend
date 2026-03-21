@@ -20,7 +20,7 @@ import { useState } from "react";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
-export default function TestScreen({ navigation }) {
+export default function AddRideScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value);
@@ -32,6 +32,7 @@ export default function TestScreen({ navigation }) {
   const [placesTotal, setPlacesTotal] = useState(0);
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
+  // const [showTimePicker, setShowTimePicker] = useState(false);
 
   // Fonction pour gérer le changement de date depuis le DateTimePicker
   const onChange = (event, selectedDate) => {
@@ -89,7 +90,7 @@ export default function TestScreen({ navigation }) {
             onChangeText={(value) => setArrival(value)}
             value={arrival}
           />
-          <TouchableOpacity
+          {/* <TouchableOpacity
             accessibilityLabel="Choisir une date de trajet"
             onPress={() => setShowPicker(true)}
             style={styles.input}
@@ -98,8 +99,19 @@ export default function TestScreen({ navigation }) {
               {date ? date.toLocaleDateString("fr-FR") : "Date"}
             </Text>
           </TouchableOpacity>
-             { /* affiche le picker  */ } 
-          {showPicker && ( 
+          <TouchableOpacity
+            onPress={() => setShowTimePicker(true)}
+            style={styles.input}
+          >
+            <Text>
+              {date.toLocaleTimeString("fr-FR", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </Text>
+          </TouchableOpacity>
+          {/* affiche le picker  */}
+          {/* {showPicker && (
             <DateTimePicker
               accessibilityLabel="Choisir la date du trajet"
               value={date}
@@ -109,6 +121,45 @@ export default function TestScreen({ navigation }) {
               minimumDate={new Date()} // on ne peut pas choisir une date passée
             />
           )}
+          {showTimePicker && (
+            <DateTimePicker
+              value={date}
+              mode="time"
+              onChange={(event, selectedTime) => {
+                setShowTimePicker(false);
+                if (selectedTime) setDate(selectedTime);
+              }}
+            />
+          )} */}
+
+          <TouchableOpacity
+            accessibilityLabel="Choisir la date et l'heure du trajet"
+            onPress={() => setShowPicker(true)}
+            style={styles.input}
+          >
+            <Text style={{ fontSize: 18, color: date ? "#000" : "#aaa" }}>
+              {date
+                ? date.toLocaleDateString("fr-FR") +
+                  " à " +
+                  date.toLocaleTimeString("fr-FR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : "Date et heure"}
+            </Text>
+          </TouchableOpacity>
+
+          {showPicker && (
+            <DateTimePicker
+              accessibilityLabel="Choisir la date et l'heure du trajet"
+              value={date}
+              mode="datetime"
+              display={Platform.OS === "ios" ? "spinner" : "default"}
+              onChange={onChange}
+              minimumDate={new Date()}
+            />
+          )}
+
           <TextInput
             accessibilityLabel="Chosir le prix du trajet"
             placeholder="Prix"

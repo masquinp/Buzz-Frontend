@@ -26,7 +26,7 @@ import { useIsFocused } from "@react-navigation/native";
 
 const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
-export default function TestScreen({ navigation }) {
+export default function DriverHomeScreen({ navigation }) {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
@@ -89,7 +89,7 @@ export default function TestScreen({ navigation }) {
     setFlash((current) => (current === "off" ? "on" : "off"));
   };
 
-   const takePicture = async () => {
+  const takePicture = async () => {
     // déclenchement de la prise de vue
     // On utilise 'await' pour attendre que l'appareil photo termine l'enregistrement de l'image.
     const photo = await cameraRef.current?.takePictureAsync({
@@ -127,11 +127,11 @@ export default function TestScreen({ navigation }) {
              on dispatche 'data.url' (ou la clé renvoyée par ton serveur).
              c'est l'URL permanente stockée sur Cloudinary.
           */
-             dispatch(addPhoto(data.url));
-         }
+            dispatch(addPhoto(data.url));
+          }
         });
     }
-   }; 
+  };
 
   const deletePicture = (photoUrl) => {
     // photoUrl est l'URL de la photo à supprimer
@@ -177,7 +177,6 @@ export default function TestScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          console.log(data);
           dispatch(addCar(data.car));
           alert("Voiture ajoutée !");
         } else {
