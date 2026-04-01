@@ -38,7 +38,7 @@ export const userSlice = createSlice({
       state.value.car = action.payload;
     },
     removePhoto: (state, action) => {
-      state.value.photos = state.value.car.filter((photo) => photo !== action.payload);
+      state.value.photos = state.value.photos.filter((photo) => photo !== action.payload);
     },
   },
 });
